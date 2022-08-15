@@ -1,0 +1,27 @@
+.pager {
+  display: flex;
+  justify-content: center;
+  height: 28px;
+  margin-top: 8px;
+  align-items: center;
+  justify-self: flex-end;
+  align-self: center;
+  flex-shrink: 0;
+  .page {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #848A9B;
+    line-height: 30px;
+    padding: 0 10px;
+    margin: 0 8px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .pageActive {
+    color: #2CC8C2;
+  }
+}

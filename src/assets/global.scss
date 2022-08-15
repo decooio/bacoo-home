@@ -1,0 +1,51 @@
+@import "./reset.css";
+@import './capctha.css';
+
+html,body,button{
+  padding: 0;
+  margin: 0;
+  font-family: "PingFang", system-ui, sans-serif;
+  background-color: #fff;
+}
+.pointer {
+  cursor: pointer;
+}
+.link {
+  cursor: pointer;
+  color: #2CC8C2;
+  font-size: 14px;
+  &:hover {
+    color: #15C1BA;
+  }
+}
+.show {
+  visibility: visible;
+}
+.hide {
+ visibility: hidden;
+}
+
+@media screen and (max-width: 1440px) {
+  html,body{
+    font-size: 13px;
+  }
+}
+
+.ant-modal-content{
+  overflow: hidden;
+  border-radius: 8px !important;
+}
+
+@keyframes rotate_1 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.rotate_1{
+  //transition: all 2s ease-in-out;
+  animation: rotate_1 infinite 2s ease-in-out;
+}

@@ -1,1 +1,1 @@
-# bacoo-home
+# Bacoo-home
