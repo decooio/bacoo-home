@@ -1,9 +1,9 @@
 import s from "./main.module.scss";
 // import RightSlide from "./RightSlide";
 import { useT, useToast } from "../src/hooks/utils";
-import { FiArrowUp, FiCheckCircle, FiHelpCircle, FiPlus } from "react-icons/fi";
+import { FiArrowUp, FiCheckCircle, FiPlus } from "react-icons/fi";
 import React, { ChangeEvent, useRef, useState } from "react";
-import { ErrorDist, fileSizeLimitMb, WIKI_URL } from "../src/helper/const";
+import { ErrorDist, fileSizeLimitMb } from "../src/helper/const";
 import i18next from "i18next";
 import BgAnim from "./effect/BgAnim";
 // import {pinFile} from "../lib/http";
@@ -270,15 +270,6 @@ export default function Main() {
             {(isInit || isInit2) && InputFile()}
             {isUp && UploadingFile()}
             {isUpFinish && UploadingFinish()}
-            <div className={s.whatTips}>
-              <FiHelpCircle />
-              <span
-                onClick={() =>
-                  window.open(`${WIKI_URL}/general/gadget`, "_blank")
-                }>
-                {t("What is this ？")}
-              </span>
-            </div>
           </div>
         )}
         {showDc && file && (

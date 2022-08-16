@@ -2,7 +2,7 @@ import {useEffect, useMemo, useState} from "react";
 import decoo, {Options, Client} from "@decooio/sdk";
 import {Endpoint} from "@decooio/sdk/src/types";
 import _ from 'lodash';
-import {isBeta, JWT, PRIVATE_KEY } from "../src/helper/const";
+import {baseUrl, isBeta, JWT, PRIVATE_KEY } from "../src/helper/const";
 import {useUser} from "./useUser";
 
 export interface DecooIo {
@@ -14,7 +14,7 @@ export interface DecooIo {
 
 const defOpt: Options = {
   zone: isBeta ? "beta" : "cn",
-  baseUrl: "https://api.baitech-ipfs.cloud",
+  baseUrl: baseUrl,
   jwt: JWT,
   privateKey: PRIVATE_KEY
 }
