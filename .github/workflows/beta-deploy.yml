@@ -14,7 +14,7 @@ jobs:
       - name: Install dependencies
         uses: Borales/actions-yarn@v3
         with:
-          cmd: install
+          cmd: install --frozen-lockfile
 
       - name: Build for production
         uses: Borales/actions-yarn@v3
