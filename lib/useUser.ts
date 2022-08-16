@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {withLoading} from "../components/common/Loading";
 import {getPlanDetails, PlanDetails} from "./http_billing";
 import {useError} from "../src/hooks/utils";
-import {getNeedBindGithubAccount, getUserInfo} from "./http";
+import {getUserInfo} from "./http";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
 import {updatePref} from "../redux/main";
@@ -50,15 +50,5 @@ export function usePlanDetails(user: IUserInfo | null) {
     }
   }, [user])
   return {plan}
-}
-
-
-function parseShowNeedBindGithubAccountDot(str: string | null) {
-  try {
-    if (str) return JSON.parse(str)
-    return null
-  } catch (e) {
-    return null
-  }
 }
 

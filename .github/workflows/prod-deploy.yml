@@ -14,11 +14,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: data-map
-        id: data-map
-        run: |
-          echo '::set-output name=DATA_MAP::{"refs/heads/main":"decoo-home-cn", "refs/heads/baitech":"decoo-baitech-cn"}'
-
       - uses: actions/checkout@v2
 
       - name: Set up Docker Buildx
@@ -45,4 +40,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/decooio/${{ fromJSON(steps.data-map.outputs.DATA_MAP)[github.ref] }}:latest, decoo-registry.tencentcloudcr.com/decooio/${{ fromJSON(steps.data-map.outputs.DATA_MAP)[github.ref] }}:latest
+          tags: ghcr.io/decooio/bacoo-home:latest, decoo-registry.tencentcloudcr.com/decooio/bacoo-home:latest

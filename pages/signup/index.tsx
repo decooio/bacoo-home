@@ -7,7 +7,6 @@ import {singUp, login, resendEmail, resetPwd} from "../../lib/http";
 import ErrorMsg from "../../components/common/ErrorMsg";
 import {getLogoDark, getMsg, validate} from '../../src/helper/utils';
 import {useRouter} from "next/router";
-import {isBaitech} from "../../src/helper/const";
 import {useLoading} from "../../components/common/Loading";
 import {Info} from "../../components/Profile";
 import {useUser} from "../../lib/useUser";
@@ -71,7 +70,6 @@ enum ERegisterState {
 }
 
 const getThirdParty = () => {
-  if (isBaitech) return 2
   return 0
 }
 

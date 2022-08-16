@@ -8,11 +8,6 @@ jobs:
   beta-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: data-map
-        id: data-map
-        run: |
-          echo '::set-output name=DATA_MAP::{"refs/heads/dev":"decoo-cn-home-deploy"}'
-
       - name: Checkout
         uses: actions/checkout@v2.3.4
 
@@ -26,12 +21,10 @@ jobs:
         with:
           cmd: export
 
-      - name: Deploy to decooio/decoo-cn-home-deploy
-        uses: hpcodecraft/action-deploy-workspace-to-repo@v2.2
+      - name: Deploy to GithubPage
+        uses: crazy-max/ghaction-github-pages@v3
+        with:
+          target_branch: gh-pages
+          build_dir: public
         env:
-          GITHUB_ACCESS_TOKEN: ${{ secrets.DECOO_PAT }}
-          SRC_FOLDER: out
-          DEST_OWNER: decooio
-          DEST_REPO: ${{ fromJSON(steps.data-map.outputs.DATA_MAP)[github.ref] }}
-          DEST_BRANCH: main
-          DEST_FOLDER: docs
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

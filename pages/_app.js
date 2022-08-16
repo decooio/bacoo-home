@@ -7,8 +7,6 @@ import 'antd/dist/antd.css'
 import '../src/assets/global.scss'
 import 'tailwindcss/tailwind.css'
 import {useEffect, useState} from "react";
-import en from '../lang/en.json';
-import zhCN from '../lang/zh-CN.json';
 import i18next from "i18next";
 import detectLang from 'detect-browser-language'
 import {initReactI18next} from "react-i18next";
@@ -20,13 +18,9 @@ import {AppLoading} from '../components/common/Loading'
 import React from "react";
 import {prefSelector, updatePref} from "../redux/main";
 import {Alert} from "antd";
-import {isBaitech} from "../src/helper/const";
 import {getStrKey} from "../src/helper/oed";
 
 function getFavicon(){
-  if(isBaitech){
-    return '/favicon_baitech.ico'
-  }
   return '/favicon.ico'
 }
 function MApp({Component, pageProps}) {
@@ -80,17 +74,6 @@ function MApp({Component, pageProps}) {
   </SWRConfig>
 }
 
-export default function App({Component, pageProps}) {
-  const store = useStore(pageProps.initialReduxState)
-  const [inited, setInited] = useState(false)
-  return (
-    <Provider store={store}>
-      {!inited && <InitI18n onInit={() => setInited(true)}/>}
-      {inited && <MApp Component={Component} pageProps={pageProps}/>}
-    </Provider>
-  )
-}
-
 function InitI18n(props) {
   useEffect(() => {
     const lng = window.localStorage.getItem('userLang') ??
@@ -105,4 +88,15 @@ function InitI18n(props) {
     console.info('detectLan-->', lng)
   }, [props])
   return null
+}
+
+export default function App({Component, pageProps}) {
+  const store = useStore(pageProps.initialReduxState)
+  const [inited, setInited] = useState(false)
+  return (
+    <Provider store={store}>
+      {!inited && <InitI18n onInit={() => setInited(true)}/>}
+      {inited && <MApp Component={Component} pageProps={pageProps}/>}
+    </Provider>
+  )
 }
