@@ -21,12 +21,9 @@ jobs:
         with:
           cmd: export
 
-      - name: Deploy to GithubPage
-        uses: crazy-max/ghaction-github-pages@v3
+      - name: Deploy Gh-Pages 🚀
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          target_branch: gh-pages
-          build_dir: out
-          keep_history: true
-          jekyll: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
+          cname: bacoo.decoo.cloud
