@@ -2,6 +2,8 @@ import s from "./main.module.scss";
 // import RightSlide from "./RightSlide";
 import { useT, useToast } from "../src/hooks/utils";
 import { FiArrowUp, FiCheckCircle, FiPlus } from "react-icons/fi";
+import { GrDocument, GrFolder } from "react-icons/gr";
+
 import React, { ChangeEvent, useRef, useState } from "react";
 import { ErrorDist, fileSizeLimitMb } from "../src/helper/const";
 import i18next from "i18next";
@@ -108,7 +110,8 @@ function DcPanelCom(props: DcPanelComProps) {
               height: 36,
               margin: "18px 20px",
             }}
-            onClick={() => doUpFile(file)}>
+            onClick={() => doUpFile(file)}
+          >
             <FiArrowUp />{" "}
           </Button>
         </>
@@ -116,7 +119,8 @@ function DcPanelCom(props: DcPanelComProps) {
         <Anim
           name={"rotate"}
           duration={"1.5s"}
-          style={{ marginTop: 60, width: 20, height: 20 }}>
+          style={{ marginTop: 60, width: 20, height: 20 }}
+        >
           <FaRegHourglass size={20} />
         </Anim>
       )}
@@ -139,6 +143,7 @@ export default function Main() {
   const decooIo = useDecooIo();
   // const {upload, progress} = useUpload()
   const [progress, setProgress] = useState(0);
+  const [uploadFileTypeShow, setUploadFileTypeShow] = useState(false);
 
   const updateProgress = (p: number, auto = false) => {
     setProgress((oldP) => {
@@ -158,6 +163,8 @@ export default function Main() {
   };
 
   const doUpFile = (file: File) => {
+    console.log(doUpFile);
+    
     if (!decooIo.client || !file) return;
     setUpState(UpState.up);
     setShowDc(false);
@@ -208,9 +215,31 @@ export default function Main() {
     let fontSize = isEn ? 32 : 38;
     if (isMobile) fontSize = Math.round(fontSize * 0.7);
     return (
-      <div className={s.inputFile} onClick={onClickAdd} style={{ fontSize }}>
-        <FiPlus />
-        <span>{t("Add File")}</span>
+      <div>
+        <div
+          className={s.inputFile}
+          style={{ fontSize }}
+          onClick={() => {
+            uploadFileTypeShow
+              ? setUploadFileTypeShow(false)
+              : setUploadFileTypeShow(true);
+          }}
+        >
+          <FiPlus />
+          <span>添加文件</span>
+        </div>
+        {uploadFileTypeShow && (
+          <div className={s.uploadFileType}>
+            <div className={s.uploadFileTypeItem} onClick={onClickAdd} >
+              <GrDocument />
+              <span className={s.uploadFileTypeItemText}>文件</span>
+            </div>
+            <div className={s.uploadFileTypeItem}>
+              <GrFolder />
+              <span className={s.uploadFileTypeItemText}>文件夹</span>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
@@ -277,8 +306,10 @@ export default function Main() {
         )}
         {
           <div className={s.homeSlog}>
-            <span className={s.title}>{t(getStrKey("homeTitle"))}</span>
-            <p className={s.info}>{t(getStrKey("homeInfo"))}</p>
+            <span className={s.title}>百工链存-创新性分布式存储</span>
+            <p className={s.info}>
+              百工链存探索与拓宽分布式存储技术的发展潜力与应用边界，为企业级IPFS存储需求提供完整可用的解决方案。
+            </p>
           </div>
         }
         <div className={s.auto_padding} />
@@ -288,7 +319,8 @@ export default function Main() {
           className={
             "text-12 text-gray-300 bottom-1 absolute h-12 md:h-auto w-full flex flex-wrap md:flex-nowrap " +
             " justify-center gap-2.5 items-center mb-2"
-          }>
+          }
+        >
           <div className={"w-full text-center md:w-auto"}>
             上海脆皮网络科技有限公司 Decoo Technologies Co.,Ltd
           </div>
@@ -298,14 +330,16 @@ export default function Main() {
             rel="noreferrer"
             href={
               "http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31010902003263"
-            }>
+            }
+          >
             沪公网安备 31010902003263号
           </a>
           <a
             className={"md:hover:text-white"}
             target={"_blank"}
             rel="noreferrer"
-            href={"https://beian.miit.gov.cn/"}>
+            href={"https://beian.miit.gov.cn/"}
+          >
             沪ICP备2021017037号-1
           </a>
           <a className={"md:hover:text-white"} href={"/termofuse"}>
@@ -315,7 +349,8 @@ export default function Main() {
             className={"md:hover:text-white"}
             target={"_blank"}
             href={"/privacy"}
-            rel="noreferrer">
+            rel="noreferrer"
+          >
             隐私政策
           </a>
         </div>

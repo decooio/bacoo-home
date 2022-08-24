@@ -1,13 +1,15 @@
-import react, {useEffect, useState} from "react";
-import styled, {css} from "styled-components";
-import {FiChevronDown} from "react-icons/fi";
+import react, { useContext, useEffect, useState } from "react";
+import { Context } from "@components/Context/Context";
+import styled, { css } from "styled-components";
+import { FiChevronDown } from "react-icons/fi";
 import Button from "./common/Button";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import React from "react";
-import {TipsWhite} from "./common/tips";
-import {useUser} from "../lib/useUser";
-import {Phone} from "../src/assets/style";
-import {useTranslation} from "react-i18next";
+import { TipsWhite } from "./common/tips";
+import { useUser } from "../lib/useUser";
+import { Phone } from "../src/assets/style";
+import { useTranslation } from "react-i18next";
+import { eloginStatus, eloginType } from "@components/Context/types";
 
 const Wrapper = styled.div`
   cursor: pointer;
@@ -15,16 +17,16 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  ${Phone}{
+  ${Phone} {
     padding-right: 12px;
   }
-`
+`;
 const DropDown = styled.div`
   position: relative;
-`
+`;
 
 interface IDropDownBtn {
-  show?: boolean
+  show?: boolean;
 }
 
 const DropDownBtn = styled.div<IDropDownBtn>`
@@ -34,7 +36,7 @@ const DropDownBtn = styled.div<IDropDownBtn>`
   top: 40px;
   width: 78px;
   height: 36px;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.08);
   border-radius: 4px;
   font-size: 14px;
@@ -43,17 +45,18 @@ const DropDownBtn = styled.div<IDropDownBtn>`
   line-height: 36px;
   text-align: center;
   visibility: hidden;
-  ${props => props.show && css`
-    visibility: visible;
-
-  `}
-`
+  ${(props) =>
+    props.show &&
+    css`
+      visibility: visible;
+    `}
+`;
 const IconWrapper = styled.div<{ fold: boolean }>`
   display: inline-block;
-  transition: all 0.2s cubic-bezier(.09, .71, 1, .62);
+  transition: all 0.2s cubic-bezier(0.09, 0.71, 1, 0.62);
   vertical-align: top;
-  ${p => p.fold ? 'transform:rotate(-180deg);' : ''}
-`
+  ${(p) => (p.fold ? "transform:rotate(-180deg);" : "")}
+`;
 const UserName = styled.div`
   display: inline-block;
   height: 100%;
@@ -66,105 +69,78 @@ const UserName = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-`
+`;
 const CButton = styled(Button)`
-  ${Phone}{
+  ${Phone} {
     width: 62px;
     height: 28px;
-    background: #2CC8C2;
+    background: #2cc8c2;
     border-radius: 4px;
     font-size: 14px;
   }
-
-`
-
-
+`;
 
 const needLogin = [
-  '/panel',
-  '/panel/api',
-  '/panel/fileManager',
-  '/panel/profile',
-  '/billing',
-  '/bind_phone'
-]
+  "/panel",
+  "/panel/api",
+  "/panel/fileManager",
+  "/panel/profile",
+  "/billing",
+  "/bind_phone",
+];
 
-const isNeedLogin = ( path: string) => {
- return  needLogin.findIndex((item) => item === path) >= 0
-}
-
-const needUnlogin = [
-  '', '/', '/pricing','/signup','/login'
-]
-const isNeedUnlogin = (path: string) => {
-  return needUnlogin.findIndex(item => item === path) >= 0
-}
+const needUnlogin = ["", "/", "/pricing", "/signup", "/login"];
 
 const Userinfo: react.FC = () => {
-  const [fold, toggleFold] = useState(true);
-  const router = useRouter()
-  const {user,update} = useUser()
-  const {t} = useTranslation()
-  const handleToggle = () => {
-    toggleFold(!fold)
-  }
-  const handleLogin = () => {
-    router.push('/login')
-  }
-  const handleSignup = () => {
-    router.push('/signup')
-  }
-  const handleLogout = () => {
-    update(null)
-    window.localStorage.removeItem('JWT')
-    window.localStorage.removeItem('userinfo')
-    window.localStorage.removeItem('showNeedBindGithubAccountDot')
-    toggleFold(true)
-    router.push('/login')
-  }
-
-  const nickName = user ? user.nickName : ''
-
-  useEffect(() => {
-    if (user && !user.userRsaPrivateKey && router.pathname !== '/login'){
-      window.localStorage.removeItem('JWT')
-      window.localStorage.removeItem('userinfo')
-      window.localStorage.removeItem('showNeedBindGithubAccountDot')
-      update(null)
-      router.replace('/login')
-      return
+  const router = useRouter();
+  const { state, dispatch } = useContext(Context) as any;
+  const { loginStatus, loginType } = state;
+  const goLoginAndRegister = (type: eloginType) => {
+    dispatch({
+      type: "UPDATE_LOGIN_TYPE",
+      payload: type,
+    });
+    console.log(router);
+    if (router.pathname === "/login") {
+      return;
     }
-
-    if (!user && isNeedLogin(router.pathname)) {
-      router.push('/login')
-    }
-    if (user && isNeedUnlogin(router.pathname)) {
-      router.push('/panel')
-    }
-
-  }, [router.pathname, user])
-  return <Wrapper>{
-    !user ? <>
-        {
-          router.pathname === '/login' ?
-            <CButton onClick={handleSignup}>{t('Sign Up')}</CButton> :
-            <CButton onClick={handleLogin}>{t('Login')}</CButton>
-        }
-      </>
-      :
-      <>
-        <DropDown>
-          <div onClick={handleToggle} style={{display: "inline-block", paddingTop: 8}}>
-            <TipsWhite title={nickName} autoAdjustOverflow={false} placement={'left'}>
-              <UserName>
-                {nickName}
-              </UserName>
-            </TipsWhite>
-            <IconWrapper fold={fold}> <FiChevronDown/></IconWrapper>
-          </div>
-          <DropDownBtn onClick={handleLogout} show={!fold} className="btn">{t("Logout")}</DropDownBtn>
-        </DropDown>
-      </>
-  }</Wrapper>
-}
-export default Userinfo
+    router.push("/login");
+  };
+  return (
+    <Wrapper>
+      {loginStatus !== eloginStatus.login ? (
+        <>
+          {loginType === eloginType.login ? (
+            <CButton onClick={() => goLoginAndRegister(eloginType.register)}>
+              注册
+            </CButton>
+          ) : (
+            <CButton onClick={() => goLoginAndRegister(eloginType.login)}>
+              登录
+            </CButton>
+          )}
+        </>
+      ) : (
+        <>
+          <DropDown>
+            <div style={{ display: "inline-block", paddingTop: 8 }}>
+              <TipsWhite
+                title={"111"}
+                autoAdjustOverflow={false}
+                placement={"left"}
+              >
+                <UserName>{"111"}</UserName>
+              </TipsWhite>
+              <IconWrapper fold={false}>
+                {" "}
+                <FiChevronDown />
+              </IconWrapper>
+            </div>
+            <DropDownBtn className="btn">退出登录</DropDownBtn>
+          </DropDown>
+        </>
+      )}
+    </Wrapper>
+  );
+};
+export default Userinfo;

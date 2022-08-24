@@ -113,7 +113,7 @@ const Menus = styled(COL)`
 `;
 export const getLogo = (isMobile: boolean) => {
   return {
-    src: "/logo.svg",
+    src: "/logo.png",
     width: isMobile ? 60 : 110,
     height: isMobile ? 20 : 37,
   };
@@ -200,7 +200,8 @@ const Nav = () => {
             height={120}
             closeIcon={<FiX color={"#fff"} size={24} />}
             contentWrapperStyle={{ background: "gray" }}
-            drawerStyle={{ background: "rgb(45,45,45)" }}>
+            drawerStyle={{ background: "rgb(45,45,45)" }}
+          >
             <Menus>
               {showDocumentation && (
                 <span
@@ -214,15 +215,22 @@ const Nav = () => {
               )}
             </Menus>
           </Drawer>
+          W
         </>
       ) : (
         <div className={"nav_right"}>
           {showDocumentation && (
-            <span
-              className={"item"}
-              children={t("Documentation")}
-              onClick={() => window.open(WIKI_URL, "_blank")}
-            />
+            <div>
+              <a
+                rel="noreferrer"
+                href={WIKI_URL}
+                className={"item"}
+                target="_blank"
+              >
+                文档
+              </a>
+              <a href="" target="_blank" className={"item"}>联系我们</a>
+            </div>
           )}
           <Userinfo />
         </div>

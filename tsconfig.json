@@ -1,6 +1,7 @@
 {
   "extends": "ts-node/node14/tsconfig.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "allowJs": true,
     "alwaysStrict": true,
     "esModuleInterop": true,
@@ -23,7 +24,12 @@
     ],
     "types": [
       "node"
-    ]
+    ],
+    "paths":{
+      "@components/*":["components/*"],
+      "@pages/*":["pages/*"],
+      "@public/*":["public/*"],
+    }
   },
   "exclude": ["node_modules"],
   "include": ["**/*.ts", "**/*.tsx"]

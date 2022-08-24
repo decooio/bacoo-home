@@ -19,6 +19,7 @@ import React from "react";
 import {prefSelector, updatePref} from "../redux/main";
 import {Alert} from "antd";
 import {getStrKey} from "../src/helper/oed";
+import MyContextWrapper from '@components/Context/Context'
 
 function getFavicon(){
   return '/favicon.ico'
@@ -94,9 +95,11 @@ export default function App({Component, pageProps}) {
   const store = useStore(pageProps.initialReduxState)
   const [inited, setInited] = useState(false)
   return (
-    <Provider store={store}>
-      {!inited && <InitI18n onInit={() => setInited(true)}/>}
-      {inited && <MApp Component={Component} pageProps={pageProps}/>}
-    </Provider>
+    <MyContextWrapper>
+      <Provider store={store}>
+        {!inited && <InitI18n onInit={() => setInited(true)}/>}
+        {inited && <MApp Component={Component} pageProps={pageProps}/>}
+      </Provider>
+    </MyContextWrapper>
   )
 }
