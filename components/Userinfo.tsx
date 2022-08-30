@@ -100,7 +100,6 @@ const Userinfo: react.FC = () => {
       type: "UPDATE_LOGIN_TYPE",
       payload: type,
     });
-    console.log(router);
     if (router.pathname === "/login") {
       return;
     }
@@ -110,7 +109,7 @@ const Userinfo: react.FC = () => {
     <Wrapper>
       {loginStatus !== eloginStatus.login ? (
         <>
-          {loginType === eloginType.login ? (
+          {loginType === eloginType.login && router.pathname == '/login'? (
             <CButton onClick={() => goLoginAndRegister(eloginType.register)}>
               注册
             </CButton>

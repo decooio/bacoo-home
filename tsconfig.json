@@ -29,6 +29,8 @@
       "@components/*":["components/*"],
       "@pages/*":["pages/*"],
       "@public/*":["public/*"],
+      "@src/*":["src/*"],
+      "@request/*":["request/*"]
     }
   },
   "exclude": ["node_modules"],

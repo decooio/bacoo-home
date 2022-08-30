@@ -12,6 +12,7 @@ import FileManager from "./FileManager";
 import React, { useState } from "react";
 import Api from "./Api";
 import Profile from "./Profile";
+import HelpAndReport from './HelpAndReport'
 import { NavOtherLayout } from "./nav";
 import { useRouter } from "next/router";
 import { MBadge } from "./common/badge";
@@ -99,6 +100,7 @@ interface ComMap {
   fileManager: any;
   api: any;
   profile: any;
+  helpAndReport:any;
 }
 
 type TAB = keyof ComMap;
@@ -112,15 +114,17 @@ export interface Tab {
 }
 
 const tabs: Tab[] = [
-  { name: "File Manager", icon: FiFileText, id: "fileManager" },
+  { name: "文件管理", icon: FiFileText, id: "fileManager" },
   { name: "API", icon: FiGitCommit, id: "api" },
-  { name: "Profile", icon: FiSettings, id: "profile" },
+  { name: "用户信息", icon: FiSettings, id: "profile" },
+  { name: "帮助与报告", icon: FiSettings, id: "helpAndReport" },
 ];
 
 const comMap: ComMap = {
   fileManager: FileManager,
   api: Api,
   profile: Profile,
+  helpAndReport:HelpAndReport
 };
 
 export interface PropsPanel {

@@ -236,11 +236,12 @@ export default function FileManager() {
 
       <Table>
         <RowFill style={{ height: 37 }}>
-          <TextTitle flex={1}>{t("Name")}</TextTitle>
-          <TextTitle flex={2}>CID</TextTitle>
-          <TextTitle flex={2}>{t("Link")}</TextTitle>
-          <DownBtn />
-          <TextTitle flex={1}>{t("Pin Timestamp")}</TextTitle>
+          <TextTitle flex={2}>文件名</TextTitle>
+          <TextTitle flex={6}>CID</TextTitle>
+          <TextTitle flex={6}>访问域名</TextTitle>
+          <TextTitle flex={1}>体积</TextTitle>
+          <TextTitle flex={3}>Pin时间戳</TextTitle>
+
         </RowFill>
         {files.length === 0 && !showAppLoading && (
           <EmptyText>{t("empty")}</EmptyText>
