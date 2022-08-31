@@ -20,6 +20,7 @@ import {prefSelector, updatePref} from "../redux/main";
 import {Alert} from "antd";
 import {getStrKey} from "../src/helper/oed";
 import MyContextWrapper from '@components/Context/Context'
+import Request from '../request/request'
 
 function getFavicon(){
   return '/favicon.ico'
@@ -96,10 +97,12 @@ export default function App({Component, pageProps}) {
   const [inited, setInited] = useState(false)
   return (
     <MyContextWrapper>
-      <Provider store={store}>
-        {!inited && <InitI18n onInit={() => setInited(true)}/>}
-        {inited && <MApp Component={Component} pageProps={pageProps}/>}
-      </Provider>
+      
+        <Provider store={store}>
+          {!inited && <InitI18n onInit={() => setInited(true)}/>}
+          {inited && <MApp Component={Component} pageProps={pageProps}/>}
+        </Provider>
+      
     </MyContextWrapper>
   )
 }

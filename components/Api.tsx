@@ -5,7 +5,6 @@ import {useEffect, useState} from "react";
 import {getApiKeys} from "../lib/http";
 import {Api as ApiType} from "../src/types/manager";
 import {useUser} from "../lib/useUser";
-import {withLoading} from "./common/Loading";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Phone, useDevice} from "../src/assets/style";
@@ -56,14 +55,6 @@ export default function Api() {
   const [apis, setApis] = useState<ApiType[]>([])
   const {user} = useUser()
   const {t} = useTranslation()
-  useEffect(() => {
-    if (!user) return
-    withLoading(
-      getApiKeys().then(data => {
-        setApis(data)
-      })
-    ).catch(e => console.error(e))
-  }, [user])
   const device = useDevice();
   const styleItem = device.isMobile? styleItemTxt_phone: styleItemTxt;
   const flexRight = device.isMobile? 1:5;

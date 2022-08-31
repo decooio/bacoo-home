@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react";
-import {withLoading} from "../components/common/Loading";
 import {getPlanDetails, PlanDetails} from "./http_billing";
 import {useError} from "../src/hooks/utils";
 import {getUserInfo} from "./http";
@@ -41,14 +40,6 @@ export function useUser(): {
 export function usePlanDetails(user: IUserInfo | null) {
   const onError = useError()
   const [plan, setPlan] = useState<PlanDetails | null>(null)
-  useEffect(() => {
-    if (user) {
-      withLoading(
-          getPlanDetails()
-              .then(setPlan)
-      ).catch(onError)
-    }
-  }, [user])
   return {plan}
 }
 

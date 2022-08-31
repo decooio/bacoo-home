@@ -94,7 +94,7 @@ const needUnlogin = ["", "/", "/pricing", "/signup", "/login"];
 const Userinfo: react.FC = () => {
   const router = useRouter();
   const { state, dispatch } = useContext(Context) as any;
-  const { loginStatus, loginType } = state;
+  const { loginStatus, loginType, user } = state;
   const goLoginAndRegister = (type: eloginType) => {
     dispatch({
       type: "UPDATE_LOGIN_TYPE",
@@ -109,7 +109,7 @@ const Userinfo: react.FC = () => {
     <Wrapper>
       {loginStatus !== eloginStatus.login ? (
         <>
-          {loginType === eloginType.login && router.pathname == '/login'? (
+          {loginType === eloginType.login && router.pathname == "/login" ? (
             <CButton onClick={() => goLoginAndRegister(eloginType.register)}>
               注册
             </CButton>

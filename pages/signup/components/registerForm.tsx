@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import React, { createRef, useState } from "react";
-import { Checkbox, Form, Input, Modal } from "antd";
+import { Checkbox, Form, Input, message, Modal } from "antd";
 import Button from "../../../components/common/Button";
-import { SEMDSMS_API, VERIFY_CODE_API } from "@request/apis";
+import { REGISTERED_API, SEMDSMS_API, VERIFY_CODE_API } from "@request/apis";
 import type { FormInstance } from "antd/es/form";
 export const BetweenFlexBox = styled.div`
   width: 100%;
@@ -28,6 +28,19 @@ const VerifyBtn = styled.div<IButtonProps>`
     background-color: #15c1ba;
   }
 `;
+const CountdownBtn = styled.div<IButtonProps>`
+  background: #cccccc;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 52px;
+  width: 457px;
+  font-size: 16px;
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  max-width: 100%;
+`;
 const verifyCodeImgStyle = {
   display: "flex",
   justifyContent: "center",
@@ -40,35 +53,68 @@ const astyle = {
   color: "#2CC8C2",
 };
 const RegisterForm = function () {
+  const [mobile, setMobile] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [smsCode, setsmsCode] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [verifyCodeImg, setVerifyCodeImg] = useState("");
   const [inputVerifyCodeImg, setInputVerifyCodeImg] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [setCookie, setSetCookie] = useState("setCookie");
+  const [countdownNum, setCountdownNum] = useState(60);
+
   const formRef = createRef<FormInstance>();
   const verify = () => {
-    // const res = await VERIFY_CODE_API()
     (formRef.current as any)
       .validateFields(["user", "phone"])
-      .then(async (res: any) => {
-        const verifyCodeImg = await VERIFY_CODE_API(mobile);
-        console.log(verifyCodeImg);
-        console.log(document.cookie);
-
-        setVerifyCodeImg(verifyCodeImg.data);
+      .then(async () => {
+        getVerifyCodeImg();
         setIsModalVisible(true);
       });
   };
 
+  const getVerifyCodeImg = async () => {
+    const verifyCodeImg = await VERIFY_CODE_API(mobile);
+    setVerifyCodeImg(verifyCodeImg);
+  };
+
   const sendSms = async () => {
-    const res = await SEMDSMS_API(
-      {
+    try {
+      await SEMDSMS_API({
         mobile: mobile,
         verifyCode: inputVerifyCodeImg,
-      },
-      
-    );
-    console.log(res);
+      });
+      message.success("验证码发送成功");
+      let num = 60;
+      const time = setInterval(() => {
+        if (num == 0) {
+          setCountdownNum(60);
+          clearInterval(time);
+        } else {
+          setCountdownNum(num--);
+        }
+      }, 1000);
+    } catch (error) {
+      message.error("验证码错误");
+    }
+    setIsModalVisible(false);
+  };
+
+  const register = async () => {
+    try {
+      (formRef.current as any)
+        .validateFields(["user", "phone", "code", "password"])
+        .then(async () => {
+          const res = await REGISTERED_API({
+            username,
+            password,
+            mobile,
+            smsCode,
+          });
+          console.log(res);
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -79,7 +125,12 @@ const RegisterForm = function () {
           name="user"
           rules={[{ required: true, message: "请输入用户名" }]}
         >
-          <Input style={{ height: "50px" }} placeholder="用户名" size="large" />
+          <Input
+            onInput={(e) => setUsername((e.target as any).value)}
+            style={{ height: "50px" }}
+            placeholder="用户名"
+            size="large"
+          />
         </Form.Item>
 
         <Form.Item
@@ -109,18 +160,28 @@ const RegisterForm = function () {
         >
           <BetweenFlexBox>
             <Input
+              onInput={(e) => {
+                setsmsCode((e.target as any).value);
+              }}
               style={{ width: "280px", height: "50px" }}
               placeholder="验证码"
               size="large"
             />
-            <VerifyBtn
-              onClick={() => {
-                verify();
-              }}
-              style={{ width: "148px" }}
-            >
-              发送验证码
-            </VerifyBtn>
+
+            {countdownNum < 60 ? (
+              <CountdownBtn style={{ width: "148px" }}>
+                {countdownNum}
+              </CountdownBtn>
+            ) : (
+              <VerifyBtn
+                onClick={() => {
+                  verify();
+                }}
+                style={{ width: "148px" }}
+              >
+                发送验证码
+              </VerifyBtn>
+            )}
           </BetweenFlexBox>
         </Form.Item>
 
@@ -136,12 +197,15 @@ const RegisterForm = function () {
           ]}
         >
           <Input.Password
+            onInput={(e) => {
+              setPassword((e.target as any).value);
+            }}
             style={{ height: "50px" }}
             placeholder="密码"
             size="large"
           />
         </Form.Item>
-        <Form.Item rules={[]}>
+        <Form.Item name="agree">
           <Checkbox>
             我已同意{" "}
             <a style={astyle} href="">
@@ -156,7 +220,9 @@ const RegisterForm = function () {
         </Form.Item>
 
         <Form.Item wrapperCol={{ span: 32 }}>
-          <Button size="large">注册</Button>
+          <Button onClick={() => register()} size="large">
+            注册
+          </Button>
         </Form.Item>
       </Form>
       <Modal
@@ -168,6 +234,7 @@ const RegisterForm = function () {
         okText="确定"
       >
         <div
+          onClick={() => getVerifyCodeImg()}
           style={verifyCodeImgStyle}
           dangerouslySetInnerHTML={{ __html: verifyCodeImg }}
         />
