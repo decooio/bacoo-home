@@ -1,35 +1,26 @@
 import { COL, Row, RowFill, SpaceH } from "./common/layouts";
 import Button from "./common/Button";
-import { FiBox, FiDownload, FiPlus } from "react-icons/fi";
+import { FiBox, FiChevronDown, FiDownload, FiPlus } from "react-icons/fi";
 import styled from "styled-components";
 import { CopyText, EmptyText, Text, TextTitle } from "./common/texts";
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import { DOWN_GATEWAY, fileSizeLimitMb, GATEWAY } from "../src/helper/const";
-import { createTokenSource, getFiles, getFilesCount } from "../lib/http";
+import { useEffect, useState } from "react";
 import { IFile } from "../src/types/manager";
-import {
-  apiToDownload,
-  apiToGateway,
-  formatTime,
-  getMsg,
-} from "../src/helper/utils";
 import { Pager } from "./common/Pager";
 import _ from "lodash";
 import { useLoading, withLoading } from "./common/Loading";
 import { Tips } from "./common/tips";
 import React from "react";
-import { useError, useT } from "../src/hooks/utils";
-import { Alert, Modal, Progress } from "antd";
-import { CancelTokenSource } from "axios";
-import { usePlanDetails, useUser } from "../lib/useUser";
-import { TFunction } from "react-i18next";
-import { useDecooIo } from "../lib/useDecooIo";
 import { Phone } from "../src/assets/style";
-import { EndpointSelect } from "./endpoint/EndpointSelect";
-import { Anim } from "./effect/Anim";
-import { FaRegHourglass } from "react-icons/fa";
+import { getFilesRes, getgatewayListRes } from "@request/types";
+import {
+  GET_FILE_LIST_API,
+  GET_GATEWAY_LIST_API,
+  UPDATA_FILE_API,
+} from "@request/apis";
+import { Dropdown, Menu, Space, Upload } from "antd";
+import { getLoc } from "@src/index";
 
-const Table = styled(COL)`
+export const Table = styled(COL)`
   width: calc(100% - 62px);
   flex: 1;
   overflow: auto;
@@ -37,7 +28,7 @@ const Table = styled(COL)`
     width: 100%;
   }
 `;
-const MCol = styled(COL)`
+export const MCol = styled(COL)`
   padding: 32px 32px 20px 32px;
   align-items: flex-start;
   height: 100%;
@@ -46,15 +37,19 @@ const MCol = styled(COL)`
   }
 `;
 
-const MText = styled.div`
+export const MText = styled.div`
   width: min-content;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
-
-const DownBtn = styled.div<{ invisible?: boolean }>`
+export const AddIcon = styled.span`
+  color: #fff;
+  margin-right: 5px;
+  font-size: 24px;
+`;
+export const DownBtn = styled.div<{ invisible?: boolean }>`
   width: 38px;
   height: 100%;
   color: #808080;
@@ -73,35 +68,107 @@ const DownBtn = styled.div<{ invisible?: boolean }>`
 `;
 
 export default function FileManager() {
-  const { t } = useT();
-  const inputFile = useRef<HTMLInputElement>(null);
-  const [files, setFiles] = useState<IFile[]>([
-    {
-      cosUrl: null,
-      createAt: 123,
-      cumulativeSize: 123,
-      deleteTime: "",
-      fileName: "",
-      folderPinHash: "",
-      id: 123,
-      ipfsPinHash: "",
-      lastUpdateAt: 123,
-      metaData: "",
-      orderId: "",
-      pinAt: 123,
-      state: 123,
-      thirdParty: 123,
-      userId: 123,
-      uuid: "",
-    },
-  ]);
+  const [files, setFiles] = useState<getFilesRes["data"]>([]);
+  const [gatewayList, setGatewayList] = useState<getgatewayListRes["data"]>([]);
+  const [activeGateway, setActiveGateway] = useState<{
+    host: string;
+    nodeType: number;
+    name: string;
+  }>({
+    host: "",
+    nodeType: 0,
+    name: "",
+  });
+
+  const [pageNum, setPageNum] = useState("1");
 
   const { showAppLoading } = useLoading();
 
   const setPageIndex = () => {};
+  //获取节点列表
+  const getGatewayList = async () => {
+    try {
+      const res = await GET_GATEWAY_LIST_API();
+      console.log(res);
+      const data = res.data;
+      setGatewayList([...data]);
+      setActiveGateway(data[0]);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  //获取已经上传的文件
+  const getFiles = async () => {
+    try {
+      const res = await GET_FILE_LIST_API({
+        pageSize: "10",
+        pageNum,
+      });
+
+      console.log(res);
+      setFiles([...res.data]);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getFiles();
+  }, [pageNum]);
+
+  useEffect(() => {
+    getGatewayList();
+  }, []);
 
   return (
     <MCol>
+      <div style={{ display: "flex" }}>
+        <Upload
+          showUploadList={false}
+          name="file"
+          action={`${activeGateway.host}/api/v0/add?pin=true`}
+          headers={{ authorization: getLoc("token") as string }}
+          onChange={async (info) => {
+            console.log(info);
+            if (info.file.status === "done" || info.file.status === "success") {
+              console.log(info.file.response);
+              const { Hash, Name } = info.file.response;
+              const res = await UPDATA_FILE_API({
+                cid: Hash,
+                name: Name,
+              });
+              console.log(res);
+              getFiles();
+            }
+          }}
+        >
+          <Button
+            style={{
+              marginRight: "24px",
+            }}
+          >
+            <AddIcon>+</AddIcon> 添加文件
+          </Button>
+        </Upload>
+
+        <Dropdown
+          overlay={
+            <Menu>
+              {gatewayList.map((item, index) => {
+                return (
+                  <Menu.Item key={index} onClick={() => setActiveGateway(item)}>
+                    {item.name}
+                  </Menu.Item>
+                );
+              })}
+            </Menu>
+          }
+        >
+          <Space>
+            上传节点: {activeGateway.name} <FiChevronDown></FiChevronDown>
+          </Space>
+        </Dropdown>
+      </div>
       <Table>
         <RowFill style={{ height: 37 }}>
           <TextTitle flex={2}>文件名</TextTitle>
@@ -125,12 +192,14 @@ export default function FileManager() {
               style={{ height: 44, borderTop: "1px solid #eeeeee" }}
             >
               <Text flex={2}>
+                <MText>{file.name}</MText>
+              </Text>
+              <CopyText flex={6}>{file.cid}</CopyText>
+              <Text flex={6}>
                 <Tips title="文件名Tips">
-                  <MText>文件名</MText>
+                  <MText>{file.name}</MText>
                 </Tips>
               </Text>
-              <CopyText flex={6}>cid</CopyText>
-              <CopyText flex={6}>地址</CopyText>
 
               <Text flex={1}>
                 <DownBtn>
@@ -143,8 +212,8 @@ export default function FileManager() {
                   </Tips>
                 </DownBtn>
               </Text>
-              <Text flex={1}>18kb</Text>
-              <Text flex={3}>时间戳</Text>
+              <Text flex={1}>{file.fileSize} kb</Text>
+              <Text flex={3}>{file.createTime}</Text>
             </RowFill>
           );
         })}

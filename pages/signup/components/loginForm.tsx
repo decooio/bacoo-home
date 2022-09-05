@@ -11,7 +11,7 @@ export const LoginFormBox = styled.div`
   width: 100%;
 `;
 const LoginForm = function () {
-  const { disaptch } = useContext(Context) as any;
+  const { dispatch } = useContext(Context) as any;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const login = async () => {
@@ -22,7 +22,7 @@ const LoginForm = function () {
       });
       const token = `Bearer ${res.data.signature}`;
       setLoc("token", token);
-      disaptch({
+      dispatch({
         type: "UPDATE_LOGIN_STATUS",
         payload: eloginStatus.login,
       });

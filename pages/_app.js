@@ -97,12 +97,10 @@ export default function App({Component, pageProps}) {
   const [inited, setInited] = useState(false)
   return (
     <MyContextWrapper>
-      
         <Provider store={store}>
           {!inited && <InitI18n onInit={() => setInited(true)}/>}
           {inited && <MApp Component={Component} pageProps={pageProps}/>}
         </Provider>
-      
     </MyContextWrapper>
   )
 }

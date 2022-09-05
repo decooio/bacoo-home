@@ -1,9 +1,13 @@
 import styled from "styled-components";
-import React, { createRef, useState } from "react";
+import React, { createRef, useContext, useState } from "react";
 import { Checkbox, Form, Input, message, Modal } from "antd";
 import Button from "../../../components/common/Button";
 import { REGISTERED_API, SEMDSMS_API, VERIFY_CODE_API } from "@request/apis";
 import type { FormInstance } from "antd/es/form";
+import { eloginStatus } from "@components/Context/types";
+import { setLoc } from "@src/index";
+import router from "next/router";
+import { Context } from "@components/Context/Context";
 export const BetweenFlexBox = styled.div`
   width: 100%;
   display: flex;
@@ -53,6 +57,7 @@ const astyle = {
   color: "#2CC8C2",
 };
 const RegisterForm = function () {
+  const { dispatch } = useContext(Context) as any;
   const [mobile, setMobile] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -110,7 +115,13 @@ const RegisterForm = function () {
             mobile,
             smsCode,
           });
-          console.log(res);
+          const token = `Bearer ${res.data.signature}`;
+          setLoc("token", token);
+          dispatch({
+            type: "UPDATE_LOGIN_STATUS",
+            payload: eloginStatus.login,
+          });
+          router.push("/panel/fileManager");
         });
     } catch (err) {
       console.log(err);

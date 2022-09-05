@@ -215,7 +215,6 @@ const Nav = () => {
               )}
             </Menus>
           </Drawer>
-          W
         </>
       ) : (
         <div className={"nav_right"}>

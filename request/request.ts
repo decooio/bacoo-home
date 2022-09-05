@@ -65,12 +65,12 @@ const request: ResponseFun<any> = (
   addHeaders
 ) => {
   // let AppLoadingDom = AppLoading;
-  if (config.loading) {
-    const dom = document.createElement("div");
-    dom.setAttribute("id", "loading");
-    document.body.appendChild(dom);
-    // ReactDOM.render(<AppLoadingDom />, dom);
-  }
+  // if (config.loading) {
+  //   const dom = document.createElement("div");
+  //   dom.setAttribute("id", "loading");
+  //   document.body.appendChild(dom);
+  //   // ReactDOM.render(<AppLoadingDom />, dom);
+  // }
   url = BASE_URL + url;
   const headers = [
     REGISTERED_ADDRESS,
@@ -98,16 +98,12 @@ const request: ResponseFun<any> = (
           reject(res.data);
           message.error(res.data.message);
         } else {
-          console.log(res);
-
           resolve(res.data);
         }
       })
       .catch((err: ErrorResponse) => {
-        console.log(err);
-
         // if (config.hint) message.error(err.response.data.message);
-        // reject(err.response.data);
+        reject(err.response);
       });
   });
 };
