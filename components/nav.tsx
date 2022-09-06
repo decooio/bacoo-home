@@ -7,10 +7,11 @@ import styled, { css } from "styled-components";
 import { WIKI_URL } from "../src/helper/const";
 import { useUser } from "../lib/useUser";
 import { Phone, useDevice } from "../src/assets/style";
-import { Drawer } from "antd";
+import { Drawer, message } from "antd";
 import { FiMenu, FiX } from "react-icons/fi";
 import { COL, Row, SpaceW } from "./common/layouts";
 import { useTranslation } from "react-i18next";
+import copyToClipboard from "copy-to-clipboard";
 // import i18next from "i18next";
 
 export const NavOtherLayout = styled.div`
@@ -159,7 +160,10 @@ const Nav = () => {
   const unPrice = router.pathname !== "/pricing";
   const showDocumentation = unPrice;
   const showMenu = showDocumentation;
-
+  const copyEmail=()=>{
+    copyToClipboard("may.bu@baitech.com");
+    message.success("邮箱已复制");
+  }
   return (
     <NavDiv isHome={isHome}>
       <div className={"nav_left"}>
@@ -222,13 +226,13 @@ const Nav = () => {
             <div>
               <a
                 rel="noreferrer"
-                href={WIKI_URL}
+                href={"https://beta-docs.baitech-ipfs.net/"}
                 className={"item"}
                 target="_blank"
               >
                 文档
               </a>
-              <a href="" target="_blank" className={"item"}>联系我们</a>
+              <span onClick={()=>copyEmail()} className={"item"}>联系我们</span>
             </div>
           )}
           <Userinfo />

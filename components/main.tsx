@@ -105,7 +105,6 @@ export default function Main() {
   );
   const [fileList, setFileList] = useState<RcFile[]>([]);
 
-
   // 复制
   const onClickCopy = () => {
     copyToClipboard(shareUrl);
@@ -149,9 +148,12 @@ export default function Main() {
         });
         localStorage.removeItem("token");
         setUpLoadStatus("finish");
-        const {cid} = (updatares as any).pin
+        const { cid } = (updatares as any).pin;
         setShareUrl(
-          `https://099equ.${activeGateway?.host.replace("https://", "")}/ipfs/${cid}`
+          `https://099equ.${activeGateway?.host.replace(
+            "https://",
+            ""
+          )}/ipfs/${cid}`
         );
       } catch (err) {
         message.error("文件上传失败,请稍后再试");
@@ -350,17 +352,17 @@ export default function Main() {
           }
         >
           <div className={"w-full text-center md:w-auto"}>
-            上海脆皮网络科技有限公司 Decoo Technologies Co.,Ltd
+            百工智联（上海）工业科技有限公司
           </div>
           <a
             className={"md:hover:text-white"}
             target={"_blank"}
             rel="noreferrer"
             href={
-              "http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31010902003263"
+              "http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=2022024704"
             }
           >
-            沪公网安备 31010902003263号
+            沪ICP备2022024704号
           </a>
           <a
             className={"md:hover:text-white"}
@@ -368,7 +370,7 @@ export default function Main() {
             rel="noreferrer"
             href={"https://beian.miit.gov.cn/"}
           >
-            沪ICP备2021017037号-1
+           
           </a>
           <a className={"md:hover:text-white"} href={"/termofuse"}>
             用户协议

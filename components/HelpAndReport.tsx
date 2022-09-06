@@ -91,17 +91,17 @@ const Reporter = styled.span`
 `;
 
 const typeMap = new Map([
-  [1, "技术支持"],
-  [2, "暂定"],
+  [0, "技术支持"],
+  [1, "用户意向"],
 ]);
 const typeList = [
   {
-    type: 1,
+    type: 0,
     text: "技术支持",
   },
   {
-    type: 2,
-    text: "暂定",
+    type: 1,
+    text: "用户意向",
   },
 ];
 
@@ -205,7 +205,7 @@ export default function HelpAndReport() {
           <TextTitle flex={2}>类型</TextTitle>
           <TextTitle flex={6}>描述</TextTitle>
           <TextTitle flex={2}>状态</TextTitle>
-
+          <TextTitle flex={6}>反馈</TextTitle>
           <TextTitle flex={2}></TextTitle>
         </RowFill>
         {ticketsList && ticketsList.length === 0 && (
@@ -235,9 +235,11 @@ export default function HelpAndReport() {
                     : "已解决"}
                 </MText>
               </Text>
-
+              <Text flex={6}>
+                <MText>{item.feedback}</MText>
+              </Text>
               <Text flex={2}>
-                <span
+               { item.status !==0 && (<span
                   onClick={() => {
                     getDetails(item.id);
                   }}
@@ -247,7 +249,7 @@ export default function HelpAndReport() {
                   }}
                 >
                   查看
-                </span>
+                </span>)}
               </Text>
             </RowFill>
           );
@@ -311,7 +313,7 @@ export default function HelpAndReport() {
         <ModalText>类型</ModalText>
         <Select
           disabled
-          defaultValue={detail?.type == 1 ? "技术支持" : "暂定"}
+          defaultValue={detail?.type == 0 ? "技术支持" : "用户意向"}
           style={{ width: "100%" }}
         ></Select>
         <HeightBox></HeightBox>
