@@ -17,6 +17,11 @@ export interface registeredData {
 export interface registerRes extends success_Response {
   code: number;
   message: string;
+  data: {
+    address: string;
+    signature: string;
+    uuid: string;
+  };
 }
 export type registerApi = (data: registeredData) => Promise<registerRes>;
 
@@ -70,12 +75,12 @@ export type forgetPasswordApi = (
 export interface getgatewayListRes extends success_Response {
   data: Array<{ host: string; nodeType: number; name: string }>;
 }
-export type getgatewayListApi = () => Promise<getgatewayListRes>;
+export type getgatewayListApi = (he?: any) => Promise<getgatewayListRes>;
 
 /**-----------------------------------------------------------获取文件列表接口------------------------------------------------------------------------------*/
 export interface getFilesData {
-  pageSize: string;
-  pageNum: string;
+  pageSize: number;
+  pageNum: number;
 }
 export interface getFilesRes extends success_Response {
   data: Array<{
@@ -84,6 +89,7 @@ export interface getFilesRes extends success_Response {
     fileSize: number;
     fileType: string;
     name: string;
+    host: string;
   }>;
 }
 export type getFilesApi = (data: getFilesData) => Promise<getFilesRes>;
@@ -95,7 +101,19 @@ export interface updataFilesData {
   name: string;
 }
 export interface updataFilesRes extends success_Response {
-  data: any;
+  data: {
+    created: string;
+    delegates: [];
+    info: any
+    pin: {
+      cid: string;
+      name: string;
+      meta: null;
+      origins: [];
+    };
+    requestId: string;
+    status: string;
+  };
 }
 export type updataFilesApi = (data: updataFilesData) => Promise<updataFilesRes>;
 
@@ -140,3 +158,21 @@ export interface changePasswordRes extends success_Response {
 export type changePasswordApi = (
   data: changePasswordData
 ) => Promise<changePasswordRes>;
+/**-----------------------------------------------------------修改密码接口------------------------------------------------------------------------------*/
+
+export interface getticketsListRes extends success_Response {
+  data: {
+    count: number;
+    results: Array<{
+      description: string;
+      feedback: string;
+      id: number;
+      status: number;
+      ticketNo: string;
+      type: number;
+    }>;
+  };
+}
+export type getticketsListApi = (
+  data: getFilesData
+) => Promise<getticketsListRes>;

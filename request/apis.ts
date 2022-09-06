@@ -11,6 +11,7 @@ import {
   getApisApi,
   getUserInfoApi,
   changePasswordApi,
+  getticketsListApi,
 } from "./types";
 /**-----------------------------------------------------------注册------------------------------------------------------------------------------*/
 
@@ -88,6 +89,20 @@ export const GET_FILE_LIST_API: getFilesApi = (data) => {
   );
 };
 
+/**-----------------------------------------------------------获取文件列表总数接口------------------------------------------------------------------------------*/
+export const GET_FILE_SIZE = "auth/file/list/size";
+export const GET_FILE_SIZE_API = () => {
+  return request(
+    GET_FILE_SIZE,
+    {},
+    {
+      hint: false,
+      method: "get",
+      loading: true,
+    }
+  );
+};
+
 /**-----------------------------------------------------------上传的文件列表接口------------------------------------------------------------------------------*/
 
 export const UPDATA_FILE = "psa/pins";
@@ -131,7 +146,7 @@ export const CHANGE_PASSWORD_API: changePasswordApi = (data: {
 /**-----------------------------------------------------------工单列表接口------------------------------------------------------------------------------*/
 
 export const GET_TICKETS_LIST = "auth/tickets/list";
-export const GET_TICKETS_LIST_API = (data: {
+export const GET_TICKETS_LIST_API: getticketsListApi = (data: {
   pageSize: number;
   pageNum: number;
 }) => {
@@ -143,5 +158,93 @@ export const GET_TICKETS_LIST_API = (data: {
       method: "get",
       loading: true,
     }
+  );
+};
+
+/**-----------------------------------------------------------提交工单列表接口------------------------------------------------------------------------------*/
+export const SUBMIT_TICKETS = "auth/tickets/report";
+export const SUBMIT_TICKETS_API = (data: {
+  description: string;
+  type: string | number;
+  feedback: string;
+}) => {
+  return request(SUBMIT_TICKETS, data, {
+    method: "post",
+    hint: true,
+    loading: false,
+  });
+};
+
+/**----------------------------------------------------------获取工单详情接口------------------------------------------------------------------------------*/
+export const GET_TICKETS_DETAILS = "auth/tickets/info/";
+export const GET_TICKETS_DETAILS_API = (id: string | number) => {
+  return request(
+    `${GET_TICKETS_DETAILS}${id}`,
+    {},
+    {
+      method: "get",
+      hint: true,
+      loading: false,
+    }
+  );
+};
+
+/**----------------------------------------------------------短信验证码接口(修改手机号)------------------------------------------------------------------------------*/
+export const SET_MOBILE_SMS = "auth/mobile/change/sms";
+export const SET_MOBILE_SMS_API = (mobile: string) => {
+  return request(
+    `${SET_MOBILE_SMS}`,
+    {
+      mobile,
+    },
+    {
+      method: "post",
+      hint: true,
+      loading: false,
+    }
+  );
+};
+
+/**----------------------------------------------------------修改手机号接口------------------------------------------------------------------------------*/
+export const SET_MOBILE = "auth/mobile/change";
+export const SET_MOBILE_API = (data: { mobile: string; smsCode: string }) => {
+  return request(`${SET_MOBILE}`, data, {
+    method: "post",
+    hint: true,
+    loading: false,
+  });
+};
+
+/**----------------------------------------------------------提交存储使用意向------------------------------------------------------------------------------*/
+export const POST_INTENTION = "auth/intention";
+export const POST_INTENTION_API = (data: {
+  storageType: number;
+  gatewayType: number;
+  requirment: string;
+}) => {
+  return request(`${POST_INTENTION}`, data, {
+    method: "post",
+    hint: true,
+    loading: false,
+  });
+};
+
+/**----------------------------------------------------------修改报告解决状态------------------------------------------------------------------------------*/
+export const SET_SOLVEd = "auth/tickets/feedback/resolved";
+export const SET_UNSOLVEd = "auth/tickets/feedback/unresolved";
+
+export const SET_SOLVEd_API = (id: string | number) => {
+  return request(
+    `${SET_SOLVEd}/${id}`,
+    {},
+    { method: "post", hint: true, loading: false }
+  );
+};
+
+export const SET_UNSOLVEd_API = (id: string | number) => {
+  return request(
+    `${SET_UNSOLVEd}/${id}`,
+    {},
+    { method: "post", hint: true, loading: false }
   );
 };

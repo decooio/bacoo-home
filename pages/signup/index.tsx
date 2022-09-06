@@ -1,15 +1,14 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import Button from "../../components/common/Button";
-import styled, { css } from "styled-components";
-import { getLogoDark, getMsg, validate } from "../../src/helper/utils";
-import { Checkbox, Form, Input } from "antd";
-import { useRouter } from "next/router";
+import React, { useContext } from "react";
+
+import styled from "styled-components";
+import { getLogoDark } from "../../src/helper/utils";
+
 import { Context } from "@components/Context/Context";
 import { eloginType } from "@components/Context/types";
-import { elementType } from "prop-types";
+
 import LoginForm from "./components/loginForm";
 import RegisterForm from "./components/registerForm";
-import ResetPasswordForm from './components/resetPasswordForm'
+import ResetPasswordForm from "./components/resetPasswordForm";
 
 export const FormWrapper = styled.div`
   @media (min-width: 768px) {
@@ -37,13 +36,7 @@ const mlinksyle = {
   paddingLeft: 20,
 };
 
-export default function () {
-  const router = useRouter();
-  const [invalidMsg, setInvalidMsg] = useState<any>({
-    phone: "",
-    password: "",
-    nickName: "",
-  });
+export default function Loing() {
   const { state, dispatch } = useContext(Context) as any;
   const { loginType } = state;
   const setLoginType = (type: eloginType) => {
@@ -58,10 +51,9 @@ export default function () {
       <FormWrapper className="relative flex  flex-col	items-center w-full px-8 md:px-0">
         <Logo src={getLogoDark()} />
 
-        {loginType == eloginType.login && <LoginForm/>}
-        {loginType == eloginType.register && <RegisterForm/>}
-        {loginType == eloginType.resetPassword && <ResetPasswordForm/>}
-
+        {loginType == eloginType.login && <LoginForm />}
+        {loginType == eloginType.register && <RegisterForm />}
+        {loginType == eloginType.resetPassword && <ResetPasswordForm />}
 
         <FlexBox>
           <span className="text-14 md:text-16">

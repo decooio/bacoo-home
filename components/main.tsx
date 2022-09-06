@@ -1,34 +1,34 @@
 import s from "./main.module.scss";
 // import RightSlide from "./RightSlide";
-import { useT, useToast } from "../src/hooks/utils";
-import { FiArrowUp, FiCheckCircle, FiPlus } from "react-icons/fi";
-import { GrDocument, GrFolder } from "react-icons/gr";
-
-import React, { ChangeEvent, useRef, useState } from "react";
-import { ErrorDist, fileSizeLimitMb } from "../src/helper/const";
+import { FiCheckCircle, FiChevronDown, FiPlus } from "react-icons/fi";
+import { GrDocument } from "react-icons/gr";
+import React, { useContext, useEffect, useState } from "react";
 import i18next from "i18next";
 import BgAnim from "./effect/BgAnim";
 // import {pinFile} from "../lib/http";
 import styled from "styled-components";
-import { apiToGateway, formatSize, getMsg } from "../src/helper/utils";
 import { Phone, useDevice } from "../src/assets/style";
 import classNames from "classnames";
-import { PinRes } from "@decooio/sdk/src/types";
 import { COL } from "./common/layouts";
-import { DecooIo, useDecooIo } from "../lib/useDecooIo";
 import Button from "./common/Button";
-import { EndpointSelect } from "./endpoint/EndpointSelect";
-import { FaRegHourglass } from "react-icons/fa";
-import { Anim } from "./common/Anim";
-import { Progress } from "antd";
+import { Dropdown, Menu, message, Progress, Space, Upload } from "antd";
+import { GET_GATEWAY_LIST_API, UPDATA_FILE_API } from "@request/apis";
+import { setLoc } from "@src/index";
+import { getgatewayListRes } from "@request/types";
+import { RcFile } from "antd/lib/upload";
+import axios from "axios";
 import copyToClipboard from "copy-to-clipboard";
-import { getStrKey } from "../src/helper/oed";
-
-const UpState = {
-  init: "init",
-  init2: "init2",
-  up: "up",
-  upFinish: "up-finish",
+import { Context } from "./Context/Context";
+import { eloginStatus } from "./Context/types";
+import router from "next/router";
+const token =
+  "Bearer c3Vic3RyYXRlLWNUTEJlSGlvd2JDZE1rdjNLaENSQkxzbXNmRDNicVlnVlZURU5DQlp1ZjIxRW5OOEc6MHgwMjFiNTU1OTg3ZGU4OTJlY2JlMmE5MWIzMTI3Mzg4OGIwYTUwYzZmN2ExNzAwNTFhNzVkNjAwMDc2NzhiYjA1YTU0NWIwYjJkNjVkYmRlNTJmNWQyNDU0NzljODRiMzExZDQxMjM5MjU3MzM5MTlhMGFkMzhiZWE0YjRlZGM4OQ";
+const upDataPorps = {
+  showUploadList: false,
+  name: "file",
+  headers: {
+    authorization: token,
+  },
 };
 
 const DCPanel = styled(COL)<{ invisible: boolean }>`
@@ -86,132 +86,85 @@ const DCPanel = styled(COL)<{ invisible: boolean }>`
   }
 `;
 
-interface DcPanelComProps {
-  file: File;
-  doUpFile: (file: File) => void;
-  decooIo: DecooIo;
-}
-
-function DcPanelCom(props: DcPanelComProps) {
-  const { file, doUpFile, decooIo } = props;
-  return (
-    <DCPanel invisible={!decooIo.endpoint}>
-      <div className={"title"}>Add File</div>
-      <div className={"file_item"}>
-        <div className={"file_name"}>{file.name}</div>
-        <div className={"file_size"}>{formatSize(file.size)}</div>
-      </div>
-      {decooIo.endpoint ? (
-        <>
-          <EndpointSelect decooIo={decooIo} />
-          <Button
-            style={{
-              width: "calc(100% - 40px)",
-              height: 36,
-              margin: "18px 20px",
-            }}
-            onClick={() => doUpFile(file)}
-          >
-            <FiArrowUp />{" "}
-          </Button>
-        </>
-      ) : (
-        <Anim
-          name={"rotate"}
-          duration={"1.5s"}
-          style={{ marginTop: 60, width: 20, height: 20 }}
-        >
-          <FaRegHourglass size={20} />
-        </Anim>
-      )}
-    </DCPanel>
-  );
-}
-
 export default function Main() {
-  const { t } = useT();
+  const { state } = useContext(Context) as any;
+  const { loginStatus } = state;
   const { isMobile } = useDevice();
-  const [upState, setUpState] = useState(UpState.init);
-  const isInit = upState === UpState.init;
-  const isInit2 = upState === UpState.init2;
-  const isUp = upState === UpState.up;
-  const isUpFinish = upState === UpState.upFinish;
   const [shareUrl, setShareUrl] = useState("");
-  const [showDc, setShowDc] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const toast = useToast();
-  const decooIo = useDecooIo();
-  // const {upload, progress} = useUpload()
-  const [progress, setProgress] = useState(0);
+  //  进度
+  const [progress] = useState(55);
   const [uploadFileTypeShow, setUploadFileTypeShow] = useState(false);
+  const [gayewayList, setGayewayList] = useState<getgatewayListRes["data"]>([]);
+  const [activeGateway, setActiveGateway] = useState<{
+    host: string;
+    nodeType: number;
+    name: string;
+  } | null>();
+  const [upLoadStatus, setUpLoadStatus] = useState<string | undefined>(
+    "initial"
+  );
+  const [fileList, setFileList] = useState<RcFile[]>([]);
 
-  const updateProgress = (p: number, auto = false) => {
-    setProgress((oldP) => {
-      if (auto) {
-        const nP = oldP + p;
-        return nP <= 99 ? nP : 99;
-      }
-      if (oldP > p) return oldP;
-      return p;
-    });
-  };
 
-  const inputFile = useRef<HTMLInputElement>(null);
-  const onClickAdd = () => {
-    const event = new MouseEvent("click");
-    inputFile?.current?.dispatchEvent(event);
-  };
-
-  const doUpFile = (file: File) => {
-    console.log(doUpFile);
-    
-    if (!decooIo.client || !file) return;
-    setUpState(UpState.up);
-    setShowDc(false);
-    decooIo.client
-      .pinFile(file, (p) => {
-        updateProgress(p * 100);
-      })
-      .then((data: PinRes) => {
-        console.info("pinFile", data);
-        setUpState(UpState.upFinish);
-        // clearInterval(autoProgress)
-        setShareUrl(`${data.PinHash}?filename=${file.name}`);
-        setProgress(0);
-      })
-      .catch((e: any) => {
-        // clearInterval(autoProgress)
-        setProgress(0);
-        setUpState(UpState.init);
-        toast.show(getMsg(e, "Upload Error"), 5000);
-      });
-  };
-
-  const onFileSelected = (e: ChangeEvent<HTMLInputElement>) => {
-    // check null
-    if (!e.target.files || e.target.files.length === 0 || !e.target.files[0])
-      return;
-    const file = e.target.files[0];
-    e.target.value = "";
-    if (file.size > fileSizeLimitMb * 1024 * 1024) {
-      toast.show(t(ErrorDist.FileSizeError), 5000);
-      return;
-    }
-    setFile(file);
-    setShowDc(true);
-  };
-
+  // 复制
   const onClickCopy = () => {
-    if (!decooIo.endpoint) return;
-    copyToClipboard(
-      `${apiToGateway(decooIo.endpoint.apiHost)}/ipfs/${shareUrl}`
-    );
-    toast.show(t("copied"));
+    copyToClipboard(shareUrl);
+    message.success("复制成功");
   };
 
+  //获取节点列表
+  const getGatewayList = async () => {
+    setLoc("token", token);
+    try {
+      const res = await GET_GATEWAY_LIST_API();
+      setGayewayList([...res.data]);
+      setActiveGateway(res.data[0]);
+    } catch (e) {
+      console.log(e);
+    }
+    localStorage.removeItem("token");
+  };
+
+  // 手动上传
+  const handleUpload = async () => {
+    const formData = new FormData();
+    formData.append("file", fileList[0]);
+    try {
+      setUpLoadStatus("uploading");
+      const res = await axios.post(
+        `${activeGateway?.host}/api/v0/add?pin=true`,
+        formData,
+        {
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      const { Hash, Name } = res.data;
+      try {
+        setLoc("token", token);
+        const updatares = await UPDATA_FILE_API({
+          cid: Hash,
+          name: Name,
+        });
+        localStorage.removeItem("token");
+        setUpLoadStatus("finish");
+        const {cid} = (updatares as any).pin
+        setShareUrl(
+          `https://099equ.${activeGateway?.host.replace("https://", "")}/ipfs/${cid}`
+        );
+      } catch (err) {
+        message.error("文件上传失败,请稍后再试");
+        setUpLoadStatus("initial");
+      }
+    } catch (error) {
+      message.error("文件上传失败,请稍后再试");
+      setUpLoadStatus("initial");
+    }
+  };
+  // 上传文件
   const InputFile = () => {
     const isEn = i18next.language === "en";
-
     let fontSize = isEn ? 32 : 38;
     if (isMobile) fontSize = Math.round(fontSize * 0.7);
     return (
@@ -219,31 +172,50 @@ export default function Main() {
         <div
           className={s.inputFile}
           style={{ fontSize }}
-          onClick={() => {
-            uploadFileTypeShow
-              ? setUploadFileTypeShow(false)
-              : setUploadFileTypeShow(true);
-          }}
+          onClick={() => setUploadFileTypeShow(!uploadFileTypeShow)}
         >
           <FiPlus />
           <span>添加文件</span>
         </div>
         {uploadFileTypeShow && (
           <div className={s.uploadFileType}>
-            <div className={s.uploadFileTypeItem} onClick={onClickAdd} >
-              <GrDocument />
-              <span className={s.uploadFileTypeItemText}>文件</span>
-            </div>
-            <div className={s.uploadFileTypeItem}>
-              <GrFolder />
-              <span className={s.uploadFileTypeItemText}>文件夹</span>
-            </div>
+            <Upload
+              className={s.uploadFileTypeItem}
+              action={`${activeGateway?.host}/api/v0/add?pin=true`}
+              {...upDataPorps}
+              beforeUpload={async (file) => {
+                setUpLoadStatus("success");
+                setFileList([file]);
+                return false;
+              }}
+            >
+              <div className={s.box}>
+                <GrDocument />
+                <span className={s.uploadFileTypeItemText}>文件</span>
+              </div>
+            </Upload>
+
+            {/* <Upload
+              className={s.uploadFileTypeItem}
+              directory
+              {...upDataPorps}
+              beforeUpload={async (file) => {
+                setUpLoadStatus("success");
+                setFileList([file]);
+                return false;
+              }}
+            >
+              <div className={s.box}>
+                <GrFolder />
+                <span className={s.uploadFileTypeItemText}>文件夹</span>
+              </div>
+            </Upload> */}
           </div>
         )}
       </div>
     );
   };
-
+  // 文件上传中
   const UploadingFile = () => {
     const stroke = isMobile ? 20 : 25;
     const margin = isMobile ? "0 15px" : "0 20px";
@@ -259,7 +231,7 @@ export default function Main() {
       </div>
     );
   };
-
+  // 分享文件
   const UploadingFinish = () => {
     return (
       <div className={s.uploadFinish}>
@@ -271,39 +243,95 @@ export default function Main() {
         </div>
         <div className={s.btns}>
           <div className={s.btn} onClick={onClickCopy}>
-            {t("Share Link")}
+            分享链接
           </div>
-          <div className={s.btn2} onClick={onClickAdd}>
-            {t("Continue to add")}
+          <div className={s.btn2} onClick={() => setUpLoadStatus("initial")}>
+            继续添加
           </div>
         </div>
       </div>
     );
   };
 
+  // 展示节点的组件
+  function DcPanelCom(list: getgatewayListRes["data"]) {
+    return (
+      <DCPanel invisible={false}>
+        <div className={"title"}>Add File</div>
+        {fileList.map((item, index) => {
+          return (
+            <div key={index} className={"file_item"}>
+              <div className={"file_name"}>{item.name}</div>
+              <div className={"file_size"}>{item.size}kb</div>
+            </div>
+          );
+        })}
+        <div
+          style={{
+            padding: "10px 0 0 20px",
+          }}
+        >
+          <Dropdown
+            overlay={
+              <Menu>
+                {list.map((item, index) => {
+                  return (
+                    <Menu.Item
+                      key={index}
+                      onClick={() => setActiveGateway(item)}
+                    >
+                      {item.name}
+                    </Menu.Item>
+                  );
+                })}
+              </Menu>
+            }
+          >
+            <Space>
+              上传节点: {activeGateway?.name} <FiChevronDown></FiChevronDown>
+            </Space>
+          </Dropdown>
+        </div>
+        <>
+          <Button
+            style={{
+              width: "calc(100% - 40px)",
+              height: 36,
+              margin: "18px 20px",
+            }}
+            onClick={() => handleUpload()}
+          >
+            上传
+          </Button>
+        </>
+      </DCPanel>
+    );
+  }
+
+  useEffect(() => {
+    if (loginStatus == eloginStatus.login) {
+      router.replace("/panel/fileManager");
+      return;
+    }
+    getGatewayList();
+  }, []);
   return (
     <div className={classNames(s.main, isMobile && s.main_mobile)}>
       <BgAnim />
       <div className={s.content}>
         <div className={s.auto_padding} />
-        {!showDc && (
+
+        {upLoadStatus !== "success" && (
           <div className={s.input_btn}>
-            <input
-              ref={inputFile}
-              type={"file"}
-              onChange={onFileSelected}
-              style={{ visibility: "hidden", height: 0, display: "none" }}
-            />
-            <div className={s.toast}>{toast.Toast()}</div>
             <div className={s.baseFile} />
-            {(isInit || isInit2) && InputFile()}
-            {isUp && UploadingFile()}
-            {isUpFinish && UploadingFinish()}
+            {upLoadStatus == "initial" && InputFile()}
+            {upLoadStatus == "uploading" && UploadingFile()}
+            {upLoadStatus == "finish" && UploadingFinish()}
+            {/* {DcPanelCom()} */}
           </div>
         )}
-        {showDc && file && (
-          <DcPanelCom file={file} doUpFile={doUpFile} decooIo={decooIo} />
-        )}
+        {upLoadStatus == "success" && DcPanelCom(gayewayList)}
+
         {
           <div className={s.homeSlog}>
             <span className={s.title}>百工链存-创新性分布式存储</span>

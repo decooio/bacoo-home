@@ -29,7 +29,6 @@ jobs:
       - name: Login to private docker registry
         uses: docker/login-action@v1
         with:
-          registry: decoo-registry.tencentcloudcr.com
           username: ${{ secrets.TCR_USER }}
           password: ${{ secrets.TCR_PASSWD}}
 
@@ -40,4 +39,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/decooio/bacoo-home:latest, decoo-registry.tencentcloudcr.com/decooio/bacoo-home:latest
+          tags: ghcr.io/decooio/bacoo-home:latest, gavfu/bacoo-home:latest

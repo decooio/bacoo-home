@@ -1,24 +1,23 @@
-import { COL, Row, RowFill, SpaceH } from "./common/layouts";
+import { COL,  RowFill } from "./common/layouts";
 import Button from "./common/Button";
-import { FiBox, FiChevronDown, FiDownload, FiPlus } from "react-icons/fi";
+import { FiBox, FiChevronDown, FiDownload } from "react-icons/fi";
 import styled from "styled-components";
 import { CopyText, EmptyText, Text, TextTitle } from "./common/texts";
-import { useEffect, useState } from "react";
-import { IFile } from "../src/types/manager";
+import { useContext, useEffect, useState } from "react";
 import { Pager } from "./common/Pager";
-import _ from "lodash";
-import { useLoading, withLoading } from "./common/Loading";
 import { Tips } from "./common/tips";
 import React from "react";
 import { Phone } from "../src/assets/style";
 import { getFilesRes, getgatewayListRes } from "@request/types";
 import {
   GET_FILE_LIST_API,
+  GET_FILE_SIZE_API,
   GET_GATEWAY_LIST_API,
   UPDATA_FILE_API,
 } from "@request/apis";
-import { Dropdown, Menu, Space, Upload } from "antd";
+import { Alert, Dropdown, Menu, Modal, Progress, Space, Upload } from "antd";
 import { getLoc } from "@src/index";
+import { Context } from "./Context/Context";
 
 export const Table = styled(COL)`
   width: calc(100% - 62px);
@@ -68,6 +67,8 @@ export const DownBtn = styled.div<{ invisible?: boolean }>`
 `;
 
 export default function FileManager() {
+  const { state, dispatch } = useContext(Context) as any;
+  const { loading, uuid } = state;
   const [files, setFiles] = useState<getFilesRes["data"]>([]);
   const [gatewayList, setGatewayList] = useState<getgatewayListRes["data"]>([]);
   const [activeGateway, setActiveGateway] = useState<{
@@ -79,14 +80,17 @@ export default function FileManager() {
     nodeType: 0,
     name: "",
   });
+  const [pageNum, setPageNum] = useState(1);
+  const [upLoadOpen, setUpLoadOpen] = useState(false);
+  const [upLoadStatus, setUpLoadStatus] = useState<string | undefined>("");
+  const [pageSize, setPageSize] = useState(0);
 
-  const [pageNum, setPageNum] = useState("1");
-
-  const { showAppLoading } = useLoading();
-
-  const setPageIndex = () => {};
   //获取节点列表
   const getGatewayList = async () => {
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: true,
+    });
     try {
       const res = await GET_GATEWAY_LIST_API();
       console.log(res);
@@ -96,17 +100,36 @@ export default function FileManager() {
     } catch (e) {
       console.log(e);
     }
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: false,
+    });
   };
   //获取已经上传的文件
   const getFiles = async () => {
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: true,
+    });
     try {
       const res = await GET_FILE_LIST_API({
-        pageSize: "10",
+        pageSize: 10,
         pageNum,
       });
-
       console.log(res);
       setFiles([...res.data]);
+    } catch (e) {
+      console.log(e);
+    }
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: false,
+    });
+  };
+  const getFileSize = async () => {
+    try {
+      const res = await GET_FILE_SIZE_API();
+      setPageSize(res.data);
     } catch (e) {
       console.log(e);
     }
@@ -114,6 +137,7 @@ export default function FileManager() {
 
   useEffect(() => {
     getFiles();
+    getFileSize();
   }, [pageNum]);
 
   useEffect(() => {
@@ -129,15 +153,18 @@ export default function FileManager() {
           action={`${activeGateway.host}/api/v0/add?pin=true`}
           headers={{ authorization: getLoc("token") as string }}
           onChange={async (info) => {
-            console.log(info);
+            setUpLoadStatus(info.file.status);
+            if (info.file.status == "uploading") {
+              setUpLoadOpen(true);
+            }
+
             if (info.file.status === "done" || info.file.status === "success") {
-              console.log(info.file.response);
+              setUpLoadOpen(false);
               const { Hash, Name } = info.file.response;
-              const res = await UPDATA_FILE_API({
+              await UPDATA_FILE_API({
                 cid: Hash,
                 name: Name,
               });
-              console.log(res);
               getFiles();
             }
           }}
@@ -182,7 +209,7 @@ export default function FileManager() {
           <TextTitle flex={1}>体积</TextTitle>
           <TextTitle flex={3}>Pin时间戳</TextTitle>
         </RowFill>
-        {files && files.length === 0 && !showAppLoading && (
+        {files && files.length === 0 && !loading && (
           <EmptyText>暂无数据</EmptyText>
         )}
         {files.map((file, index) => {
@@ -196,7 +223,7 @@ export default function FileManager() {
               </Text>
               <CopyText flex={6}>{file.cid}</CopyText>
               <Text flex={6}>
-                <Tips title="文件名Tips">
+                <Tips title="因遵守当地相关法律法规要求，暂不提供针对该内容的服务。">
                   <MText>{file.name}</MText>
                 </Tips>
               </Text>
@@ -204,10 +231,15 @@ export default function FileManager() {
               <Text flex={1}>
                 <DownBtn>
                   <Tips title="点击下载">
-                    <FiDownload />
+                    <a
+                      rel="noreferrer"
+                      target="_blank"
+                      href={`https://${uuid}.${file.host.replace('https://','')}/ipfs/${file.cid}`}
+                    >
+                      <FiDownload />
+                    </a>
                   </Tips>
                   <Tips title="在IPFS Scan查看文件副本分布">
-                    {" "}
                     <FiBox />
                   </Tips>
                 </DownBtn>
@@ -218,7 +250,33 @@ export default function FileManager() {
           );
         })}
       </Table>
-      <Pager pageSize={10} pageIndex={1} setPageIndex={setPageIndex} />
+      <Pager
+        pageSize={Math.ceil(pageSize / 10)}
+        pageIndex={pageNum}
+        setPageIndex={(e) => setPageNum(e)}
+      />
+
+      <Modal
+        title="上传文件"
+        visible={upLoadOpen}
+        footer={null}
+        onCancel={() => setUpLoadOpen(false)}
+      >
+        {upLoadStatus === "done" ||
+          (upLoadStatus === "success" && (
+            <Alert message="上传成功" type="success" />
+          ))}
+        {upLoadStatus === "done" ||
+          (upLoadStatus === "error" && (
+            <Alert message="上传失败" type="error" />
+          ))}
+        <Progress
+          strokeWidth={20}
+          strokeColor={"rgb(51 51 51)"}
+          percent={99}
+          status="active"
+        />
+      </Modal>
     </MCol>
   );
 }

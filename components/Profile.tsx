@@ -1,18 +1,22 @@
 import styled from "styled-components";
-import { COL, Row, SpaceH, SpaceW } from "./common/layouts";
+import { COL, Row, SpaceH } from "./common/layouts";
 import Button from "./common/Button";
-import { usePlanDetails, useUser } from "../lib/useUser";
-import React, { useState, useEffect } from "react";
-import { changePwd } from "../lib/http";
-import { F_DAY, formatSize, formatTime, getMsg } from "../src/helper/utils";
-import { useRouter } from "next/router";
-import { useTranslation } from "react-i18next";
-import { Phone, useDevice } from "../src/assets/style";
-import { CHANGE_PASSWORD_API, GET_USER_INFO_API } from "@request/apis";
+import React, { useState, useEffect, useContext } from "react";
+import { Phone } from "../src/assets/style";
+import {
+  CHANGE_PASSWORD_API,
+  GET_GATEWAY_LIST_API,
+  GET_USER_INFO_API,
+  POST_INTENTION_API,
+} from "@request/apis";
 import { getUserInfoRes } from "@request/types";
 import { changeSize } from "@src/index";
 import { message, Modal, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+import { Context } from "./Context/Context";
+import SelectorBox from "./common/SelectorBox";
+import TextArea from "antd/lib/input/TextArea";
+import router from "next/router";
 
 const antIcon = <LoadingOutlined style={{ fontSize: 48 }} spin />;
 
@@ -98,6 +102,26 @@ const InputPwd = styled.input`
     border: 1px solid #999999;
   }
 `;
+export const Minput = styled.input`
+  width: 100%;
+  font-size: 14px;
+  margin-top: 16px;
+  border-radius: 4px;
+  line-height: 44px;
+  border: 1px solid #cccccc;
+  padding: 0 16px;
+
+  &::placeholder {
+    margin-left: 16px;
+    font-size: 14px;
+    color: #cccccc;
+    line-height: 20px;
+  }
+
+  &:focus {
+    border: 1px solid #999999;
+  }
+`;
 
 export const Info = styled.span<{ success: boolean }>`
   color: ${(p) => (p.success ? "#56CB8F" : "#F37565")};
@@ -120,6 +144,9 @@ const MCol = styled(COL)`
     justify-content: flex-start;
   }
 `;
+export const HeightBox = styled.div`
+  height: 20px;
+`;
 
 const Tips = styled.span`
   font-weight: 400;
@@ -127,26 +154,125 @@ const Tips = styled.span`
   line-height: 18px;
   color: #aaaaaa;
 `;
+export const ModalText = styled.p`
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 31px;
+  color: #000000;
+`;
+const FlexBox = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`;
+const DetailsText = styled.p`
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 28px;
+  color: #666666;
+`;
+
+const storageUsage = [
+  {
+    id: 0,
+    text: "<10TB",
+  },
+  {
+    id: 1,
+    text: "100TB",
+  },
+  {
+    id: 2,
+    text: "1PB",
+  },
+];
+
+const gatewayList = [
+  {
+    id: 0,
+    text: "公共网关",
+  },
+  {
+    id: 1,
+    text: "专用网关",
+  },
+];
+
 export default function Profile() {
-  const { isMobile } = useDevice();
-  const space = isMobile ? "10px" : "24px";
+  const { dispatch } = useContext(Context) as any;
   const [user, setUser] = useState<getUserInfoRes["data"]["info"]>();
   const [plan, setPlan] = useState<getUserInfoRes["data"]["plan"]>();
   const [oPwd, setOPwd] = useState("");
   const [nPwd, setNPwd] = useState("");
   const [loading, setLoading] = useState(false);
   const [info, setInfo] = useState("");
-  const [modalOpen, setModalOpen] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [storageUsageId, setStorageUsageId] = useState(0);
+  const [gatewayID, setGatewayID] = useState(0);
+  const [requirment, setRequirment] = useState("");
+  const [activeGateway, setActiveGateway] = useState<{
+    host: string;
+    nodeType: number;
+    name: string;
+  }>({
+    host: "",
+    nodeType: 0,
+    name: "",
+  });
+
+  const postIntention = async () => {
+    try {
+      await POST_INTENTION_API({
+        storageType: storageUsageId,
+        gatewayType: gatewayID,
+        requirment,
+      });
+      setModalOpen(false);
+      message.success("提交成功");
+    } catch (e) {
+      message.error(e);
+    }
+  };
+  //获取节点列表
+  const getGatewayList = async () => {
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: true,
+    });
+    try {
+      const res = await GET_GATEWAY_LIST_API();
+      console.log(res);
+      const data = res.data;
+      const activeGateway = data.find((item) => item.nodeType == 1);
+      activeGateway
+        ? setActiveGateway(activeGateway)
+        : setActiveGateway(data[0]);
+    } catch (e) {
+      console.log(e);
+    }
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: false,
+    });
+  };
 
   const getInfo = async () => {
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: true,
+    });
     try {
       const res = await GET_USER_INFO_API();
-      console.log(res.data.info);
       setUser(res.data.info);
       setPlan(res.data.plan);
     } catch (e) {
       console.log(e);
     }
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: false,
+    });
   };
 
   const changePassword = async () => {
@@ -178,8 +304,8 @@ export default function Profile() {
             <SpaceH />
           </div>
           <div>
-            <SubText children={`用户名：${user?.username}`} />
-            <SubText children={`手机号：${user?.mobile}`} />
+            <SubText children={`用户名：${user?.username || "暂无信息"}`} />
+            <SubText children={`手机号：${user?.mobile || "暂无信息"}`} />
           </div>
           <Button
             children={"更改手机号"}
@@ -188,7 +314,9 @@ export default function Profile() {
               marginTop: 16,
               borderRadius: 4,
               fontSize: 14,
+              height: 48,
             }}
+            onClick={() => router.push("/setPhone")}
           />
         </Card>
 
@@ -208,18 +336,57 @@ export default function Profile() {
                 plan?.usedDownloadSize
               )}/${changeSize(plan?.maxDownloadSize)}`}
             />
-            <SubText children={`到期时间：${plan?.storageExpireTime}`} />
+            <SubText
+              children={`到期时间：${plan?.storageExpireTime || "暂无信息"}`}
+            />
           </div>
 
-          <Button
-            children={"了解更多存储计划"}
-            style={{
-              width: "100%",
-              marginTop: 16,
-              borderRadius: 4,
-              fontSize: 14,
-            }}
-          />
+          {plan?.orderType == 1 && (
+            <Button
+              children={"了解更多存储计划"}
+              style={{
+                width: "100%",
+                marginTop: 16,
+                borderRadius: 4,
+                fontSize: 14,
+                height: 48,
+              }}
+              onClick={() => {
+                setModalOpen(true);
+              }}
+            />
+          )}
+          {plan?.orderType == 0 && (
+            <FlexBox>
+              <Button
+                children={"查看存储计划详情"}
+                style={{
+                  width: "45%",
+                  marginTop: 16,
+                  borderRadius: 4,
+                  fontSize: 14,
+                  height: 48,
+                }}
+                onClick={() => {
+                  getGatewayList();
+                  setDetailsModalOpen(true);
+                }}
+              />
+              <Button
+                children={"了解更多存储计划"}
+                style={{
+                  width: "45%",
+                  marginTop: 16,
+                  borderRadius: 4,
+                  fontSize: 14,
+                  height: 48,
+                }}
+                onClick={() => {
+                  setModalOpen(true);
+                }}
+              />
+            </FlexBox>
+          )}
         </Card>
 
         {loading ? (
@@ -251,6 +418,7 @@ export default function Profile() {
                 marginTop: 16,
                 borderRadius: 4,
                 fontSize: 14,
+                height: 48,
               }}
               onClick={() => changePassword()}
             />
@@ -258,11 +426,88 @@ export default function Profile() {
         )}
       </MCol>
 
-      <Modal title="我们希望了解您的使用意向" visible={modalOpen} footer={null}>
-        <p>选择您偏好的存储用量</p>
-        <p>选择您所使用的IPFS网关</p>
-        <Tips>*公共网关为共享带宽网关，用户需根据所使用的上下行流量付费；专用网关可配置固定带宽，且专门为用户保留，速度与响应更有保证。</Tips>
-        <p>您对于文件副本数的要求？</p>
+      <Modal
+        width={320}
+        title="我们希望了解您的使用意向"
+        visible={modalOpen}
+        footer={null}
+        onCancel={() => setModalOpen(false)}
+      >
+        <ModalText>选择您偏好的存储用量</ModalText>
+        <SelectorBox
+          list={storageUsage}
+          activeKey={storageUsageId}
+          onChange={(e: number) => setStorageUsageId(e)}
+        ></SelectorBox>
+        <HeightBox />
+
+        <ModalText>选择您所使用的IPFS网关</ModalText>
+        <SelectorBox
+          list={gatewayList}
+          activeKey={gatewayID}
+          onChange={(e: number) => setGatewayID(e)}
+        ></SelectorBox>
+
+        <Tips>
+          *公共网关为共享带宽网关，用户需根据所使用的上下行流量付费；专用网关可配置固定带宽，且专门为用户保留，速度与响应更有保证。
+        </Tips>
+        <HeightBox />
+
+        <ModalText>您对于文件副本数的要求？</ModalText>
+        <TextArea
+          rows={4}
+          onInput={(e) => {
+            setRequirment((e.target as any).value);
+          }}
+        />
+        <Tips>*您可简单描述您对文件副本数量以及地域分布的需求。</Tips>
+        <HeightBox />
+
+        <Button
+          style={{
+            width: "320px",
+          }}
+          onClick={() => postIntention()}
+        >
+          点击提交您的存储使用意向
+        </Button>
+        <Tips>*提交意向后，我们会及时通过邮件与您联系。</Tips>
+      </Modal>
+
+      <Modal
+        width={380}
+        title="存储计划详情"
+        visible={detailsModalOpen}
+        footer={null}
+        onCancel={() => setDetailsModalOpen(false)}
+      >
+        <ModalText>存储计划名称</ModalText>
+        <HeightBox />
+        <DetailsText>百工链存 - 存储计划Pro</DetailsText>
+        <HeightBox />
+
+        <ModalText>计划配置</ModalText>
+        <DetailsText>
+          存储用量上限：{changeSize(plan?.maxStorageSize)}
+        </DetailsText>
+        <DetailsText>公共IPFS网关：</DetailsText>
+        <DetailsText>状态：可使用</DetailsText>
+        <DetailsText>流量：{changeSize(plan?.maxDownloadSize)}</DetailsText>
+        <DetailsText>
+          专用IPFS网关：{activeGateway.host || "暂无信息"}
+        </DetailsText>
+        <DetailsText>状态：可使用</DetailsText>
+        <DetailsText>固定配置带宽：上下行200Mbps</DetailsText>
+        <HeightBox />
+
+        <ModalText>用量统计</ModalText>
+        <DetailsText>
+          已消耗存储用量：{changeSize(plan?.usedStorageSize)}
+        </DetailsText>
+        <DetailsText>
+          已消耗公共IPFS网关流量：{changeSize(plan?.usedDownloadSize)}
+        </DetailsText>
+        <DetailsText>到期时间：{plan?.storageExpireTime}</DetailsText>
       </Modal>
     </Grid>
   );

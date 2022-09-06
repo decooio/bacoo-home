@@ -1,4 +1,3 @@
-import React from "react";
 import { getLoc } from "@src/index";
 import { message } from "antd";
 import axios from "axios";
@@ -9,9 +8,6 @@ import {
   VERIFY_CODE_ADDRESS,
 } from "./apis";
 const BASE_URL = "https://beta-api.baitech-ipfs.net/";
-import ReactDOM from "react-dom";
-import { AppLoading } from "../components/common/Loading";
-import { Spin } from "antd";
 
 type RequestConfig = {
   method?: "get" | "post" | "put" | "delete";
@@ -53,7 +49,6 @@ const setTokenToHeader = () => ({
   Authorization: getLoc("token"),
 });
 
-
 const request: ResponseFun<any> = (
   url,
   data = {},
@@ -64,13 +59,6 @@ const request: ResponseFun<any> = (
   },
   addHeaders
 ) => {
-  // let AppLoadingDom = AppLoading;
-  // if (config.loading) {
-  //   const dom = document.createElement("div");
-  //   dom.setAttribute("id", "loading");
-  //   document.body.appendChild(dom);
-  //   // ReactDOM.render(<AppLoadingDom />, dom);
-  // }
   url = BASE_URL + url;
   const headers = [
     REGISTERED_ADDRESS,
@@ -102,7 +90,7 @@ const request: ResponseFun<any> = (
         }
       })
       .catch((err: ErrorResponse) => {
-        // if (config.hint) message.error(err.response.data.message);
+        if (config.hint) message.error(err.response.data.message);
         reject(err.response);
       });
   });

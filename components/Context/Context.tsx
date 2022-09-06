@@ -1,5 +1,5 @@
+import { getUserInfoRes } from "@request/types";
 import { getLoc } from "@src/index";
-import router from "next/router";
 import React, { createContext, useEffect, useReducer, useState } from "react";
 import { eloginStatus, eloginType } from "./types";
 interface initialStateType {
@@ -7,17 +7,26 @@ interface initialStateType {
   loginType: eloginType;
   loading: boolean;
   userName: string;
+  uuid: string;
+  user: getUserInfoRes["data"]["info"];
+  plan: getUserInfoRes["data"]["plan"] | null;
 }
 // 生成 state 以及 dispatch
 export const Context = createContext({});
 
 // 将 wrapper 暴露出去
 const MyContextWrapper = ({ children: children }: any) => {
-  const [initialState, setInitialState] = useState<initialStateType>({
+  const [initialState] = useState<initialStateType>({
     loginStatus: eloginStatus.login,
     loginType: eloginType.login,
     loading: false,
     userName: "",
+    uuid: "",
+    user: {
+      username: "尚未登录",
+      mobile: "暂无信息",
+    },
+    plan: null,
   });
   const [initialization, setInitialization] = useState(false);
 
@@ -45,6 +54,26 @@ const MyContextWrapper = ({ children: children }: any) => {
           ...state,
           loading: payload,
         };
+      case "UPDATE_UUID":
+        return {
+          ...state,
+          uuid: payload,
+        };
+      case "UPDATE_USER_NAME":
+        return {
+          ...state,
+          userName: payload,
+        };
+      case "UPDATE_USER":
+        return {
+          ...state,
+          user: payload,
+        };
+      case "UPDATE_PLAN":
+        return {
+          ...state,
+          plan: payload,
+        };
 
       default:
         return state;
@@ -54,16 +83,26 @@ const MyContextWrapper = ({ children: children }: any) => {
     const loginStatus = getLoc("token")
       ? eloginStatus.login
       : eloginStatus.notLogin;
-    const userName = getLoc("token") ? getLoc("token") : "";
+    const userName = getLoc("userName") ? getLoc("userName") : "";
+
+    const uuid = getLoc("uuid") ? getLoc("uuid") : "";
+
+    dispatch({
+      type: "UPDATE_UUID",
+      payload: uuid,
+    });
 
     dispatch({
       type: "UPDATE_LOGIN_STATUS",
       payload: loginStatus,
     });
+
     dispatch({
-      type: "userName",
+      type: "UPDATE_USER_NAME",
       payload: userName,
     });
+    console.log(initialization);
+    
     setInitialization(true);
   }, []);
 

@@ -16,7 +16,7 @@ export const BetweenFlexBox = styled.div`
 export const LoginFormBox = styled.div`
   width: 100%;
 `;
-const VerifyBtn = styled.div<IButtonProps>`
+export const VerifyBtn = styled.div<IButtonProps>`
   background: #2cc8c2;
   display: inline-flex;
   justify-content: center;
@@ -32,7 +32,7 @@ const VerifyBtn = styled.div<IButtonProps>`
     background-color: #15c1ba;
   }
 `;
-const CountdownBtn = styled.div<IButtonProps>`
+export const CountdownBtn = styled.div<IButtonProps>`
   background: #cccccc;
   display: inline-flex;
   justify-content: center;
@@ -45,7 +45,7 @@ const CountdownBtn = styled.div<IButtonProps>`
   cursor: pointer;
   max-width: 100%;
 `;
-const verifyCodeImgStyle = {
+export const verifyCodeImgStyle = {
   display: "flex",
   justifyContent: "center",
   marginBottom: "20px",
@@ -84,6 +84,10 @@ const RegisterForm = function () {
 
   const sendSms = async () => {
     try {
+      dispatch({
+        type: "UPDATE_LOADING",
+        payload: true,
+      });
       await SEMDSMS_API({
         mobile: mobile,
         verifyCode: inputVerifyCodeImg,
@@ -101,6 +105,10 @@ const RegisterForm = function () {
     } catch (error) {
       message.error("验证码错误");
     }
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: false,
+    });
     setIsModalVisible(false);
   };
 
@@ -109,6 +117,10 @@ const RegisterForm = function () {
       (formRef.current as any)
         .validateFields(["user", "phone", "code", "password"])
         .then(async () => {
+          dispatch({
+            type: "UPDATE_LOADING",
+            payload: true,
+          });
           const res = await REGISTERED_API({
             username,
             password,
@@ -121,11 +133,20 @@ const RegisterForm = function () {
             type: "UPDATE_LOGIN_STATUS",
             payload: eloginStatus.login,
           });
+          dispatch({
+            type: "UPDATE_USER_NAME",
+            payload: username,
+          });
+          setLoc('userName',username)
           router.push("/panel/fileManager");
         });
     } catch (err) {
       console.log(err);
     }
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: false,
+    });
   };
 
   return (

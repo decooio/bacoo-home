@@ -16,20 +16,39 @@ const LoginForm = function () {
   const [password, setPassword] = useState("");
   const login = async () => {
     try {
+      dispatch({
+        type: "UPDATE_LOADING",
+        payload: true,
+      });
       const res = await LOGIN_API({
         username,
         password,
       });
-      const token = `Bearer ${res.data.signature}`;
+      const { signature, uuid } = res.data;
+      const token = `Bearer ${signature}`;
       setLoc("token", token);
+      setLoc("uuid", uuid);
+      dispatch({
+        type: "UPDATE_UUID",
+        payload: uuid,
+      });
       dispatch({
         type: "UPDATE_LOGIN_STATUS",
         payload: eloginStatus.login,
       });
+      dispatch({
+        type: "UPDATE_USER_NAME",
+        payload: username,
+      });
+      setLoc("userName", username);
       router.push("/panel/fileManager");
     } catch (err) {
       console.log(err);
     }
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: false,
+    });
   };
   return (
     <LoginFormBox>

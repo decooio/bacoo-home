@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
-import {getPlanDetails, PlanDetails} from "./http_billing";
-import {useError} from "../src/hooks/utils";
+import { useState} from "react";
+import { PlanDetails} from "./http_billing";
+
 import {getUserInfo} from "./http";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
@@ -37,9 +37,9 @@ export function useUser(): {
   return {user, update: updateUser, refreshUser}
 }
 
-export function usePlanDetails(user: IUserInfo | null) {
-  const onError = useError()
-  const [plan, setPlan] = useState<PlanDetails | null>(null)
+export function usePlanDetails() {
+  
+  const [plan] = useState<PlanDetails | null>(null)
   return {plan}
 }
 

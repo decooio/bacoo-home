@@ -1,15 +1,12 @@
-import { COL, RowFill, SpaceH } from "./common/layouts";
+import { COL, RowFill } from "./common/layouts";
 import styled from "styled-components";
 import { CopyText, TextTitle, Text } from "./common/texts";
-import { useEffect, useState } from "react";
-import { getApiKeys } from "../lib/http";
-import { Api as ApiType } from "../src/types/manager";
-import { useUser } from "../lib/useUser";
+import { useContext, useEffect, useState } from "react";
 import React from "react";
-import { useTranslation } from "react-i18next";
 import { Phone, useDevice } from "../src/assets/style";
 import { GET_APIS_API } from "@request/apis";
 import { getApisRes } from "@request/types";
+import {Context} from "./Context/Context";
 
 const MCol = styled(COL)`
   padding: 32px;
@@ -30,21 +27,7 @@ const Table = styled(COL)`
     margin-top: 18px;
   }
 `;
-const Verification = styled(COL)`
-  padding: 28px 32px 12px 52px;
-  width: calc(100% + 62px);
-  margin-top: -32px;
-  margin-left: -32px;
-  flex-shrink: 0;
-  align-items: flex-start;
 
-  ${Phone} {
-    width: 100%;
-    padding: 4px 0;
-    margin-top: 0;
-    margin-left: 0;
-  }
-`;
 
 const styleItemTxt = {
   paddingLeft: 20,
@@ -53,11 +36,16 @@ const styleItemTxt = {
 const styleItemTxt_phone = {};
 // const apis: any[] = [1, 2]
 export default function Api() {
+  const { dispatch } = useContext(Context) as any;
   const [apis, setApis] = useState<getApisRes["data"]>([]);
   const device = useDevice();
   const styleItem = device.isMobile ? styleItemTxt_phone : styleItemTxt;
   const flexRight = device.isMobile ? 1 : 5;
   const getApis = async () => {
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: true,
+    });
     try {
       const res = await GET_APIS_API();
       const apis = res.data;
@@ -65,6 +53,10 @@ export default function Api() {
     } catch (e) {
       console.log(e);
     }
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: false,
+    });
   };
 
   useEffect(() => {

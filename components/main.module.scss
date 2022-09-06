@@ -260,7 +260,7 @@
 }
 
 .uploadFileType {
-  height: 140px;
+ 
   width: 348px;
   left: 170px;
   top: 293px;
@@ -276,11 +276,11 @@
     text-align: center;
     line-height: 50px;
     font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
+
     cursor: pointer;
 
+    
 
     .uploadFileTypeItemText {
       margin-left: 16px;
@@ -289,6 +289,14 @@
 
   .uploadFileTypeItem:hover {
     background: #EEEEEE;
+
+  }
+  .box {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
 
   }
 
