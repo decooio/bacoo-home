@@ -16,7 +16,7 @@ import copyToClipboard from "copy-to-clipboard";
 
 export const NavOtherLayout = styled.div`
   height: calc(100% - 80px);
-  margin-top: 80px;
+  margin-top: 68px;
 
   ${Phone} {
     height: calc(100% - 60px);
@@ -28,7 +28,7 @@ const NavDiv = styled.div<{ isHome: boolean }>`
   position: absolute;
   z-index: 1;
   width: 100vw;
-  height: 80px;
+  height: 68px;
   flex-shrink: 0;
   display: flex;
   flex-direction: row;
