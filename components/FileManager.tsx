@@ -202,9 +202,7 @@ export default function FileManager() {
           <TextTitle flex={6}>CID</TextTitle>
           <TextTitle flex={6}>访问域名</TextTitle>
           <TextTitle flex={1}>
-            <DownBtn>
-              <FiDownload />
-            </DownBtn>
+            
           </TextTitle>
           <TextTitle flex={1}>体积</TextTitle>
           <TextTitle flex={3}>Pin时间戳</TextTitle>
@@ -224,7 +222,7 @@ export default function FileManager() {
               <CopyText flex={6}>{file.cid}</CopyText>
               <Text flex={6}>
                 <Tips title="因遵守当地相关法律法规要求，暂不提供针对该内容的服务。">
-                  <MText>{file.name}</MText>
+                  <MText>{`https://${uuid}.${file.host.replace('https://','')}/ipfs/${file.cid}`}</MText>
                 </Tips>
               </Text>
 
