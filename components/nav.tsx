@@ -128,7 +128,7 @@ const NAV_TITLE = {
 
 const getNavTitle = (path: string) => {
   if (path.startsWith("/panel")) {
-    return "Panel";
+    return '控制台';
   }
   return _.get(NAV_TITLE, path, "");
 };
