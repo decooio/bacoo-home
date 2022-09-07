@@ -217,7 +217,9 @@ export default function FileManager() {
               style={{ height: 44, borderTop: "1px solid #eeeeee" }}
             >
               <Text flex={2}>
+              <Tips title={file.name}>
                 <MText>{file.name}</MText>
+                </Tips>
               </Text>
               <CopyText flex={6}>{file.cid}</CopyText>
               <Text flex={6}>
