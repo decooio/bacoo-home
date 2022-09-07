@@ -202,7 +202,7 @@ const RegisterForm = function () {
 
             {countdownNum < 60 ? (
               <CountdownBtn style={{ width: "148px" }}>
-                {countdownNum}
+                {countdownNum}s
               </CountdownBtn>
             ) : (
               <VerifyBtn
