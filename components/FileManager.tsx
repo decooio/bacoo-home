@@ -1,4 +1,4 @@
-import { COL,  RowFill } from "./common/layouts";
+import { COL, RowFill } from "./common/layouts";
 import Button from "./common/Button";
 import { FiBox, FiChevronDown, FiDownload } from "react-icons/fi";
 import styled from "styled-components";
@@ -45,7 +45,7 @@ export const MText = styled.div`
 `;
 export const AddIcon = styled.span`
   color: #fff;
-  margin-right: 5px;
+  margin-right: 12px;
   font-size: 24px;
 `;
 export const DownBtn = styled.div<{ invisible?: boolean }>`
@@ -146,7 +146,7 @@ export default function FileManager() {
 
   return (
     <MCol>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex",marginBottom:'20px' }}>
         <Upload
           showUploadList={false}
           name="file"
@@ -172,6 +172,8 @@ export default function FileManager() {
           <Button
             style={{
               marginRight: "24px",
+              width: "150px",
+              height: "44px",
             }}
           >
             <AddIcon>+</AddIcon> 添加文件
@@ -201,9 +203,7 @@ export default function FileManager() {
           <TextTitle flex={2}>文件名</TextTitle>
           <TextTitle flex={6}>CID</TextTitle>
           <TextTitle flex={6}>访问域名</TextTitle>
-          <TextTitle flex={1}>
-            
-          </TextTitle>
+          <TextTitle flex={1}></TextTitle>
           <TextTitle flex={1}>体积</TextTitle>
           <TextTitle flex={3}>Pin时间戳</TextTitle>
         </RowFill>
@@ -222,7 +222,10 @@ export default function FileManager() {
               <CopyText flex={6}>{file.cid}</CopyText>
               <Text flex={6}>
                 <Tips title="因遵守当地相关法律法规要求，暂不提供针对该内容的服务。">
-                  <MText>{`https://${uuid}.${file.host.replace('https://','')}/ipfs/${file.cid}`}</MText>
+                  <MText>{`https://${uuid}.${file.host.replace(
+                    "https://",
+                    ""
+                  )}/ipfs/${file.cid}`}</MText>
                 </Tips>
               </Text>
 
@@ -232,7 +235,10 @@ export default function FileManager() {
                     <a
                       rel="noreferrer"
                       target="_blank"
-                      href={`https://${uuid}.${file.host.replace('https://','')}/ipfs/${file.cid}`}
+                      href={`https://${uuid}.${file.host.replace(
+                        "https://",
+                        ""
+                      )}/ipfs/${file.cid}`}
                     >
                       <FiDownload />
                     </a>
