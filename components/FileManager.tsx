@@ -16,7 +16,7 @@ import {
   UPDATA_FILE_API,
 } from "@request/apis";
 import { Alert, Dropdown, Menu, Modal, Progress, Space, Upload } from "antd";
-import { getLoc } from "@src/index";
+import { changeSize, getLoc } from "@src/index";
 import { Context } from "./Context/Context";
 
 export const Table = styled(COL)`
@@ -146,7 +146,7 @@ export default function FileManager() {
 
   return (
     <MCol>
-      <div style={{ display: "flex",marginBottom:'20px' }}>
+      <div style={{ display: "flex", marginBottom: "20px" }}>
         <Upload
           showUploadList={false}
           name="file"
@@ -217,8 +217,8 @@ export default function FileManager() {
               style={{ height: 44, borderTop: "1px solid #eeeeee" }}
             >
               <Text flex={2}>
-              <Tips title={file.name}>
-                <MText>{file.name}</MText>
+                <Tips title={file.name}>
+                  <MText>{file.name}</MText>
                 </Tips>
               </Text>
               <CopyText flex={6}>{file.cid}</CopyText>
@@ -250,7 +250,7 @@ export default function FileManager() {
                   </Tips>
                 </DownBtn>
               </Text>
-              <Text flex={1}>{file.fileSize} kb</Text>
+              <Text flex={1}>{changeSize(file.fileSize)} </Text>
               <Text flex={3}>{file.createTime}</Text>
             </RowFill>
           );
