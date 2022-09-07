@@ -137,7 +137,7 @@ const RegisterForm = function () {
             type: "UPDATE_USER_NAME",
             payload: username,
           });
-          setLoc('userName',username)
+          setLoc("userName", username);
           router.push("/panel/fileManager");
         });
     } catch (err) {
@@ -240,12 +240,21 @@ const RegisterForm = function () {
         <Form.Item name="agree">
           <Checkbox>
             我已同意{" "}
-            <a style={astyle} href="">
+            <a
+              style={astyle}
+              href={"/termofuse"}
+              target={"_blank"}
+              rel="noreferrer"
+            >
               《用户协议》
             </a>{" "}
             和{" "}
-            <a style={astyle} href="">
-              {" "}
+            <a
+              style={astyle}
+              target={"_blank"}
+              href={"/privacy"}
+              rel="noreferrer"
+            >
               《隐私协议》
             </a>{" "}
           </Checkbox>
