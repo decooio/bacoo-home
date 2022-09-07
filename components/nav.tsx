@@ -160,21 +160,20 @@ const Nav = () => {
   const unPrice = router.pathname !== "/pricing";
   const showDocumentation = unPrice;
   const showMenu = showDocumentation;
-  const copyEmail=()=>{
+  const copyEmail = () => {
     copyToClipboard("may.bu@baitech.com");
     message.success("邮箱已复制");
-  }
+  };
   return (
     <NavDiv isHome={isHome}>
       <div className={"nav_left"}>
-        {!isHome && (
-          <img
-            onClick={handleLogoClick}
-            alt="LOGO"
-            className={"pointer"}
-            {...getLogo(isMobile)}
-          />
-        )}
+        (
+        <img
+          onClick={handleLogoClick}
+          alt="LOGO"
+          className={"pointer"}
+          {...getLogo(isMobile)}
+        />
         {showNavTitle && <div className={"split"} />}
         {showNavTitle && (
           <span style={{ color: "#CCCCCC", ...panelStyle }}>{navTitle}</span>
@@ -232,7 +231,9 @@ const Nav = () => {
               >
                 文档
               </a>
-              <span onClick={()=>copyEmail()} className={"item"}>联系我们</span>
+              <span onClick={() => copyEmail()} className={"item"}>
+                联系我们
+              </span>
             </div>
           )}
           <Userinfo />
