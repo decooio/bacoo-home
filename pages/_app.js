@@ -48,7 +48,7 @@ function MApp({Component, pageProps}) {
   >
     <Head>
       <link rel="shortcut icon" href={getFavicon()}/>
-      <title>{useT().t(getStrKey("homeTitle"))}</title>
+      <title>百工链存</title>
     </Head>
     <div style={{
       position: 'absolute', left: 0, top: 0,
