@@ -1,4 +1,4 @@
-import react, { useContext, useState } from "react";
+import react, { useContext } from "react";
 import { Context } from "@components/Context/Context";
 import styled from "styled-components";
 import { FiChevronDown } from "react-icons/fi";
@@ -8,7 +8,7 @@ import React from "react";
 import { Phone } from "../src/assets/style";
 
 import { eloginStatus, eloginType } from "@components/Context/types";
-import { Dropdown, Menu, Modal, Space } from "antd";
+import { Dropdown, Menu, Space } from "antd";
 
 const Wrapper = styled.div`
   cursor: pointer;
@@ -35,7 +35,6 @@ const Userinfo: react.FC = () => {
   const router = useRouter();
   const { state, dispatch } = useContext(Context) as any;
   const { loginStatus, loginType, userName } = state;
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const goLoginAndRegister = (type: eloginType) => {
     dispatch({
       type: "UPDATE_LOGIN_TYPE",
@@ -48,7 +47,6 @@ const Userinfo: react.FC = () => {
   };
 
   const loginOut = async () => {
-    setIsModalOpen(false);
     localStorage.removeItem("token");
     dispatch({
       type: "UPDATE_LOGIN_STATUS",
@@ -78,7 +76,7 @@ const Userinfo: react.FC = () => {
             <Menu style={{ width: 86 }}>
               <Menu.Item
                 onClick={() => {
-                  setIsModalOpen(true);
+                  loginOut();
                 }}
               >
                 退出登录
@@ -92,17 +90,6 @@ const Userinfo: react.FC = () => {
           </Space>
         </Dropdown>
       )}
-
-      <Modal
-        title="提示"
-        visible={isModalOpen}
-        onOk={() => loginOut()}
-        onCancel={() => setIsModalOpen(false)}
-        okText="确定"
-        cancelText="取消"
-      >
-        是否要退出登录
-      </Modal>
     </Wrapper>
   );
 };
