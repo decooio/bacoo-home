@@ -7,6 +7,7 @@ import {
   FiSettings,
   FiX,
 } from "react-icons/fi";
+import {AiOutlineQuestionCircle} from "react-icons/ai"
 import { IconType } from "react-icons";
 import FileManager from "./FileManager";
 import React, { useState } from "react";
@@ -117,7 +118,7 @@ const tabs: Tab[] = [
   { name: "文件管理", icon: FiFileText, id: "fileManager" },
   { name: "API", icon: FiGitCommit, id: "api" },
   { name: "用户信息", icon: FiSettings, id: "profile" },
-  { name: "帮助与报告", icon: FiSettings, id: "helpAndReport" },
+  { name: "帮助与报告", icon: AiOutlineQuestionCircle, id: "helpAndReport" },
 ];
 
 const comMap: ComMap = {
