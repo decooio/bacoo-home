@@ -226,6 +226,13 @@ const RegisterForm = function () {
               pattern: /[a-z]/,
               message: "密码必须包含小写",
             },
+            {
+              min:6,
+              message: '密码不能少于6个字符',
+            }, {
+              max:16,
+              message: '密码不能大于16个字符',
+            }
           ]}
         >
           <Input.Password
