@@ -4,7 +4,7 @@ import {
   FiFileText,
   FiGitCommit,
   FiMenu,
-  FiSettings,
+  FiUser,
   FiX,
 } from "react-icons/fi";
 import {AiOutlineQuestionCircle} from "react-icons/ai"
@@ -117,7 +117,7 @@ export interface Tab {
 const tabs: Tab[] = [
   { name: "文件管理", icon: FiFileText, id: "fileManager" },
   { name: "API", icon: FiGitCommit, id: "api" },
-  { name: "用户信息", icon: FiSettings, id: "profile" },
+  { name: "用户信息", icon: FiUser, id: "profile" },
   { name: "帮助与报告", icon: AiOutlineQuestionCircle, id: "helpAndReport" },
 ];
 

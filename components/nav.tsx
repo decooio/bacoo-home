@@ -167,7 +167,7 @@ const Nav = () => {
   return (
     <NavDiv isHome={isHome}>
       <div className={"nav_left"}>
-        (
+        
         <img
           onClick={handleLogoClick}
           alt="LOGO"

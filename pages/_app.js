@@ -48,7 +48,7 @@ function MApp({Component, pageProps}) {
   >
     <Head>
       <link rel="shortcut icon" href={getFavicon()}/>
-      <title>百工链存</title>
+      <title>百工链存-创新性分布式存储</title>
     </Head>
     <div style={{
       position: 'absolute', left: 0, top: 0,

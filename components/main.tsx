@@ -259,7 +259,7 @@ export default function Main() {
   function DcPanelCom(list: getgatewayListRes["data"]) {
     return (
       <DCPanel invisible={false}>
-        <div className={"title"}>上传文件</div>
+        <div className={"title"}>添加文件</div>
         {fileList.map((item, index) => {
           return (
             <div key={index} className={"file_item"}>

@@ -18,6 +18,7 @@ import {
 import { Alert, Dropdown, Menu, Modal, Progress, Space, Upload } from "antd";
 import { changeSize, getLoc } from "@src/index";
 import { Context } from "./Context/Context";
+import { GrAdd } from "react-icons/gr";
 
 export const Table = styled(COL)`
   width: calc(100% - 62px);
@@ -47,6 +48,7 @@ export const AddIcon = styled.span`
   color: #fff;
   margin-right: 12px;
   font-size: 24px;
+  margin-bottom: 1px;
 `;
 export const DownBtn = styled.div<{ invisible?: boolean }>`
   width: 38px;
@@ -176,7 +178,14 @@ export default function FileManager() {
               height: "44px",
             }}
           >
-            <AddIcon>+</AddIcon> 添加文件
+            <AddIcon>+</AddIcon>
+            <span
+              style={{
+                fontSize: "18px",
+              }}
+            >
+              添加文件
+            </span>
           </Button>
         </Upload>
 
