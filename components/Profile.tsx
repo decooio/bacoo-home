@@ -329,7 +329,7 @@ export default function Profile() {
             <SubText
               children={`存储用量 已消耗/总用量上限：${changeSize(
                 plan?.usedStorageSize
-              )}/${changeSize(plan?.maxStorageSize)}:`}
+              )}/${changeSize(plan?.maxStorageSize)}`}
             />
             <SubText
               children={`公共网关流量 已消耗/总用量上限：${changeSize(
