@@ -1,5 +1,6 @@
 import { getUserInfoRes } from "@request/types";
 import { getLoc } from "@src/index";
+import router from "next/router";
 import React, { createContext, useEffect, useReducer, useState } from "react";
 import { eloginStatus, eloginType } from "./types";
 interface initialStateType {
@@ -28,7 +29,6 @@ const MyContextWrapper = ({ children: children }: any) => {
     },
     plan: null,
   });
-  const [initialization, setInitialization] = useState(false);
 
   function reducer(
     state = initialState,
@@ -101,9 +101,13 @@ const MyContextWrapper = ({ children: children }: any) => {
       type: "UPDATE_USER_NAME",
       payload: userName,
     });
-    console.log(initialization);
-    
-    setInitialization(true);
+
+    if (
+      loginStatus == 1 &&
+      !(["/", "/login", "/termofuse", "/privacy"].includes(router.pathname))
+    ) {
+      router.replace("/");
+    }
   }, []);
 
   const [state, dispatch] = useReducer(reducer, initialState);

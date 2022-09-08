@@ -1,3 +1,5 @@
+import { Form } from "antd";
+
 export const getLoc = (key: string) => {
   return localStorage.getItem(key);
 };
@@ -6,8 +8,8 @@ export const setLoc = (key: string, value: string) => {
 };
 export const changeSize = (limit: number | undefined) => {
   let size = "";
-  if(!limit){
-    return '0kb'
+  if (!limit) {
+    return "0kb";
   }
   if (limit < 0.1 * 1024) {
     //小于0.1KB，则转化成B
@@ -34,4 +36,77 @@ export const changeSize = (limit: number | undefined) => {
     return sizeStr.substring(0, index) + sizeStr.substr(index + 3, 2);
   }
   return size;
+};
+
+type ValidateStatus = Parameters<typeof Form.Item>[0]["validateStatus"];
+type VerifyObj = {
+  value: string;
+  validateStatus: ValidateStatus;
+  errorMsg: string | null;
+};
+type VerifyFun = (value: string) => VerifyObj;
+
+export const mobileVerifyF: VerifyFun = (value: string) => {
+  const mobileRex =
+    /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+  const obj: VerifyObj = {
+    value,
+    validateStatus: "success",
+    errorMsg: null,
+  };
+  if (obj.value.length === 0) {
+    obj.validateStatus = "error";
+    obj.errorMsg = "请输入手机号";
+    return obj;
+  }
+  if (mobileRex.test(value)) {
+    obj.validateStatus = "success";
+    obj.errorMsg = null;
+  } else {
+    obj.validateStatus = "error";
+    obj.errorMsg = "请输入正确的手机号";
+  }
+
+  return obj;
+};
+
+export const codeVerifyF: VerifyFun = (value: string) => {
+  const obj: VerifyObj = {
+    value,
+    validateStatus: "success",
+    errorMsg: null,
+  };
+  if (value.length === 0) {
+    obj.validateStatus = "error";
+    obj.errorMsg = "请输入验证码";
+  } else {
+    obj.validateStatus = "success";
+    obj.errorMsg = null;
+  }
+  return obj;
+};
+
+
+
+export const passwordVerifyF: VerifyFun = (value: string) => {
+  const passwordRex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[a-z]{6,16}/;
+  const obj:VerifyObj = {
+    value,
+    validateStatus: "success",
+    errorMsg: "请输入密码",
+  };
+  if (value.length === 0) {
+    obj.validateStatus = "error";
+    obj.errorMsg = "请输入密码";
+  }
+  if (passwordRex.test(value)) {
+    obj.validateStatus = "success";
+    obj.errorMsg = null;
+  } else {
+    obj.validateStatus = "error";
+    obj.errorMsg = "请输入正确的手机号";
+  }
+
+  return obj;
 };

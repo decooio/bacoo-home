@@ -18,6 +18,9 @@ const SetPhone = () => {
   const [mobile, setMobile] = useState("");
   const [smsCode, setsmsCode] = useState("");
   const [countdownNum, setCountdownNum] = useState(60);
+  const [mobileVerify, setMobileVerify] = useState(false);
+  const [codeVerify, setcodeVerify] = useState(false);
+
   const formRef = createRef<FormInstance>();
 
   const verify = () => {
@@ -43,7 +46,7 @@ const SetPhone = () => {
         }
       }, 1000);
     } catch (error) {
-      message.error("验证码错误");
+      message.error(error);
     }
     dispatch({
       type: "UPDATE_LOADING",
@@ -64,12 +67,14 @@ const SetPhone = () => {
             mobile,
             smsCode,
           });
-          router.replace('panel/profile')
+          router.replace("panel/profile");
         });
     } catch (e) {
       message.error(e);
     }
   };
+  const changeSmsCode = (value: string) => {};
+  const changeMobile = (value: string) => {};
   return (
     <div className="w-full h-full flex relative items-center justify-center">
       <FormWrapper className="relative flex  flex-col	items-center w-full px-8 md:px-0">
@@ -80,37 +85,32 @@ const SetPhone = () => {
             width: "457px",
           }}
         >
-          <Form.Item
-            label=""
-            name="phone"
-            rules={[
-              { required: true, message: "请输入手机号" },
-              {
-                pattern: /^1[3456789]\d{9}$/,
-                message: "请输入正确的手机号",
-              },
-            ]}
-          >
+          <Form.Item label="" name="phone" validateStatus="error" help="s">
             <Input
               onInput={(e) => {
                 setMobile((e.target as any).value);
               }}
-              style={{ height: "52px" }}
+              style={{
+                height: "52px",
+                background: "#F8F8F8",
+                borderRadius: "8px",
+              }}
               placeholder="手机号"
               size="large"
             />
           </Form.Item>
-          <Form.Item
-            label=""
-            name="code"
-            rules={[{ required: true, message: "请输入验证码" }]}
-          >
+          <Form.Item label="" name="code">
             <BetweenFlexBox>
               <Input
                 onInput={(e) => {
-                  setsmsCode((e.target as any).value);
+                  changeSmsCode((e.target as any).value);
                 }}
-                style={{ width: "240px", height: "52px" }}
+                style={{
+                  width: "280px",
+                  height: "52px",
+                  background: "#F8F8F8",
+                  borderRadius: "8px",
+                }}
                 placeholder="验证码"
                 size="large"
               />
@@ -132,9 +132,21 @@ const SetPhone = () => {
             </BetweenFlexBox>
           </Form.Item>
           <Form.Item wrapperCol={{ span: 32 }}>
-            <Button onClick={() => setPhone()} size="large">
-              提交
-            </Button>
+            {mobileVerify && codeVerify ? (
+              <Button onClick={() => setPhone()} size="large">
+                提交
+              </Button>
+            ) : (
+              <Button
+                disabled
+                size="large"
+                style={{
+                  background: "#CCCCCC",
+                }}
+              >
+                提交
+              </Button>
+            )}
           </Form.Item>
         </Form>
       </FormWrapper>
