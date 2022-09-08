@@ -23,7 +23,7 @@ import MyContextWrapper from '@components/Context/Context'
 import Request from '../request/request'
 
 function getFavicon(){
-  return '/favicon.ico'
+  return '/logo.ico'
 }
 function MApp({Component, pageProps}) {
   const r = useRouter()

@@ -350,12 +350,19 @@ export default function Main() {
             "text-12 text-gray-300 bottom-1 absolute h-12 md:h-auto w-full flex flex-wrap md:flex-nowrap " +
             " justify-center gap-2.5 items-center mb-2"
           }
+          style={{
+            fontSize: "14px",
+            color: "#999999",
+          }}
         >
           <div className={"w-full text-center md:w-auto"}>
             百工智联（上海）工业科技有限公司
           </div>
           <a
             className={"md:hover:text-white"}
+            style={{
+              fontSize: "14px",
+            }}
             target={"_blank"}
             rel="noreferrer"
             href={
@@ -369,10 +376,13 @@ export default function Main() {
             target={"_blank"}
             rel="noreferrer"
             href={"https://beian.miit.gov.cn/"}
+          ></a>
+          <a
+            target={"_blank"}
+            rel="noreferrer"
+            className={"md:hover:text-white"}
+            href={"/termofuse"}
           >
-           
-          </a>
-          <a className={"md:hover:text-white"} href={"/termofuse"}>
             用户协议
           </a>
           <a

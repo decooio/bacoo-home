@@ -66,7 +66,7 @@ export default function Api() {
     <MCol>
       <Table>
         <RowFill style={{ height: 37 }}>
-          <TextTitle flex={4} style={styleItem}>
+          <TextTitle flex={8} style={styleItem}>
             API Key
           </TextTitle>
           <TextTitle flex={flexRight} style={styleItem}>
@@ -78,7 +78,7 @@ export default function Api() {
             key={`apis_${index}`}
             style={{ height: 44, borderTop: "1px solid #eeeeee" }}
           >
-            <CopyText flex={4} style={styleItem}>{item.signature}</CopyText>
+            <CopyText flex={8} style={styleItem}>{item.signature}</CopyText>
             <Text flex={flexRight} style={styleItem}>
               {item.valid?'有效':'无效'}
             </Text>
