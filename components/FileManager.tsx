@@ -1,5 +1,4 @@
 import { COL, RowFill } from "./common/layouts";
-import Button from "./common/Button";
 import { FiBox, FiChevronDown, FiDownload } from "react-icons/fi";
 import styled from "styled-components";
 import { CopyText, EmptyText, Text, TextTitle } from "./common/texts";
