@@ -52,7 +52,7 @@ const Userinfo: react.FC = () => {
       type: "UPDATE_LOGIN_STATUS",
       payload: eloginStatus.notLogin,
     });
-    router.replace("/");
+    router.replace("/login");
   };
   return (
     <Wrapper>
