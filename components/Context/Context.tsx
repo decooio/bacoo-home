@@ -101,10 +101,9 @@ const MyContextWrapper = ({ children: children }: any) => {
       type: "UPDATE_USER_NAME",
       payload: userName,
     });
-
     if (
       loginStatus == 1 &&
-      !(["/", "/login", "/termofuse", "/privacy"].includes(router.pathname))
+      !["/", "/login", "/termofuse", "/privacy"].includes(router.pathname)
     ) {
       router.replace("/");
     }

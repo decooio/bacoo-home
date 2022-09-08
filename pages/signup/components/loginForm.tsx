@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react";
 import { Form, Input } from "antd";
 import Button from "../../../components/common/Button";
 import { LOGIN_API } from "@request/apis";
-import { setLoc } from "@src/index";
+import { passwordVerifyF, setLoc, usernameVerifyF } from "@src/index";
 import router from "next/router";
 import { Context } from "@components/Context/Context";
 import { eloginStatus } from "@components/Context/types";
@@ -14,6 +14,10 @@ const LoginForm = function () {
   const { dispatch } = useContext(Context) as any;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [usernameVerify, setUsernameVerify] = useState(false);
+  const [passwordVerify, setPasswordVerify] = useState(false);
+
+  
   const login = async () => {
     try {
       dispatch({
@@ -56,10 +60,16 @@ const LoginForm = function () {
         <Form.Item
           label=""
           name="username"
-          rules={[{ required: true, message: "请输入用户名" }]}
+          rules={[{ required: true, message: "请输入用户名或手机" }]}
         >
           <Input
-            onInput={(e) => setUsername((e.target as any).value)}
+            onInput={(e) => {
+              const value: string = (e.target as any).value;
+              setUsername(value);
+              console.log(usernameVerifyF(value));
+
+              setUsernameVerify(usernameVerifyF(value));
+            }}
             style={{ height: "50px" }}
             placeholder="用户名"
             size="large"
@@ -69,10 +79,30 @@ const LoginForm = function () {
         <Form.Item
           label=""
           name="password"
-          rules={[{ required: true, message: "请输入密码" }]}
+          rules={[
+            { required: true, message: "请输入密码" },
+            {
+              pattern: /[a-z]{1}/,
+              message: "密码必须包含小写字母",
+            },
+            {
+              max: 16,
+              message: "密码必须在6~16位之间",
+            },
+            {
+              min: 6,
+              message: "密码必须在6~16位之间",
+            },
+          ]}
         >
           <Input.Password
-            onInput={(e) => setPassword((e.target as any).value)}
+            onInput={(e) => {
+              const value: string = (e.target as any).value;
+              setPassword(value);
+              console.log(passwordVerifyF(value));
+
+              setPasswordVerify(passwordVerifyF(value));
+            }}
             style={{ height: "50px" }}
             placeholder="密码"
             size="large"
@@ -80,9 +110,19 @@ const LoginForm = function () {
         </Form.Item>
 
         <Form.Item wrapperCol={{ span: 32 }}>
-          <Button onClick={() => login()} size="large">
-            登录
-          </Button>
+          {usernameVerify && passwordVerify ? (
+            <Button type="button" onClick={() => login()} size="large">
+              登录
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              size="large"
+              style={{ background: "#CCCCCC" }}
+            >
+              登录
+            </Button>
+          )}
         </Form.Item>
       </Form>
     </LoginFormBox>
