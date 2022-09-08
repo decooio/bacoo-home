@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { COL, RowFill } from "./common/layouts";
 import { Pager } from "./common/Pager";
-import { EmptyText, TextTitle,  Text } from "./common/texts";
+import { EmptyText, TextTitle, Text } from "./common/texts";
 import Button from "./common/Button";
 import {
   GET_TICKETS_DETAILS_API,
@@ -18,6 +18,7 @@ import { HeightBox, ModalText } from "./Profile";
 import TextArea from "antd/lib/input/TextArea";
 import { getticketsListRes } from "@request/types";
 import { MText } from "./FileManager";
+import { Tips } from "./common/tips";
 
 const { Option } = Select;
 interface detailInfo {
@@ -59,7 +60,7 @@ const Title = styled.div`
   line-height: 20px;
   margin-bottom: 17px;
 `;
-const Tips = styled.div`
+const TipsText = styled.div`
   font-weight: 400;
   font-size: 14px;
   line-height: 21px;
@@ -187,9 +188,9 @@ export default function HelpAndReport() {
       <Tooltip>
         <div>
           <Title>需要报告问题或寻求帮助？</Title>
-          <Tips>
+          <TipsText>
             *如您有任何疑问或希望反馈任何问题，请点击“发起报告”并填写提交。我们会尽快联系您并做出反馈。谢谢！
-          </Tips>
+          </TipsText>
         </div>
         <Button
           onClick={() => setModalOpen(true)}
@@ -224,7 +225,9 @@ export default function HelpAndReport() {
                 <MText>{typeMap.get(item.type)}</MText>
               </Text>
               <Text flex={6}>
-                <MText>{item.description}</MText>
+                <Tips title={item.description}>
+                  <MText>{item.description}</MText>
+                </Tips>
               </Text>
               <Text flex={2}>
                 <MText>
@@ -236,20 +239,24 @@ export default function HelpAndReport() {
                 </MText>
               </Text>
               <Text flex={6}>
-                <MText>{item.feedback}</MText>
+                <Tips title={item.feedback}>
+                  <MText>{item.feedback}</MText>
+                </Tips>
               </Text>
               <Text flex={2}>
-               { item.status !==0 && (<span
-                  onClick={() => {
-                    getDetails(item.id);
-                  }}
-                  style={{
-                    color: "#2CC8C2",
-                    cursor: "pointer",
-                  }}
-                >
-                  查看
-                </span>)}
+                {item.status !== 0 && (
+                  <span
+                    onClick={() => {
+                      getDetails(item.id);
+                    }}
+                    style={{
+                      color: "#2CC8C2",
+                      cursor: "pointer",
+                    }}
+                  >
+                    查看
+                  </span>
+                )}
               </Text>
             </RowFill>
           );
@@ -323,7 +330,7 @@ export default function HelpAndReport() {
         <ModalText>报告内容</ModalText>
         <TextArea rows={2} disabled value={detail?.description} />
         <HeightBox></HeightBox>
-        <Tips>提交时间：{detail?.reportTime}</Tips>
+        <TipsText>提交时间：{detail?.reportTime}</TipsText>
         <HeightBox></HeightBox>
         <FlexBox>
           <Button
@@ -333,7 +340,7 @@ export default function HelpAndReport() {
               border: " 1px solid #2CC8C2",
               color: "#2CC8C2",
             }}
-            onClick={()=>setStates(activeId, 0)}
+            onClick={() => setStates(activeId, 0)}
           >
             未解决
           </Button>
@@ -341,7 +348,7 @@ export default function HelpAndReport() {
             style={{
               width: "45%",
             }}
-            onClick={()=>setStates(activeId, 1)}
+            onClick={() => setStates(activeId, 1)}
           >
             已解决
           </Button>
