@@ -66,6 +66,17 @@ export const DownBtn = styled.div<{ invisible?: boolean }>`
     color: #666666;
   }
 `;
+export const UploadBtn = styled.div`
+  width: 150px;
+  height: 44px;
+  background: #2cc8c2;
+  border-radius: 8px;
+  margin-right: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+`;
 
 export default function FileManager() {
   const { state, dispatch } = useContext(Context) as any;
@@ -170,14 +181,15 @@ export default function FileManager() {
             }
           }}
         >
-          <Button
-            style={{
-              marginRight: "24px",
-              width: "150px",
-              height: "44px",
-            }}
-          >
-            <AddIcon>+</AddIcon>
+          <UploadBtn>
+            <span
+              style={{
+                marginRight: "12px",
+                transform: "scale(2) translateY(-0.5px)",
+              }}
+            >
+              +
+            </span>
             <span
               style={{
                 fontSize: "18px",
@@ -185,7 +197,7 @@ export default function FileManager() {
             >
               添加文件
             </span>
-          </Button>
+          </UploadBtn>
         </Upload>
 
         <Dropdown

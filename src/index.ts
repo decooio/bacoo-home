@@ -1,5 +1,3 @@
-
-
 export const getLoc = (key: string) => {
   return localStorage.getItem(key);
 };
@@ -11,17 +9,17 @@ export const changeSize = (limit: number | undefined) => {
   if (!limit) {
     return "0kb";
   }
-  if (limit < 0.1 * 1024) {
-    //小于0.1KB，则转化成B
+  if (limit < 1 * 1024) {
+    //小于1KB，则转化成B
     size = limit.toFixed(2) + "B";
-  } else if (limit < 0.1 * 1024 * 1024) {
-    //小于0.1MB，则转化成KB
+  } else if (limit < 1 * 1024 * 1024) {
+    //小于1MB，则转化成KB
     size = (limit / 1024).toFixed(2) + "KB";
-  } else if (limit < 0.1 * 1024 * 1024 * 1024) {
-    //小于0.1GB，则转化成MB
+  } else if (limit < 1 * 1024 * 1024 * 1024) {
+    //小于1GB，则转化成MB
     size = (limit / (1024 * 1024)).toFixed(2) + "MB";
-  } else if (limit < 0.1 * 1024 * 1024 * 1024 * 1024) {
-    //小于0.1TB，则转化成TB
+  } else if (limit < 1 * 1024 * 1024 * 1024 * 1024) {
+    //小于1TB，则转化成TB
     size = (limit / (1024 * 1024 * 1024)).toFixed(2) + "GB";
   } else {
     // 其余转换为TB
