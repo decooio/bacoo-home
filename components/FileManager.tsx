@@ -18,7 +18,6 @@ import {
 import { Alert, Dropdown, Menu, Modal, Progress, Space, Upload } from "antd";
 import { changeSize, getLoc } from "@src/index";
 import { Context } from "./Context/Context";
-import { GrAdd } from "react-icons/gr";
 
 export const Table = styled(COL)`
   width: calc(100% - 62px);

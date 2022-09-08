@@ -18,8 +18,8 @@ const SetPhone = () => {
   const [mobile, setMobile] = useState("");
   const [smsCode, setsmsCode] = useState("");
   const [countdownNum, setCountdownNum] = useState(60);
-  const [mobileVerify, setMobileVerify] = useState(false);
-  const [codeVerify, setcodeVerify] = useState(false);
+  // const [mobileVerify, setMobileVerify] = useState(false);
+  // const [codeVerify, setcodeVerify] = useState(false);
 
   const formRef = createRef<FormInstance>();
 
@@ -73,12 +73,12 @@ const SetPhone = () => {
       message.error(e);
     }
   };
-  const changeSmsCode=(value:string)=>{
-    
-  } 
-  const changeMobile = (value:string)=>{
+  // const changeSmsCode=(value:string)=>{
 
-  }
+  // }
+  // const changeMobile = (value:string)=>{
+
+  // }
   return (
     <div className="w-full h-full flex relative items-center justify-center">
       <FormWrapper className="relative flex  flex-col	items-center w-full px-8 md:px-0">
@@ -121,8 +121,7 @@ const SetPhone = () => {
             <BetweenFlexBox>
               <Input
                 onInput={(e) => {
-                  changeSmsCode((e.target as any).value)
-                 
+                  setsmsCode((e.target as any).value);
                 }}
                 style={{
                   width: "280px",
@@ -147,11 +146,11 @@ const SetPhone = () => {
                 >
                   发送验证码
                 </VerifyBtn>
-              )} 
+              )}
             </BetweenFlexBox>
           </Form.Item>
           <Form.Item wrapperCol={{ span: 32 }}>
-            {mobileVerify && codeVerify ? (
+            {/* {mobileVerify && codeVerify ? (
               <Button onClick={() => setPhone()} size="large">
                 提交
               </Button>
@@ -165,7 +164,10 @@ const SetPhone = () => {
               >
                 提交
               </Button>
-            )}
+            )} */}
+            <Button onClick={() => setPhone()} size="large">
+              提交
+            </Button>
           </Form.Item>
         </Form>
       </FormWrapper>
