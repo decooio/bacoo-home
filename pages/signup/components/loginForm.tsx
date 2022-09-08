@@ -17,7 +17,6 @@ const LoginForm = function () {
   const [usernameVerify, setUsernameVerify] = useState(false);
   const [passwordVerify, setPasswordVerify] = useState(false);
 
-  
   const login = async () => {
     try {
       dispatch({
@@ -106,6 +105,7 @@ const LoginForm = function () {
             style={{ height: "50px" }}
             placeholder="密码"
             size="large"
+            maxLength={16}
           />
         </Form.Item>
 

@@ -220,6 +220,7 @@ const RegisterForm = function () {
         <Form.Item
           label=""
           name="password"
+          
           rules={[
             { required: true, message: "请输入密码" },
             {
@@ -243,6 +244,8 @@ const RegisterForm = function () {
             style={{ height: "50px" }}
             placeholder="密码"
             size="large"
+            maxLength={16}
+            
           />
         </Form.Item>
         <Form.Item name="agree">
