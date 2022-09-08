@@ -73,8 +73,12 @@ const SetPhone = () => {
       message.error(e);
     }
   };
-  const changeSmsCode = (value: string) => {};
-  const changeMobile = (value: string) => {};
+  const changeSmsCode=(value:string)=>{
+    
+  } 
+  const changeMobile = (value:string)=>{
+
+  }
   return (
     <div className="w-full h-full flex relative items-center justify-center">
       <FormWrapper className="relative flex  flex-col	items-center w-full px-8 md:px-0">
@@ -85,7 +89,17 @@ const SetPhone = () => {
             width: "457px",
           }}
         >
-          <Form.Item label="" name="phone" validateStatus="error" help="s">
+          <Form.Item
+            label=""
+            name="phone"
+            rules={[
+              { required: true, message: "请输入手机号" },
+              {
+                pattern: /^1[3456789]\d{9}$/,
+                message: "请输入正确的手机号",
+              },
+            ]}
+          >
             <Input
               onInput={(e) => {
                 setMobile((e.target as any).value);
@@ -99,11 +113,16 @@ const SetPhone = () => {
               size="large"
             />
           </Form.Item>
-          <Form.Item label="" name="code">
+          <Form.Item
+            label=""
+            name="code"
+            rules={[{ required: true, message: "请输入验证码" }]}
+          >
             <BetweenFlexBox>
               <Input
                 onInput={(e) => {
-                  changeSmsCode((e.target as any).value);
+                  changeSmsCode((e.target as any).value)
+                 
                 }}
                 style={{
                   width: "280px",
@@ -128,7 +147,7 @@ const SetPhone = () => {
                 >
                   发送验证码
                 </VerifyBtn>
-              )}
+              )} 
             </BetweenFlexBox>
           </Form.Item>
           <Form.Item wrapperCol={{ span: 32 }}>

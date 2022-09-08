@@ -13,7 +13,7 @@ import { COL } from "./common/layouts";
 import Button from "./common/Button";
 import { Dropdown, Menu, message, Progress, Space, Upload } from "antd";
 import { GET_GATEWAY_LIST_API, UPDATA_FILE_API } from "@request/apis";
-import { setLoc } from "@src/index";
+import { changeSize, setLoc } from "@src/index";
 import { getgatewayListRes } from "@request/types";
 import { RcFile } from "antd/lib/upload";
 import axios from "axios";
@@ -264,7 +264,7 @@ export default function Main() {
           return (
             <div key={index} className={"file_item"}>
               <div className={"file_name"}>{item.name}</div>
-              <div className={"file_size"}>{item.size}kb</div>
+              <div className={"file_size"}>{changeSize(item.size)}</div>
             </div>
           );
         })}
