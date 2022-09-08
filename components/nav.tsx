@@ -153,8 +153,7 @@ const Nav = () => {
   }, []);
   const navTitle = getNavTitle(router.pathname);
   const showNavTitle = !!navTitle;
-  const panelStyle =
-    navTitle === "分布式云存储" ? { fontSize: 18 } : { fontSize: 24 };
+  const panelStyle = { fontSize: 18 } 
   if (isMobile) panelStyle.fontSize = 12;
   const { user } = useUser();
   const unPrice = router.pathname !== "/pricing";
