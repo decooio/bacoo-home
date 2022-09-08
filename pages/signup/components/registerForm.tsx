@@ -223,16 +223,17 @@ const RegisterForm = function () {
           rules={[
             { required: true, message: "请输入密码" },
             {
-              pattern: /[a-z]/,
-              message: "密码必须包含小写",
+              pattern: /[a-z]{1}/,
+              message: "密码必须包含小写字母",
             },
             {
-              min:6,
-              message: '密码不能少于6个字符',
-            }, {
-              max:16,
-              message: '密码不能大于16个字符',
-            }
+              max: 16,
+              message: "密码必须在6~16位之间",
+            },
+            {
+              min: 6,
+              message: "密码必须在6~16位之间",
+            },
           ]}
         >
           <Input.Password
