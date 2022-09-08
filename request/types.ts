@@ -90,6 +90,7 @@ export interface getFilesRes extends success_Response {
     fileType: string;
     name: string;
     host: string;
+    valid:number
   }>;
 }
 export type getFilesApi = (data: getFilesData) => Promise<getFilesRes>;

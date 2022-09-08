@@ -231,32 +231,53 @@ export default function FileManager() {
               </Text>
               <CopyText flex={6}>{file.cid}</CopyText>
               <Text flex={6}>
-                <Tips title="因遵守当地相关法律法规要求，暂不提供针对该内容的服务。">
-                  <MText>{`https://${uuid}.${file.host.replace(
-                    "https://",
-                    ""
-                  )}/ipfs/${file.cid}`}</MText>
+                <Tips
+                  title={
+                    file.valid !== 1
+                      ? `https://${uuid}.${file.host.replace(
+                          "https://",
+                          ""
+                        )}/ipfs/${file.cid}`
+                      : "因遵守当地相关法律法规要求，暂不提供针对该内容的服务。"
+                  }
+                >
+                  <MText>
+                    {file.valid !== 1
+                      ? `https://${uuid}.${file.host.replace(
+                          "https://",
+                          ""
+                        )}/ipfs/${file.cid}`
+                      : "因遵守当地相关法律法规要求，暂不提供针对该内容的服务。"}
+                  </MText>
                 </Tips>
               </Text>
 
               <Text flex={1}>
-                <DownBtn>
-                  <Tips title="点击下载">
-                    <a
-                      rel="noreferrer"
-                      target="_blank"
-                      href={`https://${uuid}.${file.host.replace(
-                        "https://",
-                        ""
-                      )}/ipfs/${file.cid}`}
-                    >
-                      <FiDownload />
-                    </a>
-                  </Tips>
-                  <Tips title="在IPFS Scan查看文件副本分布">
-                    <FiBox />
-                  </Tips>
-                </DownBtn>
+                {file.valid !== 1 ? (
+                  <DownBtn>
+                    <Tips title="点击下载">
+                      <a
+                        rel="noreferrer"
+                        target="_blank"
+                        href={`https://${uuid}.${file.host.replace(
+                          "https://",
+                          ""
+                        )}/ipfs/${file.cid}`}
+                      >
+                        <FiDownload />
+                      </a>
+                    </Tips>
+                    <Tips title="在IPFS Scan查看文件副本分布">
+                      <a
+                        rel="noreferrer"
+                        target="_blank"
+                        href={`https://ipfs-scan.io/?cid=${file.cid}`}
+                      >
+                        <FiBox />
+                      </a>
+                    </Tips>
+                  </DownBtn>
+                ) : null}
               </Text>
               <Text flex={1}>{changeSize(file.fileSize)} </Text>
               <Text flex={3}>{file.createTime}</Text>
