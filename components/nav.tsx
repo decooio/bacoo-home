@@ -88,6 +88,7 @@ const NavDiv = styled.div<{ isHome: boolean }>`
     padding-right: 20px;
     font-size: 14px;
     cursor: pointer;
+    color:#fff !important;
 
     &:hover {
       color: #2cc8c2;
