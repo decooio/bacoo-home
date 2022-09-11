@@ -216,7 +216,7 @@ export default function HelpAndReport() {
           <TextTitle flex={6}>描述</TextTitle>
           <TextTitle flex={2}>状态</TextTitle>
           <TextTitle flex={6}>反馈</TextTitle>
-          <TextTitle flex={2}></TextTitle>
+          <TextTitle flex={1}></TextTitle>
         </RowFill>
         {ticketsList && ticketsList.length === 0 && (
           <EmptyText>暂无数据</EmptyText>
@@ -252,7 +252,7 @@ export default function HelpAndReport() {
                   <MText>{item.feedback}</MText>
                 </Tips>
               </Text>
-              <Text flex={2}>
+              <Text flex={1}>
                 {item.status !== 0 && (
                   <span
                     onClick={() => {
