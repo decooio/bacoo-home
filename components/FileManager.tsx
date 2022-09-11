@@ -272,7 +272,7 @@ export default function FileManager() {
                           ""
                         )}/ipfs/${file.cid}`}
                       >
-                        <FiDownload />
+                        <FiDownload color="#666666"/>
                       </a>
                     </Tips>
                     <Tips title="在IPFS Scan查看文件副本分布">
@@ -281,7 +281,7 @@ export default function FileManager() {
                         target="_blank"
                         href={`https://ipfs-scan.io/?cid=${file.cid}`}
                       >
-                        <FiBox />
+                        <FiBox color="#666666"/>
                       </a>
                     </Tips>
                   </DownBtn>
