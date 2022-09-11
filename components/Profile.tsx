@@ -307,6 +307,7 @@ export default function Profile() {
           <div className="contentBox">
             <SubText children={`用户名：${user?.username || "暂无信息"}`} />
             <SubText children={`手机号：${user?.mobile || "暂无信息"}`} />
+            <SubText children={`邮箱：暂无信息`} />
           </div>
           <Button
             children={"更改手机号"}

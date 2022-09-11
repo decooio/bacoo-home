@@ -177,7 +177,9 @@ export default function Main() {
           onClick={() => setUploadFileTypeShow(!uploadFileTypeShow)}
         >
           <FiPlus />
-          <span>添加文件</span>
+          <span style={{
+            fontSize:"32px"
+          }}>添加文件</span>
         </div>
         {uploadFileTypeShow && (
           <div className={s.uploadFileType}>
