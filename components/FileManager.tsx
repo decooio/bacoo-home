@@ -287,8 +287,14 @@ export default function FileManager() {
                   </DownBtn>
                 ) : null}
               </Text>
-              <Text flex={1}>{changeSize(file.fileSize)} </Text>
-              <Text flex={3}>{file.createTime}</Text>
+              <Text flex={1}>
+                <Tips title={changeSize(file.fileSize)}>
+                  {changeSize(file.fileSize)}
+                </Tips>{" "}
+              </Text>
+              <Text flex={3}>
+                <Tips title={file.createTime}>{file.createTime}</Tips>
+              </Text>
             </RowFill>
           );
         })}
