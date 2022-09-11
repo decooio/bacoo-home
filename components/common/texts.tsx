@@ -84,7 +84,7 @@ export const CopyText = (p: {
                      }
                  }}>
     {p.children}
-        {copy && <Copyed style={{...copy}}> {'copied'} <Arrow/> </Copyed>}
+        {copy && <Copyed style={{...copy}}> {'已复制'} <Arrow/> </Copyed>}
   </Text>
 
 }
