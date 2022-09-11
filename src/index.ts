@@ -60,12 +60,9 @@ export const codeVerifyF: VerifyFun = (value: string) => {
 };
 
 export const passwordVerifyF: VerifyFun = (value: string) => {
-  const passwordRex = /[a-z]{1}/;
-  if (value.length === 0) {
+  if (value.length < 6 || value.length > 16) {
     return false;
-  } else if (passwordRex.test(value)) {
-    return true;
   } else {
-    return false;
+    return true;
   }
 };

@@ -76,13 +76,17 @@ const NavDiv = styled.div<{ isHome: boolean }>`
       vertical-align: bottom;
       font-weight: 400;
       line-height: 24px;
+      font-size: 14px;
+    }
+    a {
+      font-size: 14px;
     }
   }
 
   .item {
     display: inline-block;
     padding-right: 20px;
-    font-size: 18px;
+    font-size: 14px;
     cursor: pointer;
 
     &:hover {
@@ -128,7 +132,7 @@ const NAV_TITLE = {
 
 const getNavTitle = (path: string) => {
   if (path.startsWith("/panel")) {
-    return '控制台';
+    return "控制台";
   }
   return _.get(NAV_TITLE, path, "");
 };
@@ -153,7 +157,7 @@ const Nav = () => {
   }, []);
   const navTitle = getNavTitle(router.pathname);
   const showNavTitle = !!navTitle;
-  const panelStyle = { fontSize: 18 } 
+  const panelStyle = { fontSize: 18 };
   if (isMobile) panelStyle.fontSize = 12;
   const { user } = useUser();
   const unPrice = router.pathname !== "/pricing";
@@ -166,7 +170,6 @@ const Nav = () => {
   return (
     <NavDiv isHome={isHome}>
       <div className={"nav_left"}>
-        
         <img
           onClick={handleLogoClick}
           alt="LOGO"

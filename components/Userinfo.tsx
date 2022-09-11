@@ -12,7 +12,7 @@ import { Dropdown, Menu, Space } from "antd";
 
 const Wrapper = styled.div`
   cursor: pointer;
-  font-size: 18px;
+  font-size: 14px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -84,8 +84,14 @@ const Userinfo: react.FC = () => {
             </Menu>
           }
         >
-          <Space>
-            {userName}
+          <Space size={14}>
+            <span
+              style={{
+                fontSize: "14px",
+              }}
+            >
+              {userName}
+            </span>
             <FiChevronDown></FiChevronDown>
           </Space>
         </Dropdown>

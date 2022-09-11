@@ -158,7 +158,9 @@ export function Panel(p: PropsPanel) {
               <item.icon />
               <SpaceW />
               <MBadge visible={item.showBadge}>
-                <span>{item.name}</span>
+                <span style={{
+                  fontSize:'16px'
+                }}>{item.name}</span>
               </MBadge>
             </ItemTab>
           ))}

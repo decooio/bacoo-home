@@ -45,7 +45,7 @@ export const SEMDSMS_API: sendSmsApi = (data) => {
     data,
     {
       method: "post",
-      hint: true,
+      hint: false,
       loading: true,
     }
     // { "connect.sid": setCookie }
@@ -57,7 +57,7 @@ export const SEMDSMS_API: sendSmsApi = (data) => {
 export const FORGET_PASSWORD = "common/reset/password";
 export const FORGET_PASSWORD_API: forgetPasswordApi = (data) => {
   return request(FORGET_PASSWORD, data, {
-    hint: false,
+    hint: true,
     method: "post",
     loading: true,
   });
@@ -220,7 +220,7 @@ export const POST_INTENTION = "auth/intention";
 export const POST_INTENTION_API = (data: {
   storageType: number;
   gatewayType: number;
-  requirment: string;
+  requirement: string;
 }) => {
   return request(`${POST_INTENTION}`, data, {
     method: "post",

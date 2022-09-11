@@ -18,7 +18,7 @@
   "dependencies": {
     "@decooio/sdk": "1.0.5",
     "@types/crypto-js": "^4.0.2",
-    "antd": "4.16.1",
+    "antd": "4.21.5",
     "autoprefixer": "^9",
     "axios": "0.21.1",
     "copy-to-clipboard": "3.3.1",

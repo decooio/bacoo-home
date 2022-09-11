@@ -56,7 +56,9 @@ export default function Loing() {
         {loginType == eloginType.resetPassword && <ResetPasswordForm />}
 
         <FlexBox>
-          <span className="text-14 md:text-16">
+          <span style={{
+            fontSize:"14px"
+          }}>
             {loginType === eloginType.login ? "忘记密码?" : "已有账号"}
             {loginType === eloginType.login ? (
               <span

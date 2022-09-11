@@ -3,9 +3,9 @@ import Head from 'next/head'
 import {Provider, useDispatch, useSelector} from 'react-redux'
 import {SWRConfig} from 'swr'
 import {useStore} from '../store'
-import 'antd/dist/antd.css'
 import '../src/assets/global.scss'
 import 'tailwindcss/tailwind.css'
+import "antd/dist/antd.css";
 import {useEffect, useState} from "react";
 import i18next from "i18next";
 import detectLang from 'detect-browser-language'
@@ -20,7 +20,7 @@ import {prefSelector, updatePref} from "../redux/main";
 import {Alert} from "antd";
 import {getStrKey} from "../src/helper/oed";
 import MyContextWrapper from '@components/Context/Context'
-import Request from '../request/request'
+
 
 function getFavicon(){
   return '/logo.ico'

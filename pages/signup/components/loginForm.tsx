@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import React, { useContext, useState } from "react";
-import { Form, Input } from "antd";
+import { Form } from "antd";
 import Button from "../../../components/common/Button";
 import { LOGIN_API } from "@request/apis";
 import { passwordVerifyF, setLoc, usernameVerifyF } from "@src/index";
 import router from "next/router";
 import { Context } from "@components/Context/Context";
 import { eloginStatus } from "@components/Context/types";
+import MyInput from "@components/common/MyInput";
 export const LoginFormBox = styled.div`
   width: 100%;
 `;
@@ -44,7 +45,7 @@ const LoginForm = function () {
         payload: username,
       });
       setLoc("userName", username);
-      router.push("/panel/fileManager");
+      router.replace("/panel/fileManager");
     } catch (err) {
       console.log(err);
     }
@@ -61,15 +62,11 @@ const LoginForm = function () {
           name="username"
           rules={[{ required: true, message: "请输入用户名或手机" }]}
         >
-          <Input
-            onInput={(e) => {
-              const value: string = (e.target as any).value;
+          <MyInput
+            setValue={(value) => {
               setUsername(value);
-              console.log(usernameVerifyF(value));
-
               setUsernameVerify(usernameVerifyF(value));
             }}
-            style={{ height: "50px" }}
             placeholder="用户名"
             size="large"
           />
@@ -81,10 +78,6 @@ const LoginForm = function () {
           rules={[
             { required: true, message: "请输入密码" },
             {
-              pattern: /[a-z]{1}/,
-              message: "密码必须包含小写字母",
-            },
-            {
               max: 16,
               message: "密码必须在6~16位之间",
             },
@@ -94,15 +87,11 @@ const LoginForm = function () {
             },
           ]}
         >
-          <Input.Password
-            onInput={(e) => {
-              const value: string = (e.target as any).value;
+          <MyInput
+            setValue={(value) => {
               setPassword(value);
-              console.log(passwordVerifyF(value));
-
               setPasswordVerify(passwordVerifyF(value));
             }}
-            style={{ height: "50px" }}
             placeholder="密码"
             size="large"
             maxLength={16}

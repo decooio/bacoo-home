@@ -70,6 +70,15 @@ const TipsText = styled.div`
   }
 `;
 
+const TimeText = styled.div`
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 21px;
+  color: #AAAAAA;
+  
+`;
+
+
 export const Table = styled(COL)`
   width: calc(100% - 62px);
   flex: 1;
@@ -329,8 +338,8 @@ export default function HelpAndReport() {
         <HeightBox></HeightBox>
         <ModalText>报告内容</ModalText>
         <TextArea rows={2} disabled value={detail?.description} />
-        <HeightBox></HeightBox>
-        <TipsText>提交时间：{detail?.reportTime}</TipsText>
+        
+        <TimeText>提交时间：{detail?.reportTime}</TimeText>
         <HeightBox></HeightBox>
         <FlexBox>
           <Button

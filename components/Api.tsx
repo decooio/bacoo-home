@@ -6,7 +6,7 @@ import React from "react";
 import { Phone, useDevice } from "../src/assets/style";
 import { GET_APIS_API } from "@request/apis";
 import { getApisRes } from "@request/types";
-import {Context} from "./Context/Context";
+import { Context } from "./Context/Context";
 
 const MCol = styled(COL)`
   padding: 32px;
@@ -27,7 +27,6 @@ const Table = styled(COL)`
     margin-top: 18px;
   }
 `;
-
 
 const styleItemTxt = {
   paddingLeft: 20,
@@ -73,18 +72,33 @@ export default function Api() {
             状态
           </TextTitle>
         </RowFill>
-        {apis.map((item, index) => (
-          <RowFill
-            key={`apis_${index}`}
-            style={{ height: 44, borderTop: "1px solid #eeeeee" }}
-          >
-            <CopyText flex={8} style={styleItem}>{item.signature}</CopyText>
-            <Text flex={flexRight} style={styleItem}>
-              {item.valid?'有效':'无效'}
-            </Text>
+
+        {apis.length > 0 ? (
+          apis.map((item, index) => (
+            <RowFill
+              key={`apis_${index}`}
+              style={{ height: 44, borderTop: "1px solid #eeeeee" }}
+            >
+              <CopyText flex={8} style={styleItem}>
+                {item.signature}
+              </CopyText>
+              <Text flex={flexRight} style={styleItem}>
+                {item.valid === 0 ? "无效" : "有效"}
+              </Text>
+            </RowFill>
+          ))
+        ) : (
+          <RowFill style={{ height: 44, borderTop: "1px solid #eeeeee" }}>
+            <div
+              style={{
+                textAlign: "center",
+                width: "100%",
+              }}
+            >
+              暂无数据
+            </div>
           </RowFill>
-        ))}
-        <RowFill style={{ height: 44, borderTop: "1px solid #eeeeee" }} />
+        )}
       </Table>
     </MCol>
   );

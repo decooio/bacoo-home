@@ -53,7 +53,7 @@ const Card = styled(COL)`
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.06);
   border-radius: 4px;
   padding: 16px 24px 24px 24px;
-  justify-content: space-between;
+  justify-content: start;
 
   ${Phone} {
     width: 100%;
@@ -61,10 +61,14 @@ const Card = styled(COL)`
     border-radius: unset;
     padding: 18px 20px;
   }
+  .contentBox {
+    width: 100%;
+    flex: 1;
+  }
 `;
 
 const Title = styled.div`
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 500;
   color: #333333;
   line-height: 33px;
@@ -82,7 +86,8 @@ const SubText = styled.div`
 `;
 
 const InputPwd = styled.input`
-  width: calc(100% - 32px);
+  background: #f8f8f8;
+  width: 100%;
   font-size: 14px;
   margin-top: 16px;
   border-radius: 4px;
@@ -204,13 +209,12 @@ export default function Profile() {
   const [plan, setPlan] = useState<getUserInfoRes["data"]["plan"]>();
   const [oPwd, setOPwd] = useState("");
   const [nPwd, setNPwd] = useState("");
-  const [loading, setLoading] = useState(false);
   const [info, setInfo] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [storageUsageId, setStorageUsageId] = useState(0);
   const [gatewayID, setGatewayID] = useState(0);
-  const [requirment, setRequirment] = useState("");
+  const [requirement, setRequirement] = useState("");
   const [activeGateway, setActiveGateway] = useState<{
     host: string;
     nodeType: number;
@@ -226,7 +230,7 @@ export default function Profile() {
       await POST_INTENTION_API({
         storageType: storageUsageId,
         gatewayType: gatewayID,
-        requirment,
+        requirement,
       });
       setModalOpen(false);
       message.success("提交成功");
@@ -276,18 +280,28 @@ export default function Profile() {
   };
 
   const changePassword = async () => {
-    setLoading(true);
     try {
+      dispatch({
+        type: "UPDATE_LOADING",
+        payload: true,
+      });
       const res = await CHANGE_PASSWORD_API({
         oldPassword: oPwd,
         newPassword: nPwd,
       });
       setInfo(res.message);
       message.success("修改成功");
+      dispatch({
+        type: "UPDATE_LOADING",
+        payload: false,
+      });
     } catch (e: any) {
       setInfo(e.data.message);
+      dispatch({
+        type: "UPDATE_LOADING",
+        payload: false,
+      });
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -303,7 +317,7 @@ export default function Profile() {
             <Title children={"用户信息"} />
             <SpaceH />
           </div>
-          <div>
+          <div className="contentBox">
             <SubText children={`用户名：${user?.username || "暂无信息"}`} />
             <SubText children={`手机号：${user?.mobile || "暂无信息"}`} />
           </div>
@@ -325,7 +339,7 @@ export default function Profile() {
             <Title children={"百工链存试用计划"} />
             <SpaceH />
           </div>
-          <div>
+          <div className="contentBox">
             <SubText
               children={`存储用量 已消耗/总用量上限：${changeSize(
                 plan?.usedStorageSize
@@ -389,15 +403,11 @@ export default function Profile() {
           )}
         </Card>
 
-        {loading ? (
-          <LoadingBox>
-            <Spin indicator={antIcon} />
-          </LoadingBox>
-        ) : (
-          <Card onKeyPress={(e) => console.log(e)}>
-            <Title children={"修改密码"} />
+        <Card onKeyPress={(e) => console.log(e)}>
+          <Title children={"修改密码"} />
+          <div className="contentBox">
             <InputPwd
-              placeholder={"当前密码"}
+              placeholder={"旧密码"}
               type={"password"}
               value={oPwd}
               onChange={(e) => setOPwd(e.target.value)}
@@ -408,26 +418,26 @@ export default function Profile() {
               value={nPwd}
               onChange={(e) => setNPwd(e.target.value)}
             />
-            {info !== "success" && (
-              <Info children={info} success={info === "success"} />
-            )}
-            <Button
-              children={"保存"}
-              style={{
-                width: "100%",
-                marginTop: 16,
-                borderRadius: 4,
-                fontSize: 14,
-                height: 48,
-              }}
-              onClick={() => changePassword()}
-            />
-          </Card>
-        )}
+          </div>
+          {info !== "success" && (
+            <Info children={info} success={info === "success"} />
+          )}
+          <Button
+            children={"保存"}
+            style={{
+              width: "100%",
+              marginTop: 16,
+              borderRadius: 4,
+              fontSize: 14,
+              height: 48,
+            }}
+            onClick={() => changePassword()}
+          />
+        </Card>
       </MCol>
 
       <Modal
-        width={320}
+        width={380}
         title="我们希望了解您的使用意向"
         visible={modalOpen}
         footer={null}
@@ -457,7 +467,7 @@ export default function Profile() {
         <TextArea
           rows={4}
           onInput={(e) => {
-            setRequirment((e.target as any).value);
+            setRequirement((e.target as any).value);
           }}
         />
         <Tips>*您可简单描述您对文件副本数量以及地域分布的需求。</Tips>

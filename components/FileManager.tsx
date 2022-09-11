@@ -242,25 +242,22 @@ export default function FileManager() {
               </Text>
               <CopyText flex={6}>{file.cid}</CopyText>
               <Text flex={6}>
-                <Tips
-                  title={
-                    file.valid !== 1
-                      ? `https://${uuid}.${file.host.replace(
-                          "https://",
-                          ""
-                        )}/ipfs/${file.cid}`
-                      : "因遵守当地相关法律法规要求，暂不提供针对该内容的服务。"
-                  }
-                >
-                  <MText>
-                    {file.valid !== 1
-                      ? `https://${uuid}.${file.host.replace(
-                          "https://",
-                          ""
-                        )}/ipfs/${file.cid}`
-                      : "因遵守当地相关法律法规要求，暂不提供针对该内容的服务。"}
-                  </MText>
-                </Tips>
+                {file.valid !== 1 ? (
+                  <CopyText flex={6}>{`https://${uuid}.${file.host.replace(
+                    "https://",
+                    ""
+                  )}/ipfs/${file.cid}`}</CopyText>
+                ) : (
+                  <Tips
+                    title={
+                      "因遵守当地相关法律法规要求，暂不提供针对该内容的服务。"
+                    }
+                  >
+                    <MText>
+                      因遵守当地相关法律法规要求，暂不提供针对该内容的服务。
+                    </MText>
+                  </Tips>
+                )}
               </Text>
 
               <Text flex={1}>
