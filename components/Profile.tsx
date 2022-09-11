@@ -11,27 +11,14 @@ import {
 } from "@request/apis";
 import { getUserInfoRes } from "@request/types";
 import { changeSize } from "@src/index";
-import { message, Modal, Spin } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
+import { message, Modal } from "antd";
 import { Context } from "./Context/Context";
 import SelectorBox from "./common/SelectorBox";
 import TextArea from "antd/lib/input/TextArea";
 import router from "next/router";
 
-const antIcon = <LoadingOutlined style={{ fontSize: 48 }} spin />;
 
-const LoadingBox = styled.div`
-  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.06);
-  height: auto;
-  width: 32%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  ${Phone} {
-    height: 200px;
-    width: 100%;
-  }
-`;
+
 const Grid = styled(Row)`
   height: 100%;
   width: 100%;

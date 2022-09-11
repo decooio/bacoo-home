@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React, { createRef, useContext, useState } from "react";
-import { Form, FormInstance, Input, message, Modal } from "antd";
+import { Form, FormInstance,  message, Modal } from "antd";
 import Button from "../../../components/common/Button";
 import {
   BtnBox,
@@ -18,7 +18,6 @@ import {
   codeVerifyF,
   mobileVerifyF,
   passwordVerifyF,
-  setLoc,
 } from "@src/index";
 import { Context } from "@components/Context/Context";
 export const BetweenFlexBox = styled.div`
