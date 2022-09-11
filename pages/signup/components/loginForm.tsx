@@ -77,14 +77,7 @@ const LoginForm = function () {
           name="password"
           rules={[
             { required: true, message: "请输入密码" },
-            {
-              max: 16,
-              message: "密码必须在6~16位之间",
-            },
-            {
-              min: 6,
-              message: "密码必须在6~16位之间",
-            },
+           
           ]}
         >
           <MyInput
