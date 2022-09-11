@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react";
 import { Form } from "antd";
 import Button from "../../../components/common/Button";
 import { LOGIN_API } from "@request/apis";
-import { passwordVerifyF, setLoc, usernameVerifyF } from "@src/index";
+import {  setLoc, usernameVerifyF } from "@src/index";
 import router from "next/router";
 import { Context } from "@components/Context/Context";
 import { eloginStatus } from "@components/Context/types";
