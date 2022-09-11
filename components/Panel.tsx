@@ -22,7 +22,7 @@ import { Phone } from "../src/assets/style";
 const AnimDuration = "300ms";
 const Side = styled(COL)<{ show: boolean }>`
   align-items: flex-start;
-  width: 256px;
+  width: 180px;
   background: white;
   height: 100%;
   padding: 16px;

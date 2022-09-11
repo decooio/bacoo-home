@@ -83,7 +83,7 @@ const LoginForm = function () {
           <MyInput
             setValue={(value) => {
               setPassword(value);
-              setPasswordVerify(passwordVerifyF(value));
+              setPasswordVerify(usernameVerifyF(value));
             }}
             placeholder="密码"
             size="large"
