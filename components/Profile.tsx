@@ -17,8 +17,6 @@ import SelectorBox from "./common/SelectorBox";
 import TextArea from "antd/lib/input/TextArea";
 import router from "next/router";
 
-
-
 const Grid = styled(Row)`
   height: 100%;
   width: 100%;
@@ -301,7 +299,7 @@ export default function Profile() {
       <MCol style={{ flex: 1 }}>
         <Card>
           <div>
-            <Title children={"用户信息"} />
+            <Title children={"账户信息"} />
             <SpaceH />
           </div>
           <div className="contentBox">
@@ -314,8 +312,8 @@ export default function Profile() {
             style={{
               width: "100%",
               marginTop: 16,
-              borderRadius: 4,
-              fontSize: 14,
+              borderRadius: 8,
+              fontSize: 16,
               height: 48,
             }}
             onClick={() => router.push("/setPhone")}
@@ -349,8 +347,8 @@ export default function Profile() {
               style={{
                 width: "100%",
                 marginTop: 16,
-                borderRadius: 4,
-                fontSize: 14,
+                borderRadius: 8,
+                fontSize: 16,
                 height: 48,
               }}
               onClick={() => {
@@ -365,8 +363,8 @@ export default function Profile() {
                 style={{
                   width: "45%",
                   marginTop: 16,
-                  borderRadius: 4,
-                  fontSize: 14,
+                  borderRadius: 8,
+                  fontSize: 16,
                   height: 48,
                 }}
                 onClick={() => {
@@ -379,8 +377,8 @@ export default function Profile() {
                 style={{
                   width: "45%",
                   marginTop: 16,
-                  borderRadius: 4,
-                  fontSize: 14,
+                  borderRadius: 8,
+                  fontSize: 16,
                   height: 48,
                 }}
                 onClick={() => {
@@ -415,8 +413,8 @@ export default function Profile() {
             style={{
               width: "100%",
               marginTop: 16,
-              borderRadius: 4,
-              fontSize: 14,
+              borderRadius: 8,
+              fontSize: 16,
               height: 48,
             }}
             onClick={() => changePassword()}

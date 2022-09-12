@@ -35,6 +35,7 @@ export const VerifyBtn = styled.div<IButtonProps>`
   color: #ffffff;
   cursor: pointer;
   max-width: 100%;
+  background-color: #15c1ba;
   &:hover {
     background-color: #15c1ba;
   }
