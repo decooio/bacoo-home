@@ -1,5 +1,5 @@
 import { Phone } from "@src/assets/style";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { COL, RowFill } from "./common/layouts";
 import { Pager } from "./common/Pager";
@@ -19,6 +19,7 @@ import TextArea from "antd/lib/input/TextArea";
 import { getticketsListRes } from "@request/types";
 import { MText } from "./FileManager";
 import { Tips } from "./common/tips";
+import Editor from "./common/MyWEditor";
 
 const { Option } = Select;
 interface detailInfo {
@@ -74,10 +75,8 @@ const TimeText = styled.div`
   font-weight: 400;
   font-size: 12px;
   line-height: 21px;
-  color: #AAAAAA;
-  
+  color: #aaaaaa;
 `;
-
 
 export const Table = styled(COL)`
   width: calc(100% - 62px);
@@ -118,6 +117,8 @@ const typeList = [
 export default function HelpAndReport() {
   const { state, dispatch } = useContext(Context) as any;
   const { userName } = state;
+  const editor = useRef(null);
+
   const [pageNum, setPageNum] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
   const [description, setDescription] = useState("");
@@ -304,10 +305,19 @@ export default function HelpAndReport() {
         <Reporter>{userName}</Reporter>
         <HeightBox></HeightBox>
         <ModalText>报告内容</ModalText>
-        <TextArea
+        {/* <TextArea
           rows={2}
           onInput={(e) => setDescription((e.target as any).value)}
+        /> */}
+        <Editor
+          setValue={(e) => {
+            setDescription(e);
+            console.log(description);
+            console.log(e);
+          }}
         />
+        <div id="wangeditor" ref={editor}></div>
+
         <HeightBox></HeightBox>
         <Button
           style={{
@@ -338,7 +348,7 @@ export default function HelpAndReport() {
         <HeightBox></HeightBox>
         <ModalText>报告内容</ModalText>
         <TextArea rows={2} disabled value={detail?.description} />
-        
+
         <TimeText>提交时间：{detail?.reportTime}</TimeText>
         <HeightBox></HeightBox>
         <FlexBox>

@@ -129,6 +129,14 @@
   resolved "https://registry.npmmirror.com/@babel/parser/-/parser-7.18.13.tgz"
   integrity sha512-dgXcIfMuQ0kgzLB2b9tRZs7TTFFaGM2AbtA4fJgUUYukzGH4jwsS7hzQHEGs67jdehpm22vkgKwvbU+aEflgwg==
 
+"@babel/runtime-corejs3@^7.11.2":
+  version "7.19.0"
+  resolved "https://registry.npmmirror.com/@babel/runtime-corejs3/-/runtime-corejs3-7.19.0.tgz#0df75cb8e5ecba3ca9e658898694e5326d52397f"
+  integrity sha512-JyXXoCu1N8GLuKc2ii8y5RGma5FMpFeO2nAQIe0Yzrbq+rQnN+sFj47auLblR5ka6aHNGPDgv8G/iI2Grb0ldQ==
+  dependencies:
+    core-js-pure "^3.20.2"
+    regenerator-runtime "^0.13.4"
+
 "@babel/runtime@7.12.5":
   version "7.12.5"
   resolved "https://registry.npmmirror.com/@babel/runtime/-/runtime-7.12.5.tgz"
@@ -2044,6 +2052,11 @@ copy-to-clipboard@3.3.1, copy-to-clipboard@^3.2.0:
   integrity sha512-i13qo6kIHTTpCm8/Wup+0b1mVWETvu2kIMzKoK8FpkLkFxlt0znUAHcMzox+T8sPlqtZXq3CulEjQHsYiGFJUw==
   dependencies:
     toggle-selection "^1.0.6"
+
+core-js-pure@^3.20.2:
+  version "3.25.1"
+  resolved "https://registry.npmmirror.com/core-js-pure/-/core-js-pure-3.25.1.tgz#79546518ae87cc362c991d9c2d211f45107991ee"
+  integrity sha512-7Fr74bliUDdeJCBMxkkIuQ4xfxn/SwrVg+HkJUAoNEXVqYLv55l6Af0dJ5Lq2YBUW9yKqSkLXaS5SYPK6MGa/A==
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
@@ -7692,6 +7705,11 @@ tslib@^1.8.1:
   resolved "https://registry.npmmirror.com/tslib/-/tslib-1.14.1.tgz"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
+tslib@^2.1.0:
+  version "2.4.0"
+  resolved "https://registry.npmmirror.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
+  integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
+
 tsutils@^3.21.0:
   version "3.21.0"
   resolved "https://registry.npmmirror.com/tsutils/-/tsutils-3.21.0.tgz"
@@ -7941,6 +7959,22 @@ void-elements@3.1.0:
   version "3.1.0"
   resolved "https://registry.npmmirror.com/void-elements/-/void-elements-3.1.0.tgz"
   integrity sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==
+
+wangeditor-for-react@^1.5.6:
+  version "1.5.6"
+  resolved "https://registry.npmmirror.com/wangeditor-for-react/-/wangeditor-for-react-1.5.6.tgz#b554be3b8bb92810dc8baac922af11a5880d9828"
+  integrity sha512-FLxU4K6PXc9AS3SFfU7vZhUR+EpUEWUVraFPRUiSH9VSzt9jLO9fp4IyReT7ebbp/YaMKXHhN5JLu2v2/zvNrA==
+  dependencies:
+    wangeditor "^4.7.12"
+
+wangeditor@^4.7.12:
+  version "4.7.15"
+  resolved "https://registry.npmmirror.com/wangeditor/-/wangeditor-4.7.15.tgz#38c5e279a79d0428e4fd77ae5be46367e9c819e5"
+  integrity sha512-aPTdREd8BxXVyJ5MI+LU83FQ7u1EPd341iXIorRNYSOvoimNoZ4nPg+yn3FGbB93/owEa6buLw8wdhYnMCJQLg==
+  dependencies:
+    "@babel/runtime" "^7.11.2"
+    "@babel/runtime-corejs3" "^7.11.2"
+    tslib "^2.1.0"
 
 watchpack@2.1.1:
   version "2.1.1"

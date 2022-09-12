@@ -48,7 +48,8 @@
     "sass": "1.32.11",
     "styled-components": "5.3.0",
     "swr": "0.5.5",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat"
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "wangeditor-for-react": "^1.5.6"
   },
   "license": "MIT",
   "devDependencies": {
