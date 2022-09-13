@@ -16,6 +16,7 @@ import { Context } from "./Context/Context";
 import SelectorBox from "./common/SelectorBox";
 import TextArea from "antd/lib/input/TextArea";
 import router from "next/router";
+import { Tips } from "./common/tips";
 
 const Grid = styled(Row)`
   height: 100%;
@@ -49,6 +50,14 @@ const Card = styled(COL)`
   .contentBox {
     width: 100%;
     flex: 1;
+    position: relative;
+  }
+  .errorText {
+    position: absolute;
+    bottom: -25px;
+    left: 0;
+    color:red
+}
   }
 `;
 
@@ -138,7 +147,7 @@ export const HeightBox = styled.div`
   height: 20px;
 `;
 
-const Tips = styled.span`
+const TipsText = styled.span`
   font-weight: 400;
   font-size: 12px;
   line-height: 18px;
@@ -160,6 +169,18 @@ const DetailsText = styled.p`
   font-size: 14px;
   line-height: 28px;
   color: #666666;
+`;
+const MText = styled.div`
+  width: min-content;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 400;
+  color: #666666;
+  line-height: 20px;
+  margin-bottom: 8px;
 `;
 
 const storageUsage = [
@@ -303,9 +324,13 @@ export default function Profile() {
             <SpaceH />
           </div>
           <div className="contentBox">
-            <SubText children={`用户名：${user?.username || "暂无信息"}`} />
+            {/* <SubText children={`用户名：${user?.username || "暂无信息"}`} /> */}
+            {/* <MText>{`用户名：${user?.username || "暂无信息"}`}</MText> */}
+            <Tips title={user?.username}>
+              <MText>{`用户名：${user?.username || "暂无信息"}`}</MText>
+            </Tips>
             <SubText children={`手机号：${user?.mobile || "暂无信息"}`} />
-            <SubText children={`邮箱：暂无信息`} />
+            <SubText children={`邮箱：${user?.email || "暂无信息"}`} />
           </div>
           <Button
             children={"更改手机号"}
@@ -322,7 +347,13 @@ export default function Profile() {
 
         <Card>
           <div>
-            <Title children={"百工链存试用计划"} />
+            <Title
+              children={
+                plan?.orderType == 0
+                  ? "百工链存试用计划"
+                  : "百工链存存储计划Pro"
+              }
+            />
             <SpaceH />
           </div>
           <div className="contentBox">
@@ -341,7 +372,7 @@ export default function Profile() {
             />
           </div>
 
-          {plan?.orderType == 1 && (
+          {plan?.orderType == 0 && (
             <Button
               children={"了解更多存储计划"}
               style={{
@@ -356,12 +387,12 @@ export default function Profile() {
               }}
             />
           )}
-          {plan?.orderType == 0 && (
+          {plan?.orderType == 1 && (
             <FlexBox>
               <Button
                 children={"查看存储计划详情"}
                 style={{
-                  width: "45%",
+                  width: "48%",
                   marginTop: 16,
                   borderRadius: 8,
                   fontSize: 16,
@@ -375,7 +406,7 @@ export default function Profile() {
               <Button
                 children={"了解更多存储计划"}
                 style={{
-                  width: "45%",
+                  width: "48%",
                   marginTop: 16,
                   borderRadius: 8,
                   fontSize: 16,
@@ -402,12 +433,21 @@ export default function Profile() {
               placeholder={"新密码"}
               type={"password"}
               value={nPwd}
-              onChange={(e) => setNPwd(e.target.value)}
+              onChange={(e) => {
+                setNPwd(e.target.value);
+              }}
             />
+            <span className="errorText">
+              {nPwd && oPwd && oPwd == nPwd && oPwd
+                ? "新密码不能与之前的密码一致"
+                : info == "success"
+                ? ""
+                : info}
+            </span>
           </div>
-          {info !== "success" && (
-            <Info children={info} success={info === "success"} />
-          )}
+
+          <Info success={true} />
+
           <Button
             children={"保存"}
             style={{
@@ -444,9 +484,9 @@ export default function Profile() {
           onChange={(e: number) => setGatewayID(e)}
         ></SelectorBox>
 
-        <Tips>
+        <TipsText>
           *公共网关为共享带宽网关，用户需根据所使用的上下行流量付费；专用网关可配置固定带宽，且专门为用户保留，速度与响应更有保证。
-        </Tips>
+        </TipsText>
         <HeightBox />
 
         <ModalText>您对于文件副本数的要求？</ModalText>
@@ -456,7 +496,7 @@ export default function Profile() {
             setRequirement((e.target as any).value);
           }}
         />
-        <Tips>*您可简单描述您对文件副本数量以及地域分布的需求。</Tips>
+        <TipsText>*您可简单描述您对文件副本数量以及地域分布的需求。</TipsText>
         <HeightBox />
 
         <Button
@@ -467,7 +507,7 @@ export default function Profile() {
         >
           点击提交您的存储使用意向
         </Button>
-        <Tips>*提交意向后，我们会及时通过邮件与您联系。</Tips>
+        <TipsText>*提交意向后，我们会及时通过邮件与您联系。</TipsText>
       </Modal>
 
       <Modal

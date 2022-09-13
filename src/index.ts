@@ -39,7 +39,11 @@ export const changeSize = (limit: number | undefined) => {
 type VerifyFun = (value: string) => boolean;
 
 export const usernameVerifyF: VerifyFun = (value) => {
-  return /([\s\S]*){4,32}/.test(value) ? true : false;
+  if (value.length < 4 || value.length > 32) {
+    return false;
+  } else {
+    return true;
+  }
 };
 
 export const mobileVerifyF: VerifyFun = (value: string) => {
@@ -49,7 +53,11 @@ export const mobileVerifyF: VerifyFun = (value: string) => {
     ? true
     : false;
 };
-
+export const mailVerifyF: VerifyFun = (value) => {
+  return /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(value)
+    ? true
+    : false;
+};
 export const imgCodeVerifyF: VerifyFun = (value: string) => {
   return /[a-zA-Z0-9]{4}/.test(value) ? true : false;
 };

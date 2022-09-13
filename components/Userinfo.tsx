@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { Phone } from "../src/assets/style";
 
-import { eloginStatus, eloginType } from "@components/Context/types";
+import { eloginStatus } from "@components/Context/types";
 import { Dropdown, Menu, Space } from "antd";
 
 const Wrapper = styled.div`
@@ -34,17 +34,8 @@ const CButton = styled(Button)`
 const Userinfo: react.FC = () => {
   const router = useRouter();
   const { state, dispatch } = useContext(Context) as any;
-  const { loginStatus, loginType, userName } = state;
-  const goLoginAndRegister = (type: eloginType) => {
-    dispatch({
-      type: "UPDATE_LOGIN_TYPE",
-      payload: type,
-    });
-    if (router.pathname === "/login") {
-      return;
-    }
-    router.push("/login");
-  };
+  const { loginStatus,  userName } = state;
+
 
   const loginOut = async () => {
     localStorage.removeItem("token");
@@ -58,12 +49,12 @@ const Userinfo: react.FC = () => {
     <Wrapper>
       {loginStatus !== eloginStatus.login ? (
         <>
-          {loginType === eloginType.login && router.pathname == "/login" ? (
-            <CButton onClick={() => goLoginAndRegister(eloginType.register)}>
+          {router.pathname == "/login" ? (
+            <CButton onClick={() => router.push('/register')}>
               注册
             </CButton>
           ) : (
-            <CButton onClick={() => goLoginAndRegister(eloginType.login)}>
+            <CButton onClick={() => router.push('/login')}>
               登录
             </CButton>
           )}

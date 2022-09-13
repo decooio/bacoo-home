@@ -52,6 +52,21 @@ export const SEMDSMS_API: sendSmsApi = (data) => {
   );
 };
 
+/**-----------------------------------------------------------发送邮箱验证码------------------------------------------------------------------------------*/
+
+export const SEMD_MAILCODE = "common/verify/email";
+export const SEMD_MAILCODE_API = (email: string) => {
+  return request(
+    SEMD_MAILCODE,
+    { email },
+    {
+      method: "post",
+      hint: true,
+      loading: true,
+    }
+    // { "connect.sid": setCookie }
+  );
+};
 /**-----------------------------------------------------------忘记密码接口------------------------------------------------------------------------------*/
 
 export const FORGET_PASSWORD = "common/reset/password";
@@ -166,7 +181,7 @@ export const SUBMIT_TICKETS = "auth/tickets/report";
 export const SUBMIT_TICKETS_API = (data: {
   description: string;
   type: string | number;
-  feedback: string;
+  title:string
 }) => {
   return request(SUBMIT_TICKETS, data, {
     method: "post",

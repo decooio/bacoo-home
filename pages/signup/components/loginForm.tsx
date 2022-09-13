@@ -60,14 +60,14 @@ const LoginForm = function () {
         <Form.Item
           label=""
           name="username"
-          rules={[{ required: true, message: "请输入用户名或手机" }]}
+          rules={[{ required: true, message: "请输入用户名或手机或者邮箱号" }]}
         >
           <MyInput
             setValue={(value) => {
               setUsername(value);
               setUsernameVerify(usernameVerifyF(value));
             }}
-            placeholder="用户名"
+            placeholder="用户名、手机、邮箱号"
             size="large"
           />
         </Form.Item>

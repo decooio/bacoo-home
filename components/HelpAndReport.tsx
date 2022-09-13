@@ -14,12 +14,12 @@ import {
 } from "@request/apis";
 import { Context } from "./Context/Context";
 import { message, Modal, Select } from "antd";
-import { HeightBox, ModalText } from "./Profile";
-import TextArea from "antd/lib/input/TextArea";
+import { HeightBox } from "./Profile";
 import { getticketsListRes } from "@request/types";
 import { MText } from "./FileManager";
 import { Tips } from "./common/tips";
 import Editor from "./common/MyWEditor";
+import MyInput from "./common/MyInput";
 
 const { Option } = Select;
 interface detailInfo {
@@ -29,6 +29,7 @@ interface detailInfo {
   status: number;
   ticketNo: string;
   type: number;
+  title: string;
 }
 export const MCol = styled(COL)`
   padding: 0px 32px 20px 0px;
@@ -99,6 +100,14 @@ const Reporter = styled.span`
   color: #666666;
 `;
 
+const ModalText = styled.div`
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  color: #000000;
+  margin-bottom: 10px;
+`;
+
 const typeMap = new Map([
   [0, "技术支持"],
   [1, "用户意向"],
@@ -122,14 +131,23 @@ export default function HelpAndReport() {
   const [pageNum, setPageNum] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const [description, setDescription] = useState("");
-  const [type, setType] = useState('0');
+  const [type, setType] = useState("0");
   const [pageSize, setPageSize] = useState(0);
   const [ticketsList, setTicketsList] = useState<
     getticketsListRes["data"]["results"]
   >([]);
   const [detailsmodalOpen, setDetailsModalOpen] = useState(false);
-  const [detail, setDetail] = useState<detailInfo>();
+  const [detail, setDetail] = useState<detailInfo>({
+    description: '',
+    feedback: '',
+    reportTime: '',
+    status: 0,
+    ticketNo: '',
+    type: 0,
+    title: '',
+  });
   const [activeId, setActiveId] = useState(0);
+  const [title, setTitle] = useState("");
 
   const getTicketsList = async () => {
     dispatch({
@@ -137,7 +155,10 @@ export default function HelpAndReport() {
       payload: true,
     });
     try {
-      const res = await GET_TICKETS_LIST_API({ pageSize: 10, pageNum:pageNum+1 });
+      const res = await GET_TICKETS_LIST_API({
+        pageSize: 10,
+        pageNum: pageNum + 1,
+      });
       setPageSize(res.data.count);
       setTicketsList([...res.data.results]);
     } catch (e) {
@@ -150,13 +171,18 @@ export default function HelpAndReport() {
   };
 
   const submitReport = async () => {
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: true,
+    });
     try {
-      const res = await SUBMIT_TICKETS_API({
+      await SUBMIT_TICKETS_API({
         description,
         type,
-        feedback: "测试",
+        title,
       });
-      console.log(res);
+      setModalOpen(false);
+      getTicketsList();
     } catch (e) {
       console.log(e);
     }
@@ -166,7 +192,6 @@ export default function HelpAndReport() {
     setActiveId(id);
     try {
       const res = await GET_TICKETS_DETAILS_API(id);
-      console.log(res);
       setDetailsModalOpen(true);
       setDetail(res.data[0]);
     } catch (e) {
@@ -235,8 +260,8 @@ export default function HelpAndReport() {
                 <MText>{typeMap.get(item.type)}</MText>
               </Text>
               <Text flex={6}>
-                <Tips title={item.description}>
-                  <MText>{item.description}</MText>
+                <Tips title={item.title}>
+                  <MText>{item.title}</MText>
                 </Tips>
               </Text>
               <Text flex={2}>
@@ -245,7 +270,9 @@ export default function HelpAndReport() {
                     ? "已提交"
                     : item.status == 1
                     ? "已回复"
-                    : "已解决"}
+                    : item.status == 1
+                    ? "已解决"
+                    : "未解决"}
                 </MText>
               </Text>
               <Text flex={6}>
@@ -276,7 +303,9 @@ export default function HelpAndReport() {
       <Pager
         pageSize={Math.ceil(pageSize / 10)}
         pageIndex={pageNum}
-        setPageIndex={(e) => {setPageNum(e)}}
+        setPageIndex={(e) => {
+          setPageNum(e);
+        }}
       />
 
       <Modal
@@ -304,11 +333,11 @@ export default function HelpAndReport() {
         <ModalText>报告人</ModalText>
         <Reporter>{userName}</Reporter>
         <HeightBox></HeightBox>
+        <ModalText>报告标题</ModalText>
+        <MyInput setValue={(value) => setTitle(value)} />
+        <HeightBox></HeightBox>
         <ModalText>报告内容</ModalText>
-        {/* <TextArea
-          rows={2}
-          onInput={(e) => setDescription((e.target as any).value)}
-        /> */}
+
         <Editor
           setValue={(e) => {
             setDescription(e);
@@ -318,10 +347,21 @@ export default function HelpAndReport() {
 
         <HeightBox></HeightBox>
         <Button
-          style={{
-            width: "100%",
+          style={
+            description.length === 0 || title.length === 0
+              ? {
+                  width: "100%",
+                  background: " #CCCCCC",
+                }
+              : {
+                  width: "100%",
+                }
+          }
+          onClick={() => {
+            description.length === 0 || title.length === 0
+              ? null
+              : submitReport();
           }}
-          onClick={() => submitReport()}
         >
           确认提交
         </Button>
@@ -329,26 +369,31 @@ export default function HelpAndReport() {
 
       <Modal
         width={480}
-        title={detail?.ticketNo}
+        title={`工单 ${detail.ticketNo}`}
         visible={detailsmodalOpen}
         footer={null}
         onCancel={() => setDetailsModalOpen(false)}
       >
         <ModalText>类型</ModalText>
-        <Select
-          disabled
-          defaultValue={detail?.type == 0 ? "技术支持" : "用户意向"}
-          style={{ width: "100%" }}
-        ></Select>
+        <Reporter>{detail?.type == 0 ? "技术支持" : "用户意向"}</Reporter>
         <HeightBox></HeightBox>
+
         <ModalText>报告人</ModalText>
         <Reporter>{userName}</Reporter>
         <HeightBox></HeightBox>
-        <ModalText>报告内容</ModalText>
-        <TextArea rows={2} disabled value={detail?.description} />
 
+        <ModalText>报告内容</ModalText>
+        <Reporter>{detail?.title}</Reporter>
+        <Reporter
+          dangerouslySetInnerHTML={{ __html: detail.description }}
+        ></Reporter>
         <TimeText>提交时间：{detail?.reportTime}</TimeText>
         <HeightBox></HeightBox>
+
+        <ModalText>反馈</ModalText>
+        <Reporter>{detail?.feedback}</Reporter>
+        <HeightBox></HeightBox>
+
         <FlexBox>
           <Button
             style={{

@@ -63,7 +63,7 @@ const MRowFill = styled(RowFill)<{ showSide: boolean }>`
 `;
 
 const Content = styled.div<{ showSide: boolean }>`
-  width: calc(100% - 256px - 12px);
+  width: calc(100% - 180px );
   background: white;
   height: 100%;
   transition: all ease-in-out ${AnimDuration};

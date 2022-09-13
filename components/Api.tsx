@@ -83,7 +83,7 @@ export default function Api() {
                 {item.signature}
               </CopyText>
               <Text flex={flexRight} style={styleItem}>
-                {item.valid === 0 ? "无效" : "有效"}
+                {item.valid? "无效" : "有效"}
               </Text>
             </RowFill>
           ))

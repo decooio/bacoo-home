@@ -11,14 +11,12 @@ import i18next from "i18next";
 import detectLang from 'detect-browser-language'
 import {initReactI18next} from "react-i18next";
 import resources from '../lang'
-import {useT} from "../src/hooks/utils";
 import Nav from '../components/nav';
 import {useRouter} from "next/router";
 import {AppLoading} from '../components/common/Loading'
 import React from "react";
 import {prefSelector, updatePref} from "../redux/main";
 import {Alert} from "antd";
-import {getStrKey} from "../src/helper/oed";
 import MyContextWrapper from '@components/Context/Context'
 
 

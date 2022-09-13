@@ -26,6 +26,7 @@ const MyContextWrapper = ({ children: children }: any) => {
     user: {
       username: "尚未登录",
       mobile: "暂无信息",
+      email:""
     },
     plan: null,
   });

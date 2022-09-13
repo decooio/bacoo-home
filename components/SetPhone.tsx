@@ -4,7 +4,7 @@ import {
   CountdownBtn,
   BetweenFlexBox,
   VerifyBtn,
-} from "@pages/signup/components/registerForm";
+} from "@pages/register/components/registerForm";
 import { SET_MOBILE_API, SET_MOBILE_SMS_API } from "@request/apis";
 import { codeVerifyF, mobileVerifyF } from "@src/index";
 import { Form, FormInstance } from "antd";
@@ -14,6 +14,7 @@ import React, { createRef, useContext, useState } from "react";
 import Button from "./common/Button";
 import MyInput from "./common/MyInput";
 import { Context } from "./Context/Context";
+import { LoginTitle } from "@pages/resetPassword";
 
 const SetPhone = () => {
   const { dispatch } = useContext(Context) as any;
@@ -87,6 +88,7 @@ const SetPhone = () => {
   return (
     <div className="w-full h-full flex relative items-center justify-center">
       <FormWrapper className="relative flex  flex-col	items-center w-full px-8 md:px-0">
+        <LoginTitle>更改手机号</LoginTitle>
         <Form
           name="loginForm"
           ref={formRef}

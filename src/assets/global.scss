@@ -1,37 +1,46 @@
 @import "./reset.css";
 @import './capctha.css';
 
-html,body,button{
+html,
+body,
+button {
   padding: 0;
   margin: 0;
   font-family: "PingFang", system-ui, sans-serif;
   background-color: #fff;
 }
+
 .pointer {
   cursor: pointer;
 }
+
 .link {
   cursor: pointer;
   color: #2CC8C2;
   font-size: 14px;
+
   &:hover {
     color: #15C1BA;
   }
 }
+
 .show {
   visibility: visible;
 }
+
 .hide {
- visibility: hidden;
+  visibility: hidden;
 }
 
 @media screen and (max-width: 1440px) {
-  html,body{
+
+  html,
+  body {
     font-size: 13px;
   }
 }
 
-.ant-modal-content{
+.ant-modal-content {
   overflow: hidden;
   border-radius: 8px !important;
 }
@@ -40,12 +49,17 @@ html,body,button{
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(359deg);
   }
 }
 
-.rotate_1{
+.rotate_1 {
   //transition: all 2s ease-in-out;
   animation: rotate_1 infinite 2s ease-in-out;
+}
+
+.ant-input:focus {
+  border: 1px solid #000 !important;
 }

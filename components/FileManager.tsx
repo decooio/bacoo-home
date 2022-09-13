@@ -91,7 +91,7 @@ export default function FileManager() {
     nodeType: 0,
     name: "",
   });
-  const [pageNum, setPageNum] = useState(1);
+  const [pageNum, setPageNum] = useState(0);
   const [upLoadOpen, setUpLoadOpen] = useState(false);
   const [upLoadStatus, setUpLoadStatus] = useState<string | undefined>("");
   const [pageSize, setPageSize] = useState(0);
@@ -125,7 +125,7 @@ export default function FileManager() {
     try {
       const res = await GET_FILE_LIST_API({
         pageSize: 10,
-        pageNum,
+        pageNum:pageNum+1,
       });
       console.log(res);
       setFiles([...res.data]);
@@ -177,6 +177,7 @@ export default function FileManager() {
                 name: Name,
               });
               getFiles();
+              getFileSize()
             }
           }}
         >
@@ -223,7 +224,7 @@ export default function FileManager() {
           <TextTitle flex={6}>CID</TextTitle>
           <TextTitle flex={6}>访问域名</TextTitle>
           <TextTitle flex={1}></TextTitle>
-          <TextTitle flex={1}>大小</TextTitle>
+          <TextTitle flex={2}>大小</TextTitle>
           <TextTitle flex={3}>Pin时间戳</TextTitle>
         </RowFill>
         {files && files.length === 0 && !loading && (
@@ -287,7 +288,7 @@ export default function FileManager() {
                   </DownBtn>
                 ) : null}
               </Text>
-              <Text flex={1}>
+              <Text flex={2}>
                 <Tips title={changeSize(file.fileSize)}>
                   {changeSize(file.fileSize)}
                 </Tips>{" "}

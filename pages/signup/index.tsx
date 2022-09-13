@@ -1,14 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 
 import styled from "styled-components";
 import { getLogoDark } from "../../src/helper/utils";
 
-import { Context } from "@components/Context/Context";
-import { eloginType } from "@components/Context/types";
+
 
 import LoginForm from "./components/loginForm";
-import RegisterForm from "./components/registerForm";
-import ResetPasswordForm from "./components/resetPasswordForm";
+import router from "next/router";
 
 export const FormWrapper = styled.div`
   @media (min-width: 768px) {
@@ -37,46 +35,28 @@ const mlinksyle = {
 };
 
 export default function Loing() {
-  const { state, dispatch } = useContext(Context) as any;
-  const { loginType } = state;
-  const setLoginType = (type: eloginType) => {
-    dispatch({
-      type: "UPDATE_LOGIN_TYPE",
-      payload: type,
-    });
-  };
+
 
   return (
     <div className="w-full h-full flex relative items-center justify-center">
       <FormWrapper className="relative flex  flex-col	items-center w-full px-8 md:px-0">
         <Logo src={getLogoDark()} />
-
-        {loginType == eloginType.login && <LoginForm />}
-        {loginType == eloginType.register && <RegisterForm />}
-        {loginType == eloginType.resetPassword && <ResetPasswordForm />}
+        <LoginForm />
 
         <FlexBox>
-          <span style={{
-            fontSize:"14px"
-          }}>
-            {loginType === eloginType.login ? "忘记密码?" : "已有账号"}
-            {loginType === eloginType.login ? (
-              <span
-                style={mlinksyle}
-                className="link"
-                onClick={() => setLoginType(eloginType.resetPassword)}
-              >
-                重置密码
-              </span>
-            ) : (
-              <span
-                style={mlinksyle}
-                className="link"
-                onClick={() => setLoginType(eloginType.login)}
-              >
-                前往登录
-              </span>
-            )}
+          <span
+            style={{
+              fontSize: "14px",
+            }}
+          >
+            忘记密码?
+            <span
+              style={mlinksyle}
+              className="link"
+              onClick={() => router.push("/resetPassword")}
+            >
+              重置密码
+            </span>
           </span>
         </FlexBox>
       </FormWrapper>

@@ -1,21 +1,25 @@
 import styled from "styled-components";
 import React, { createRef, useContext, useState } from "react";
-import { Checkbox, Form, message, Modal } from "antd";
+import { Form, FormInstance,  message, Modal } from "antd";
 import Button from "../../../components/common/Button";
-import { REGISTERED_API, SEMDSMS_API, VERIFY_CODE_API } from "@request/apis";
-import type { FormInstance } from "antd/es/form";
-import { eloginStatus } from "@components/Context/types";
+import {
+  BtnBox,
+  CountdownBtn,
+  VerifyBtn,
+  verifyCodeImgStyle,
+} from "../../register/components/registerForm";
+import {
+  FORGET_PASSWORD_API,
+  SEMDSMS_API,
+  VERIFY_CODE_API,
+} from "@request/apis";
+import MyInput from "@components/common/MyInput";
 import {
   codeVerifyF,
   mobileVerifyF,
   passwordVerifyF,
-  setLoc,
-  usernameVerifyF,
 } from "@src/index";
-import router from "next/router";
 import { Context } from "@components/Context/Context";
-import MyInput from "@components/common/MyInput";
-
 export const BetweenFlexBox = styled.div`
   width: 100%;
   display: flex;
@@ -24,80 +28,31 @@ export const BetweenFlexBox = styled.div`
 export const LoginFormBox = styled.div`
   width: 100%;
 `;
-export const VerifyBtn = styled.div<IButtonProps>`
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  height: 52px;
-  width: 457px;
-  font-size: 16px;
-  border-radius: 8px;
-  color: #ffffff;
-  cursor: pointer;
-  max-width: 100%;
-  background-color: #15c1ba;
-  &:hover {
-    background-color: #15c1ba;
-  }
-`;
-export const CountdownBtn = styled.div<IButtonProps>`
-  background: #cccccc;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  height: 52px;
-  width: 457px;
-  font-size: 16px;
-  border-radius: 8px;
-  color: #ffffff;
-  cursor: pointer;
-  max-width: 100%;
-`;
-export const verifyCodeImgStyle = {
-  display: "flex",
-  justifyContent: "center",
-  marginBottom: "20px",
-};
-export const ErrorBox = styled.div``;
-export const BtnBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 25px;
-`;
-interface IButtonProps {
-  onClick?: () => void;
-}
-const astyle = {
-  color: "#2CC8C2",
-};
-const RegisterForm = function () {
+const ResetPasswordForm = function () {
   const { dispatch } = useContext(Context) as any;
+
   const [mobile, setMobile] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [smsCode, setsmsCode] = useState("");
+  const [password, setPassword] = useState("");
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [verifyCodeImg, setVerifyCodeImg] = useState("");
   const [inputVerifyCodeImg, setInputVerifyCodeImg] = useState("");
   const [countdownNum, setCountdownNum] = useState(60);
 
-  const [agree, setAgree] = useState(false);
-  const [usernameVerify, setUsernameVerify] = useState(false);
   const [mobileVerify, setMobileVerify] = useState(false);
   const [passwordVerify, setPasswordVerify] = useState(false);
   const [codeVerify, setCodeVerify] = useState(false);
   const [codeError, setCodeError] = useState("");
 
   const formRef = createRef<FormInstance>();
-  const verify = () => {
-    (formRef.current as any)
-      .validateFields(["user", "phone"])
-      .then(async () => {
-        getVerifyCodeImg();
-        setIsModalVisible(true);
-      });
-  };
 
+  const verify = () => {
+    (formRef.current as any).validateFields(["phone"]).then(async () => {
+      getVerifyCodeImg();
+      setIsModalVisible(true);
+    });
+  };
   const getVerifyCodeImg = async () => {
     const verifyCodeImg = await VERIFY_CODE_API(mobile);
     setVerifyCodeImg(verifyCodeImg);
@@ -132,8 +87,6 @@ const RegisterForm = function () {
       } else {
         setCodeError("未知错误 请稍后重试");
       }
-
-      // setCodeError(error as string);
     }
     dispatch({
       type: "UPDATE_LOADING",
@@ -141,35 +94,22 @@ const RegisterForm = function () {
     });
   };
 
-  const register = async () => {
+  const resetPassword = async () => {
     (formRef.current as any)
-      .validateFields(["user", "phone", "code", "password"])
+      .validateFields(["phone", "code", "password"])
       .then(async () => {
         try {
           dispatch({
             type: "UPDATE_LOADING",
             payload: true,
           });
-          const res = await REGISTERED_API({
-            username,
+          await FORGET_PASSWORD_API({
             password,
             mobile,
             smsCode,
           });
-          const token = `Bearer ${res.data.signature}`;
-          setLoc("token", token);
-          dispatch({
-            type: "UPDATE_LOGIN_STATUS",
-            payload: eloginStatus.login,
-          });
-          dispatch({
-            type: "UPDATE_USER_NAME",
-            payload: username,
-          });
-          setLoc("userName", username);
-          router.replace("/panel/fileManager");
-        } catch (err) {
-          console.log(err);
+        } catch (e) {
+          console.log(e);
         }
         dispatch({
           type: "UPDATE_LOADING",
@@ -177,23 +117,9 @@ const RegisterForm = function () {
         });
       });
   };
-
   return (
     <LoginFormBox>
       <Form name="loginForm" ref={formRef}>
-        <Form.Item
-          name="user"
-          rules={[{ required: true, message: "请输入用户名" }]}
-        >
-          <MyInput
-            setValue={(e) => {
-              setUsername(e);
-              setUsernameVerify(usernameVerifyF(e));
-            }}
-            placeholder="用户名"
-          />
-        </Form.Item>
-
         <Form.Item
           name="phone"
           rules={[
@@ -205,23 +131,21 @@ const RegisterForm = function () {
           ]}
         >
           <MyInput
+            placeholder="手机号"
             setValue={(value) => {
               setMobile(value);
               setMobileVerify(mobileVerifyF(value));
             }}
-            placeholder="手机号"
           />
         </Form.Item>
         <Form.Item
+          label=""
           name="code"
           rules={[{ required: true, message: "请输入验证码" }]}
         >
           <BetweenFlexBox>
             <MyInput
-              setValue={(e) => {
-                setsmsCode(e);
-                setCodeVerify(codeVerifyF(e));
-              }}
+              placeholder="验证码"
               style={{
                 width: "280px",
                 height: "50px",
@@ -229,7 +153,10 @@ const RegisterForm = function () {
                 border: " 1px solid #DDDDDD",
                 borderRadius: "8px",
               }}
-              placeholder="验证码"
+              setValue={(value) => {
+                setsmsCode(value);
+                setCodeVerify(codeVerifyF(value));
+              }}
             />
 
             {countdownNum < 60 ? (
@@ -239,12 +166,12 @@ const RegisterForm = function () {
             ) : (
               <VerifyBtn
                 onClick={() => {
-                  if (usernameVerify && mobileVerify) {
+                  if (mobileVerify) {
                     verify();
                   }
                 }}
                 style={
-                  usernameVerify && mobileVerify
+                  mobileVerify
                     ? { width: "148px", background: "#2cc8c2" }
                     : {
                         width: "148px",
@@ -282,37 +209,11 @@ const RegisterForm = function () {
             maxLength={16}
           />
         </Form.Item>
-        <Form.Item name="agree">
-          <Checkbox checked={agree} onChange={() => setAgree(!agree)}>
-            我已同意{" "}
-            <a
-              style={astyle}
-              href={"/termofuse"}
-              target={"_blank"}
-              rel="noreferrer"
-            >
-              《用户协议》
-            </a>{" "}
-            和{" "}
-            <a
-              style={astyle}
-              target={"_blank"}
-              href={"/privacy"}
-              rel="noreferrer"
-            >
-              《隐私协议》
-            </a>{" "}
-          </Checkbox>
-        </Form.Item>
 
         <Form.Item wrapperCol={{ span: 32 }}>
-          {usernameVerify &&
-          mobileVerify &&
-          passwordVerify &&
-          codeVerify &&
-          agree ? (
-            <Button type="button" onClick={() => register()} size="large">
-              注册
+          {mobileVerify && passwordVerify && codeVerify ? (
+            <Button type="button" onClick={() => resetPassword()} size="large">
+              重置密码
             </Button>
           ) : (
             <Button
@@ -320,11 +221,12 @@ const RegisterForm = function () {
               size="large"
               style={{ background: "#CCCCCC" }}
             >
-              登录
+              重置密码
             </Button>
           )}
         </Form.Item>
       </Form>
+
       <Modal
         title="请输入验证码"
         visible={isModalVisible}
@@ -377,4 +279,4 @@ const RegisterForm = function () {
     </LoginFormBox>
   );
 };
-export default RegisterForm;
+export default ResetPasswordForm;

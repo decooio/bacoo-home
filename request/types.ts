@@ -10,6 +10,8 @@ export interface success_Response {
 export interface registeredData {
   username: string;
   password: string;
+  email:string;
+  emailCode:string;
   mobile: string;
   smsCode: string;
 }
@@ -134,7 +136,7 @@ export type getApisApi = () => Promise<getApisRes>;
 
 export interface getUserInfoRes extends success_Response {
   data: {
-    info: { username: string; mobile: string };
+    info: { username: string; mobile: string,email:string };
     plan: {
       downloadExpireTime: string;
       maxDownloadSize: number;
@@ -159,7 +161,8 @@ export interface changePasswordRes extends success_Response {
 export type changePasswordApi = (
   data: changePasswordData
 ) => Promise<changePasswordRes>;
-/**-----------------------------------------------------------修改密码接口------------------------------------------------------------------------------*/
+
+/**-----------------------------------------------------------获取工单接口------------------------------------------------------------------------------*/
 
 export interface getticketsListRes extends success_Response {
   data: {
@@ -171,6 +174,7 @@ export interface getticketsListRes extends success_Response {
       status: number;
       ticketNo: string;
       type: number;
+      title:string
     }>;
   };
 }
