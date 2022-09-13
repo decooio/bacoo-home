@@ -138,13 +138,13 @@ export default function HelpAndReport() {
   >([]);
   const [detailsmodalOpen, setDetailsModalOpen] = useState(false);
   const [detail, setDetail] = useState<detailInfo>({
-    description: '',
-    feedback: '',
-    reportTime: '',
+    description: "",
+    feedback: "",
+    reportTime: "",
     status: 0,
-    ticketNo: '',
+    ticketNo: "",
     type: 0,
-    title: '',
+    title: "",
   });
   const [activeId, setActiveId] = useState(0);
   const [title, setTitle] = useState("");
@@ -261,7 +261,7 @@ export default function HelpAndReport() {
           <TextTitle flex={2}>类型</TextTitle>
           <TextTitle flex={6}>描述</TextTitle>
           <TextTitle flex={2}>状态</TextTitle>
-          <TextTitle flex={6}>反馈</TextTitle>
+          <TextTitle flex={6}>反馈信息</TextTitle>
           <TextTitle flex={1}></TextTitle>
         </RowFill>
         {ticketsList && ticketsList.length === 0 && (
@@ -290,7 +290,7 @@ export default function HelpAndReport() {
                     ? "已提交"
                     : item.status == 1
                     ? "已回复"
-                    : item.status == 1
+                    : item.status == 2
                     ? "已解决"
                     : "未解决"}
                 </MText>
@@ -414,27 +414,40 @@ export default function HelpAndReport() {
         <Reporter>{detail?.feedback}</Reporter>
         <HeightBox></HeightBox>
 
-        <FlexBox>
-          <Button
-            style={{
-              width: "45%",
-              background: "rgba(44, 200, 194, 0.06)",
-              border: " 1px solid #2CC8C2",
-              color: "#2CC8C2",
-            }}
-            onClick={() => setStates(activeId, 0)}
-          >
-            未解决
-          </Button>
-          <Button
-            style={{
-              width: "45%",
-            }}
-            onClick={() => setStates(activeId, 1)}
-          >
-            已解决
-          </Button>
-        </FlexBox>
+        {detail.status !== 2 ? (
+          <FlexBox>
+            <Button
+              style={{
+                width: "45%",
+                background: "rgba(44, 200, 194, 0.06)",
+                border: " 1px solid #2CC8C2",
+                color: "#2CC8C2",
+              }}
+              onClick={() => setStates(activeId, 0)}
+            >
+              未解决
+            </Button>
+            <Button
+              style={{
+                width: "45%",
+              }}
+              onClick={() => setStates(activeId, 1)}
+            >
+              已解决
+            </Button>
+          </FlexBox>
+        ) : (
+          <FlexBox>
+            <Button
+              style={{
+                width: "100%",
+                background: "#CCCCCC",
+              }}
+            >
+              已解决
+            </Button>
+          </FlexBox>
+        )}
       </Modal>
     </MCol>
   );

@@ -155,7 +155,7 @@ const TipsText = styled.span`
 `;
 export const ModalText = styled.p`
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 31px;
   color: #000000;
 `;
@@ -182,6 +182,33 @@ const MText = styled.div`
   line-height: 20px;
   margin-bottom: 8px;
 `;
+const MoadlTitle = styled.div`
+  font-size: 18px;
+`;
+const SizeComparison = ({
+  size,
+  totalSize,
+}: {
+  size: number;
+  totalSize: number;
+}) => {
+  return (
+    <span>
+      <span
+        style={
+          size > totalSize
+            ? {
+                color: "red",
+              }
+            : {}
+        }
+      >
+        {changeSize(size)}
+      </span>
+      /<span>{changeSize(totalSize)}</span>
+    </span>
+  );
+};
 
 const storageUsage = [
   {
@@ -212,7 +239,15 @@ const gatewayList = [
 export default function Profile() {
   const { dispatch } = useContext(Context) as any;
   const [user, setUser] = useState<getUserInfoRes["data"]["info"]>();
-  const [plan, setPlan] = useState<getUserInfoRes["data"]["plan"]>();
+  const [plan, setPlan] = useState<getUserInfoRes["data"]["plan"]>({
+    downloadExpireTime: "",
+    maxDownloadSize: 0,
+    maxStorageSize: 0,
+    orderType: 0,
+    storageExpireTime: "",
+    usedDownloadSize: 0,
+    usedStorageSize: 0,
+  });
   const [oPwd, setOPwd] = useState("");
   const [nPwd, setNPwd] = useState("");
   const [info, setInfo] = useState("");
@@ -232,6 +267,10 @@ export default function Profile() {
   });
 
   const postIntention = async () => {
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: true,
+    });
     try {
       await POST_INTENTION_API({
         storageType: storageUsageId,
@@ -243,6 +282,13 @@ export default function Profile() {
     } catch (e) {
       message.error(e);
     }
+    setStorageUsageId(0);
+    setGatewayID(0);
+    setRequirement("");
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: false,
+    });
   };
   //获取节点列表
   const getGatewayList = async () => {
@@ -357,19 +403,27 @@ export default function Profile() {
             <SpaceH />
           </div>
           <div className="contentBox">
-            <SubText
-              children={`存储用量 已消耗/总用量上限：${changeSize(
-                plan?.usedStorageSize
-              )}/${changeSize(plan?.maxStorageSize)}`}
-            />
-            <SubText
-              children={`公共网关流量 已消耗/总用量上限：${changeSize(
-                plan?.usedDownloadSize
-              )}/${changeSize(plan?.maxDownloadSize)}`}
-            />
-            <SubText
-              children={`到期时间：${plan?.storageExpireTime || "暂无信息"}`}
-            />
+            <SubText>
+              存储用量 已消耗/总用量上限：
+              <SizeComparison
+                size={plan.usedStorageSize}
+                totalSize={plan.maxStorageSize}
+              />
+            </SubText>
+            <SubText>
+              公共网关流量 已消耗/总用量上限：
+              <SizeComparison
+                size={plan.usedDownloadSize}
+                totalSize={plan.maxDownloadSize}
+              />
+            </SubText>
+            <SubText>
+              到期时间：{<span style={
+                new Date()>new Date(plan?.storageExpireTime)?{
+                  color:'red'
+                }:{}
+              }>{plan?.storageExpireTime || "暂无信息"}</span>}
+            </SubText>
           </div>
 
           {plan?.orderType == 0 && (
@@ -492,6 +546,7 @@ export default function Profile() {
         <ModalText>您对于文件副本数的要求？</ModalText>
         <TextArea
           rows={4}
+          value={requirement}
           onInput={(e) => {
             setRequirement((e.target as any).value);
           }}
@@ -512,13 +567,12 @@ export default function Profile() {
 
       <Modal
         width={380}
-        title="存储计划详情"
+        title={<MoadlTitle>存储计划详情</MoadlTitle>}
         visible={detailsModalOpen}
         footer={null}
         onCancel={() => setDetailsModalOpen(false)}
       >
         <ModalText>存储计划名称</ModalText>
-        <HeightBox />
         <DetailsText>百工链存 - 存储计划Pro</DetailsText>
         <HeightBox />
 
@@ -530,7 +584,14 @@ export default function Profile() {
         <DetailsText>状态：可使用</DetailsText>
         <DetailsText>流量：{changeSize(plan?.maxDownloadSize)}</DetailsText>
         <DetailsText>
-          专用IPFS网关：{activeGateway.host || "暂无信息"}
+          专用IPFS网关：
+          <span
+            style={{
+              color: "#2CC8C2",
+            }}
+          >
+            {activeGateway.host || "暂无信息"}
+          </span>
         </DetailsText>
         <DetailsText>状态：可使用</DetailsText>
         <DetailsText>固定配置带宽：上下行200Mbps</DetailsText>

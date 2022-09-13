@@ -15,7 +15,20 @@ import Button from "./common/Button";
 import MyInput from "./common/MyInput";
 import { Context } from "./Context/Context";
 import { LoginTitle } from "@pages/resetPassword";
-
+import styled from "styled-components";
+import { IoChevronBack } from "react-icons/io5";
+const Goback = styled.div`
+  position: absolute;
+  top: 84px;
+  left: 36px;
+  font-size: 16px;
+  line-height: 24px;
+  color: #666666;
+  display: flex;
+  align-items: center;
+  z-index: 99999;
+  cursor: pointer;
+`;
 const SetPhone = () => {
   const { dispatch } = useContext(Context) as any;
   const [mobile, setMobile] = useState("");
@@ -86,97 +99,114 @@ const SetPhone = () => {
   };
 
   return (
-    <div className="w-full h-full flex relative items-center justify-center">
-      <FormWrapper className="relative flex  flex-col	items-center w-full px-8 md:px-0">
-        <LoginTitle>更改手机号</LoginTitle>
-        <Form
-          name="loginForm"
-          ref={formRef}
+    <div
+      style={{
+        height: "100%",
+      }}
+    >
+      <Goback onClick={() => router.back()}>
+        <IoChevronBack />
+        <span
           style={{
-            width: "457px",
+            marginLeft: "10px",
           }}
         >
-          <Form.Item
-            label=""
-            name="phone"
-            rules={[
-              { required: true, message: "请输入手机号" },
-              {
-                pattern: /^1[3456789]\d{9}$/,
-                message: "请输入正确的手机号",
-              },
-            ]}
+          返回
+        </span>
+      </Goback>
+
+      <div className="w-full h-full flex relative items-center justify-center">
+        <FormWrapper className="relative flex  flex-col	items-center w-full px-8 md:px-0">
+          <LoginTitle>更改手机号</LoginTitle>
+          <Form
+            name="loginForm"
+            ref={formRef}
+            style={{
+              width: "457px",
+            }}
           >
-            <MyInput
-              setValue={(e) => {
-                setMobile(e);
-                setMobileVerify(mobileVerifyF(e));
-              }}
-              placeholder="手机号"
-            />
-          </Form.Item>
-          <Form.Item
-            label=""
-            name="code"
-            rules={[{ required: true, message: "请输入验证码" }]}
-          >
-            <BetweenFlexBox>
+            <Form.Item
+              label=""
+              name="phone"
+              rules={[
+                { required: true, message: "请输入手机号" },
+                {
+                  pattern: /^1[3456789]\d{9}$/,
+                  message: "请输入正确的手机号",
+                },
+              ]}
+            >
               <MyInput
                 setValue={(e) => {
-                  setsmsCode(e);
-                  setcodeVerify(codeVerifyF(e));
+                  setMobile(e);
+                  setMobileVerify(mobileVerifyF(e));
                 }}
-                style={{
-                  width: "280px",
-                  height: "52px",
-                  background: "#F8F8F8",
-                  borderRadius: "8px",
-                }}
-                placeholder="验证码"
-                size="large"
+                placeholder="手机号"
               />
-
-              {countdownNum < 60 ? (
-                <CountdownBtn style={{ width: "148px" }}>
-                  {countdownNum}
-                </CountdownBtn>
-              ) : (
-                <VerifyBtn
-                  onClick={() => {
-                    if (mobileVerify) {
-                      verify();
-                    }
+            </Form.Item>
+            <Form.Item
+              label=""
+              name="code"
+              rules={[{ required: true, message: "请输入验证码" }]}
+            >
+              <BetweenFlexBox>
+                <MyInput
+                  setValue={(e) => {
+                    setsmsCode(e);
+                    setcodeVerify(codeVerifyF(e));
                   }}
-                  style={
-                    mobileVerify
-                      ? { width: "148px", background: "#2cc8c2" }
-                      : { width: "148px", background: "rgb(204, 204, 204)" }
-                  }
+                  style={{
+                    width: "280px",
+                    height: "52px",
+                    background: "#F8F8F8",
+                    borderRadius: "8px",
+                  }}
+                  placeholder="验证码"
+                  size="large"
+                />
+
+                {countdownNum < 60 ? (
+                  <CountdownBtn style={{ width: "148px" }}>
+                    {countdownNum}
+                  </CountdownBtn>
+                ) : (
+                  <VerifyBtn
+                    onClick={() => {
+                      if (mobileVerify) {
+                        verify();
+                      }
+                    }}
+                    style={
+                      mobileVerify
+                        ? { width: "148px", background: "#2cc8c2" }
+                        : { width: "148px", background: "rgb(204, 204, 204)" }
+                    }
+                  >
+                    发送验证码
+                  </VerifyBtn>
+                )}
+              </BetweenFlexBox>
+            </Form.Item>
+            <Form.Item wrapperCol={{ span: 32 }}>
+              {mobileVerify && codeVerify ? (
+                <Button onClick={() => setPhone()} size="large">
+                  提交
+                </Button>
+              ) : (
+                <Button
+                  disabled
+                  size="large"
+                  style={{
+                    background: "#CCCCCC",
+                  }}
                 >
-                  发送验证码
-                </VerifyBtn>
+                  提交
+                </Button>
               )}
-            </BetweenFlexBox>
-          </Form.Item>
-          <Form.Item wrapperCol={{ span: 32 }}>
-            {mobileVerify && codeVerify ? (
-              <Button onClick={() => setPhone()} size="large">
-                提交
-              </Button>
-            ) : (
-              <Button
-                disabled
-                size="large"
-                style={{
-                  background: "#CCCCCC",
-                }}
-              >
-                提交
-              </Button>
-            )}
-          </Form.Item>
-        </Form>
-      </FormWrapper>
+            </Form.Item>
+          </Form>
+        </FormWrapper>
+      </div>
     </div>
   );
 };
