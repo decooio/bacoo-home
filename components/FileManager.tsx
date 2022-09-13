@@ -223,7 +223,7 @@ export default function FileManager() {
           <TextTitle flex={6}>CID</TextTitle>
           <TextTitle flex={6}>访问域名</TextTitle>
           <TextTitle flex={1}></TextTitle>
-          <TextTitle flex={1}>体积</TextTitle>
+          <TextTitle flex={1}>大小</TextTitle>
           <TextTitle flex={3}>Pin时间戳</TextTitle>
         </RowFill>
         {files && files.length === 0 && !loading && (

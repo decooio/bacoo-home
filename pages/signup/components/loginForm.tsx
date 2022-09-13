@@ -86,7 +86,7 @@ const LoginForm = function () {
               setPasswordVerify(usernameVerifyF(value));
             }}
             placeholder="密码"
-            size="large"
+            type="password"
             maxLength={16}
           />
         </Form.Item>

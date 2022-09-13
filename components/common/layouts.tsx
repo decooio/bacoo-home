@@ -12,11 +12,13 @@ export const Row = styled.div`
 export const RowFill = styled(Row)`
   width: 100%;
   height: 100%;
+  border: none !important;
   :nth-child(1) {
     background: #fff !important;
   }
-  :nth-child(odd) {
+  :nth-child(even) {
     background: #f5f5f5;
+    border-radius: 8px;
   }
 `;
 

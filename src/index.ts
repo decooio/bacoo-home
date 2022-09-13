@@ -39,24 +39,22 @@ export const changeSize = (limit: number | undefined) => {
 type VerifyFun = (value: string) => boolean;
 
 export const usernameVerifyF: VerifyFun = (value) => {
-  return !(value.length === 0);
+  return /([\s\S]*){4,32}/.test(value) ? true : false;
 };
 
 export const mobileVerifyF: VerifyFun = (value: string) => {
-  const mobileRex =
-    /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
-
-  if (value.length === 0) {
-    return false;
-  } else if (mobileRex.test(value)) {
-    return true;
-  } else {
-    return false;
-  }
+  return /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/.test(
+    value
+  )
+    ? true
+    : false;
 };
 
+export const imgCodeVerifyF: VerifyFun = (value: string) => {
+  return /[a-zA-Z0-9]{4}/.test(value) ? true : false;
+};
 export const codeVerifyF: VerifyFun = (value: string) => {
-  return !(value.length === 0);
+  return /[0-9]{6}/.test(value) ? true : false;
 };
 
 export const passwordVerifyF: VerifyFun = (value: string) => {

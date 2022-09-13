@@ -119,10 +119,10 @@ export default function HelpAndReport() {
   const { userName } = state;
   const editor = useRef(null);
 
-  const [pageNum, setPageNum] = useState(1);
+  const [pageNum, setPageNum] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const [description, setDescription] = useState("");
-  const [type, setType] = useState("1");
+  const [type, setType] = useState('0');
   const [pageSize, setPageSize] = useState(0);
   const [ticketsList, setTicketsList] = useState<
     getticketsListRes["data"]["results"]
@@ -137,7 +137,7 @@ export default function HelpAndReport() {
       payload: true,
     });
     try {
-      const res = await GET_TICKETS_LIST_API({ pageSize: 10, pageNum });
+      const res = await GET_TICKETS_LIST_API({ pageSize: 10, pageNum:pageNum+1 });
       setPageSize(res.data.count);
       setTicketsList([...res.data.results]);
     } catch (e) {
@@ -275,8 +275,8 @@ export default function HelpAndReport() {
 
       <Pager
         pageSize={Math.ceil(pageSize / 10)}
-        pageIndex={1}
-        setPageIndex={(e) => setPageNum(e)}
+        pageIndex={pageNum}
+        setPageIndex={(e) => {setPageNum(e)}}
       />
 
       <Modal
@@ -312,8 +312,6 @@ export default function HelpAndReport() {
         <Editor
           setValue={(e) => {
             setDescription(e);
-            console.log(description);
-            console.log(e);
           }}
         />
         <div id="wangeditor" ref={editor}></div>
