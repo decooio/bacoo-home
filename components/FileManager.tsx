@@ -17,6 +17,7 @@ import {
 import { Alert, Dropdown, Menu, Modal, Progress, Space, Upload } from "antd";
 import { changeSize, getLoc } from "@src/index";
 import { Context } from "./Context/Context";
+import Omit from "./common/Omit";
 
 export const Table = styled(COL)`
   width: calc(100% - 62px);
@@ -125,7 +126,7 @@ export default function FileManager() {
     try {
       const res = await GET_FILE_LIST_API({
         pageSize: 10,
-        pageNum:pageNum+1,
+        pageNum: pageNum + 1,
       });
       console.log(res);
       setFiles([...res.data]);
@@ -177,7 +178,7 @@ export default function FileManager() {
                 name: Name,
               });
               getFiles();
-              getFileSize()
+              getFileSize();
             }
           }}
         >
@@ -241,7 +242,12 @@ export default function FileManager() {
                   <MText>{file.name}</MText>
                 </Tips>
               </Text>
-              <CopyText flex={6}>{file.cid}</CopyText>
+              <Tips title={file.cid} placement="topLeft">
+              <CopyText flex={6} value={file.cid}>
+                <Omit value={file.cid}></Omit>
+              </CopyText>
+              </Tips>
+            
               <Text flex={6}>
                 {file.valid !== 1 ? (
                   <CopyText flex={6}>{`https://${uuid}.${file.host.replace(
@@ -273,7 +279,7 @@ export default function FileManager() {
                           ""
                         )}/ipfs/${file.cid}`}
                       >
-                        <FiDownload color="#666666"/>
+                        <FiDownload color="#666666" />
                       </a>
                     </Tips>
                     <Tips title="在IPFS Scan查看文件副本分布">
@@ -282,7 +288,7 @@ export default function FileManager() {
                         target="_blank"
                         href={`https://ipfs-scan.io/?cid=${file.cid}`}
                       >
-                        <FiBox color="#666666"/>
+                        <FiBox color="#666666" />
                       </a>
                     </Tips>
                   </DownBtn>

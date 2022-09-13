@@ -186,9 +186,17 @@ export default function HelpAndReport() {
     } catch (e) {
       console.log(e);
     }
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: false,
+    });
   };
 
   const getDetails = async (id: number) => {
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: true,
+    });
     setActiveId(id);
     try {
       const res = await GET_TICKETS_DETAILS_API(id);
@@ -197,9 +205,17 @@ export default function HelpAndReport() {
     } catch (e) {
       message.error(e);
     }
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: false,
+    });
   };
 
   const setStates = async (id: number, type: number) => {
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: true,
+    });
     try {
       if (type == 1) {
         await SET_SOLVEd_API(id);
@@ -210,6 +226,10 @@ export default function HelpAndReport() {
     } catch (e) {
       message.error(e);
     }
+    dispatch({
+      type: "UPDATE_LOADING",
+      payload: false,
+    });
     getTicketsList();
     setDetailsModalOpen(false);
   };

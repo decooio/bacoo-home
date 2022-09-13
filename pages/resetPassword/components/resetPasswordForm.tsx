@@ -20,6 +20,7 @@ import {
   passwordVerifyF,
 } from "@src/index";
 import { Context } from "@components/Context/Context";
+import router from "next/router";
 export const BetweenFlexBox = styled.div`
   width: 100%;
   display: flex;
@@ -81,6 +82,8 @@ const ResetPasswordForm = function () {
 
       setCodeError("");
       setIsModalVisible(false);
+      message.success("密码修改成功");
+      router.replace('/login')
     } catch (error: any) {
       if (error.data.message) {
         setCodeError(error.data.message as string);
