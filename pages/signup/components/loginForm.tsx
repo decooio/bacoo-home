@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react";
 import { Form } from "antd";
 import Button from "../../../components/common/Button";
 import { LOGIN_API } from "@request/apis";
-import {  setLoc, usernameVerifyF } from "@src/index";
+import { setLoc, usernameVerifyF } from "@src/index";
 import router from "next/router";
 import { Context } from "@components/Context/Context";
 import { eloginStatus } from "@components/Context/types";
@@ -60,14 +60,20 @@ const LoginForm = function () {
         <Form.Item
           label=""
           name="username"
-          rules={[{ required: true, message: "请输入用户名或手机或者邮箱号" }]}
+          rules={[
+            { required: true, message: "请输入用户名或手机或者邮箱号" },
+            {
+              min: 4,
+              message: "请至少输入4位用户名",
+            },
+          ]}
         >
           <MyInput
             setValue={(value) => {
               setUsername(value);
               setUsernameVerify(usernameVerifyF(value));
             }}
-            placeholder="用户名、手机、邮箱号"
+            placeholder="用户名、手机号、邮箱"
             size="large"
           />
         </Form.Item>
@@ -75,10 +81,7 @@ const LoginForm = function () {
         <Form.Item
           label=""
           name="password"
-          rules={[
-            { required: true, message: "请输入密码" },
-           
-          ]}
+          rules={[{ required: true, message: "请输入密码" }]}
         >
           <MyInput
             setValue={(value) => {

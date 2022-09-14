@@ -92,7 +92,7 @@ const SetPhone = () => {
           message.error(e);
           dispatch({
             type: "UPDATE_LOADING",
-            payload: true,
+            payload: false,
           });
         }
       });
@@ -155,12 +155,7 @@ const SetPhone = () => {
                     setsmsCode(e);
                     setcodeVerify(codeVerifyF(e));
                   }}
-                  style={{
-                    width: "280px",
-                    height: "52px",
-                    background: "#F8F8F8",
-                    borderRadius: "8px",
-                  }}
+                  width="280px"
                   placeholder="验证码"
                   size="large"
                 />

@@ -26,7 +26,7 @@ const MyContextWrapper = ({ children: children }: any) => {
     user: {
       username: "尚未登录",
       mobile: "暂无信息",
-      email:""
+      email: "",
     },
     plan: null,
   });
@@ -81,9 +81,12 @@ const MyContextWrapper = ({ children: children }: any) => {
     }
   }
   useEffect(() => {
-    const loginStatus = getLoc("token")
-      ? eloginStatus.login
-      : eloginStatus.notLogin;
+    const loginStatus =
+      getLoc("token") &&
+      getLoc("token") !=
+        "Bearer c3Vic3RyYXRlLWNUTEJlSGlvd2JDZE1rdjNLaENSQkxzbXNmRDNicVlnVlZURU5DQlp1ZjIxRW5OOEc6MHgwMjFiNTU1OTg3ZGU4OTJlY2JlMmE5MWIzMTI3Mzg4OGIwYTUwYzZmN2ExNzAwNTFhNzVkNjAwMDc2NzhiYjA1YTU0NWIwYjJkNjVkYmRlNTJmNWQyNDU0NzljODRiMzExZDQxMjM5MjU3MzM5MTlhMGFkMzhiZWE0YjRlZGM4OQ"
+        ? eloginStatus.login
+        : eloginStatus.notLogin;
     const userName = getLoc("userName") ? getLoc("userName") : "";
 
     const uuid = getLoc("uuid") ? getLoc("uuid") : "";

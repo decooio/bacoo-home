@@ -222,13 +222,15 @@ const RegisterForm = function () {
     });
   };
 
-
   return (
     <LoginFormBox>
       <Form name="loginForm" ref={formRef}>
         <Form.Item
           name="user"
-          rules={[{ required: true, message: "请输入用户名" }]}
+          rules={[{ required: true, message: "请输入用户名" },{
+            min: 4,
+            message: "请至少输入4位用户名",
+          },]}
         >
           <MyInput
             setValue={(e) => {
@@ -268,13 +270,7 @@ const RegisterForm = function () {
                 setMailCode(e);
                 setMailCodeVerify(codeVerifyF(e));
               }}
-              style={{
-                width: "280px",
-                height: "50px",
-                background: "#F8F8F8",
-                border: " 1px solid #DDDDDD",
-                borderRadius: "8px",
-              }}
+              width="280px"
               placeholder="验证码"
             />
 
@@ -285,12 +281,12 @@ const RegisterForm = function () {
             ) : (
               <VerifyBtn
                 onClick={() => {
-                  if (usernameVerify && mailVerify) {
+                  if (mailVerify) {
                     sendEmailCode();
                   }
                 }}
                 style={
-                  usernameVerify && mailVerify
+                  mailVerify
                     ? { width: "148px", background: "#2cc8c2" }
                     : {
                         width: "148px",
@@ -333,13 +329,7 @@ const RegisterForm = function () {
                 setsmsCode(e);
                 setCodeVerify(codeVerifyF(e));
               }}
-              style={{
-                width: "280px",
-                height: "50px",
-                background: "#F8F8F8",
-                border: " 1px solid #DDDDDD",
-                borderRadius: "8px",
-              }}
+              width="280px"
               placeholder="验证码"
             />
 
@@ -350,12 +340,12 @@ const RegisterForm = function () {
             ) : (
               <VerifyBtn
                 onClick={() => {
-                  if (usernameVerify && mobileVerify) {
+                  if (mobileVerify) {
                     verify();
                   }
                 }}
                 style={
-                  usernameVerify && mobileVerify
+                  mobileVerify
                     ? { width: "148px", background: "#2cc8c2" }
                     : {
                         width: "148px",
@@ -466,7 +456,7 @@ const RegisterForm = function () {
               setValue={(e) => {
                 setInputVerifyCodeImg(e);
                 setInputVerifyCodeImgVerify(imgCodeVerifyF(e));
-                setCodeError('')
+                setCodeError("");
               }}
               placeholder="请输入验证码"
             />

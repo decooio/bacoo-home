@@ -3,8 +3,6 @@ import React from "react";
 import styled from "styled-components";
 import { getLogoDark } from "../../src/helper/utils";
 
-
-
 import LoginForm from "./components/loginForm";
 import router from "next/router";
 
@@ -17,6 +15,10 @@ export const Logo = styled.embed`
   width: 165px;
   //height: 55px;
   margin-bottom: 63px;
+  @media (max-height: 800px) {
+    margin-bottom: 20px;
+    transform: scale(0.5);
+  }
 `;
 
 export const FlexBox = styled.div`
@@ -35,8 +37,6 @@ const mlinksyle = {
 };
 
 export default function Loing() {
-
-
   return (
     <div className="w-full h-full flex relative items-center justify-center">
       <FormWrapper className="relative flex  flex-col	items-center w-full px-8 md:px-0">

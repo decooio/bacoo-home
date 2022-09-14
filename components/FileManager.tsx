@@ -12,12 +12,25 @@ import {
   GET_FILE_LIST_API,
   GET_FILE_SIZE_API,
   GET_GATEWAY_LIST_API,
+  GET_USER_INFO_API,
   UPDATA_FILE_API,
 } from "@request/apis";
-import { Alert, Dropdown, Menu, Modal, Progress, Space, Upload } from "antd";
+import {
+  Alert,
+  Dropdown,
+  Menu,
+  message,
+  Modal,
+  Progress,
+  Space,
+  Upload,
+} from "antd";
 import { changeSize, getLoc } from "@src/index";
 import { Context } from "./Context/Context";
 import Omit from "./common/Omit";
+import axios, { CancelTokenSource } from "axios";
+import { SIZE_LIMIT } from "./main";
+import { RcFile } from "antd/lib/upload";
 
 export const Table = styled(COL)`
   width: calc(100% - 62px);
@@ -96,6 +109,10 @@ export default function FileManager() {
   const [upLoadOpen, setUpLoadOpen] = useState(false);
   const [upLoadStatus, setUpLoadStatus] = useState<string | undefined>("");
   const [pageSize, setPageSize] = useState(0);
+  const [percent, setPercent] = useState(0);
+  const [errorText, steErrorText] = useState("");
+  const [cancelUp, setCancelUp] = useState<CancelTokenSource | null>(null);
+  const [userType, setUserType] = useState(0);
 
   //获取节点列表
   const getGatewayList = async () => {
@@ -147,6 +164,15 @@ export default function FileManager() {
     }
   };
 
+  const getInfo = async () => {
+    try {
+      const res = await GET_USER_INFO_API();
+      setUserType(res.data.plan.orderType);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
     getFiles();
     getFileSize();
@@ -154,6 +180,7 @@ export default function FileManager() {
 
   useEffect(() => {
     getGatewayList();
+    getInfo();
   }, []);
 
   return (
@@ -164,22 +191,65 @@ export default function FileManager() {
           name="file"
           action={`${activeGateway.host}/api/v0/add?pin=true`}
           headers={{ authorization: getLoc("token") as string }}
-          onChange={async (info) => {
-            setUpLoadStatus(info.file.status);
-            if (info.file.status == "uploading") {
-              setUpLoadOpen(true);
+          customRequest={(e) => {
+            setUpLoadOpen(true);
+            const { action, file, headers } = e;
+            const form = new FormData();
+            if (userType == 0) {
+              if ((file as RcFile).size > SIZE_LIMIT) {
+                message.error("文件大小不能超过100M");
+                return false;
+              }
             }
 
-            if (info.file.status === "done" || info.file.status === "success") {
-              setUpLoadOpen(false);
-              const { Hash, Name } = info.file.response;
-              await UPDATA_FILE_API({
-                cid: Hash,
-                name: Name,
+            form.append("file", file); // 文件对象
+            const cancel = axios.CancelToken.source();
+            setCancelUp(cancel);
+            axios
+              .post(action, form, {
+                headers,
+                onUploadProgress: (progressEvent) => {
+                  if (progressEvent.lengthComputable) {
+                    const complete =
+                      ((progressEvent.loaded / progressEvent.total) * 100) | 0;
+                    const percent = complete;
+                    setPercent(percent);
+                  }
+                },
+                cancelToken: cancel.token,
+              })
+              .then(async (res) => {
+                const { Hash, Name } = res.data;
+                try {
+                  setUpLoadStatus("success");
+                  await UPDATA_FILE_API({
+                    cid: Hash,
+                    name: Name,
+                  });
+                  getFiles();
+                  getFileSize();
+                } catch (e: any) {
+                  if (e.data.code == 500) {
+                    steErrorText("剩余存储空间不足");
+                  }
+                  steErrorText(
+                    e.response.data.message || "上传失败 请稍后重试"
+                  );
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+                setUpLoadStatus("error");
+                if (err.response) {
+                  steErrorText(
+                    err.response.data.message || "上传失败 请稍后重试"
+                  );
+                } else {
+                  setUpLoadOpen(false);
+                  setPercent(0);
+                  setUpLoadStatus("");
+                }
               });
-              getFiles();
-              getFileSize();
-            }
           }}
         >
           <UploadBtn>
@@ -243,12 +313,12 @@ export default function FileManager() {
                 </Tips>
               </Text>
               <Tips title={file.cid} placement="topLeft">
-              <CopyText flex={6} value={file.cid}>
-                <Omit value={file.cid}></Omit>
-              </CopyText>
+                <CopyText flex={6} value={file.cid}>
+                  <Omit value={file.cid}></Omit>
+                </CopyText>
               </Tips>
-            
-              <Text flex={6}>
+
+              <Text flex={6} paddingRight="0">
                 {file.valid !== 1 ? (
                   <CopyText flex={6}>{`https://${uuid}.${file.host.replace(
                     "https://",
@@ -316,20 +386,24 @@ export default function FileManager() {
         title="上传文件"
         visible={upLoadOpen}
         footer={null}
-        onCancel={() => setUpLoadOpen(false)}
+        maskClosable={false}
+        onCancel={() => {
+          setPercent(0);
+          setUpLoadOpen(false);
+          setUpLoadStatus("");
+          if (cancelUp) {
+            cancelUp.cancel();
+          }
+        }}
       >
-        {upLoadStatus === "done" ||
-          (upLoadStatus === "success" && (
-            <Alert message="上传成功" type="success" />
-          ))}
-        {upLoadStatus === "done" ||
-          (upLoadStatus === "error" && (
-            <Alert message="上传失败" type="error" />
-          ))}
+        {upLoadStatus === "success" && (
+          <Alert message="上传成功" type="success" />
+        )}
+        {upLoadStatus === "error" && <Alert message={errorText} type="error" />}
         <Progress
           strokeWidth={20}
           strokeColor={"rgb(51 51 51)"}
-          percent={99}
+          percent={percent}
           status="active"
         />
       </Modal>

@@ -11,7 +11,7 @@ import {
 } from "@request/apis";
 import { getUserInfoRes } from "@request/types";
 import { changeSize } from "@src/index";
-import { message, Modal } from "antd";
+import { message, Modal, Spin } from "antd";
 import { Context } from "./Context/Context";
 import SelectorBox from "./common/SelectorBox";
 import TextArea from "antd/lib/input/TextArea";
@@ -198,7 +198,7 @@ const SizeComparison = ({
         style={
           size > totalSize
             ? {
-                color: "red",
+                color: "#EF4C56",
               }
             : {}
         }
@@ -265,12 +265,10 @@ export default function Profile() {
     nodeType: 0,
     name: "",
   });
+  const [btnloading, setBtnloading] = useState(false);
 
   const postIntention = async () => {
-    dispatch({
-      type: "UPDATE_LOADING",
-      payload: true,
-    });
+    setBtnloading(true);
     try {
       await POST_INTENTION_API({
         storageType: storageUsageId,
@@ -279,16 +277,14 @@ export default function Profile() {
       });
       setModalOpen(false);
       message.success("提交成功");
-    } catch (e) {
-      message.error(e);
+    } catch (e: any) {
+      console.log(e);
+      
     }
+    setBtnloading(false);
     setStorageUsageId(0);
     setGatewayID(0);
     setRequirement("");
-    dispatch({
-      type: "UPDATE_LOADING",
-      payload: false,
-    });
   };
   //获取节点列表
   const getGatewayList = async () => {
@@ -366,7 +362,7 @@ export default function Profile() {
       <MCol style={{ flex: 1 }}>
         <Card>
           <div>
-            <Title children={"账户信息"} />
+            <Title children={"账号信息"} />
             <SpaceH />
           </div>
           <div className="contentBox">
@@ -418,11 +414,20 @@ export default function Profile() {
               />
             </SubText>
             <SubText>
-              到期时间：{<span style={
-                new Date()>new Date(plan?.storageExpireTime)?{
-                  color:'red'
-                }:{}
-              }>{plan?.storageExpireTime || "暂无信息"}</span>}
+              到期时间：
+              {
+                <span
+                  style={
+                    new Date() > new Date(plan?.storageExpireTime)
+                      ? {
+                          color: "#EF4C56",
+                        }
+                      : {}
+                  }
+                >
+                  {plan?.storageExpireTime || "暂无信息"}
+                </span>
+              }
             </SubText>
           </div>
 
@@ -511,7 +516,9 @@ export default function Profile() {
               fontSize: 16,
               height: 48,
             }}
-            onClick={() => changePassword()}
+            onClick={() => {
+              nPwd && oPwd && oPwd !== nPwd && changePassword();
+            }}
           />
         </Card>
       </MCol>
@@ -554,14 +561,27 @@ export default function Profile() {
         <TipsText>*您可简单描述您对文件副本数量以及地域分布的需求。</TipsText>
         <HeightBox />
 
-        <Button
-          style={{
-            width: "320px",
-          }}
-          onClick={() => postIntention()}
-        >
-          点击提交您的存储使用意向
-        </Button>
+        {btnloading ? (
+          <Spin>
+            <Button
+              style={{
+                width: "100%",
+              }}
+            >
+              点击提交您的存储使用意向
+            </Button>
+          </Spin>
+        ) : (
+          <Button
+            style={{
+              width: "100%",
+            }}
+            onClick={() => postIntention()}
+          >
+            点击提交您的存储使用意向
+          </Button>
+        )}
+
         <TipsText>*提交意向后，我们会及时通过邮件与您联系。</TipsText>
       </Modal>
 

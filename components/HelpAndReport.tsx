@@ -30,6 +30,7 @@ interface detailInfo {
   ticketNo: string;
   type: number;
   title: string;
+  feedbackTime:string
 }
 export const MCol = styled(COL)`
   padding: 0px 32px 20px 0px;
@@ -99,6 +100,10 @@ const Reporter = styled.span`
   line-height: 21px;
   color: #666666;
 `;
+const HtmlReporter = styled.div`
+  max-height: 300px;
+  overflow: auto;
+`;
 
 const ModalText = styled.div`
   font-weight: 400;
@@ -145,6 +150,7 @@ export default function HelpAndReport() {
     ticketNo: "",
     type: 0,
     title: "",
+    feedbackTime:""
   });
   const [activeId, setActiveId] = useState(0);
   const [title, setTitle] = useState("");
@@ -201,7 +207,7 @@ export default function HelpAndReport() {
     try {
       const res = await GET_TICKETS_DETAILS_API(id);
       setDetailsModalOpen(true);
-      setDetail(res.data[0]);
+      setDetail(res.data);
     } catch (e) {
       message.error(e);
     }
@@ -238,6 +244,11 @@ export default function HelpAndReport() {
     getTicketsList();
   }, [pageNum]);
 
+  useEffect(() => {
+    setDescription("");
+    setTitle("");
+  }, [modalOpen]);
+
   return (
     <MCol>
       <Tooltip>
@@ -259,7 +270,7 @@ export default function HelpAndReport() {
         <RowFill style={{ height: 37 }}>
           <TextTitle flex={3}>工单编号</TextTitle>
           <TextTitle flex={2}>类型</TextTitle>
-          <TextTitle flex={6}>描述</TextTitle>
+          <TextTitle flex={6}>工单标题</TextTitle>
           <TextTitle flex={2}>状态</TextTitle>
           <TextTitle flex={6}>反馈信息</TextTitle>
           <TextTitle flex={1}></TextTitle>
@@ -297,7 +308,7 @@ export default function HelpAndReport() {
               </Text>
               <Text flex={6}>
                 <Tips title={item.feedback}>
-                  <MText>{item.feedback}</MText>
+                  <MText>{item.status ==0?item.feedback:(item.feedback?item.feedback:"-")  }</MText>
                 </Tips>
               </Text>
               <Text flex={1}>
@@ -329,6 +340,7 @@ export default function HelpAndReport() {
       />
 
       <Modal
+        centered
         width={480}
         title="发起报告"
         visible={modalOpen}
@@ -354,11 +366,12 @@ export default function HelpAndReport() {
         <Reporter>{userName}</Reporter>
         <HeightBox></HeightBox>
         <ModalText>报告标题</ModalText>
-        <MyInput setValue={(value) => setTitle(value)} />
+        <MyInput value={title} setValue={(value) => setTitle(value)} />
         <HeightBox></HeightBox>
         <ModalText>报告内容</ModalText>
 
         <Editor
+          value={description}
           setValue={(e) => {
             setDescription(e);
           }}
@@ -389,7 +402,8 @@ export default function HelpAndReport() {
 
       <Modal
         width={480}
-        title={`工单 ${detail.ticketNo}`}
+        centered
+        title={`工单 ${detail?.ticketNo || '暂无信息'}`}
         visible={detailsmodalOpen}
         footer={null}
         onCancel={() => setDetailsModalOpen(false)}
@@ -404,21 +418,23 @@ export default function HelpAndReport() {
 
         <ModalText>报告内容</ModalText>
         <Reporter>{detail?.title}</Reporter>
-        <Reporter
-          dangerouslySetInnerHTML={{ __html: detail.description }}
-        ></Reporter>
+        <HtmlReporter>
+          <div dangerouslySetInnerHTML={{ __html: detail.description }}></div>
+        </HtmlReporter>
         <TimeText>提交时间：{detail?.reportTime}</TimeText>
         <HeightBox></HeightBox>
 
-        <ModalText>反馈</ModalText>
-        <Reporter>{detail?.feedback}</Reporter>
+        <ModalText>反馈内容</ModalText>
+        <Reporter>{detail?.feedback || "无"}</Reporter>
+        <TimeText>反馈时间：{detail?.feedbackTime}</TimeText>
+
         <HeightBox></HeightBox>
 
         {detail.status !== 2 ? (
           <FlexBox>
             <Button
               style={{
-                width: "45%",
+                width: "48%",
                 background: "rgba(44, 200, 194, 0.06)",
                 border: " 1px solid #2CC8C2",
                 color: "#2CC8C2",
@@ -429,7 +445,7 @@ export default function HelpAndReport() {
             </Button>
             <Button
               style={{
-                width: "45%",
+                width: "48%",
               }}
               onClick={() => setStates(activeId, 1)}
             >

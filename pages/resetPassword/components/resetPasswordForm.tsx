@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React, { createRef, useContext, useState } from "react";
-import { Form, FormInstance,  message, Modal } from "antd";
+import { Form, FormInstance, message, Modal } from "antd";
 import Button from "../../../components/common/Button";
 import {
   BtnBox,
@@ -14,13 +14,8 @@ import {
   VERIFY_CODE_API,
 } from "@request/apis";
 import MyInput from "@components/common/MyInput";
-import {
-  codeVerifyF,
-  mobileVerifyF,
-  passwordVerifyF,
-} from "@src/index";
+import { codeVerifyF, mobileVerifyF, passwordVerifyF } from "@src/index";
 import { Context } from "@components/Context/Context";
-import router from "next/router";
 export const BetweenFlexBox = styled.div`
   width: 100%;
   display: flex;
@@ -82,8 +77,6 @@ const ResetPasswordForm = function () {
 
       setCodeError("");
       setIsModalVisible(false);
-      message.success("密码修改成功");
-      router.replace('/login')
     } catch (error: any) {
       if (error.data.message) {
         setCodeError(error.data.message as string);
@@ -149,13 +142,7 @@ const ResetPasswordForm = function () {
           <BetweenFlexBox>
             <MyInput
               placeholder="验证码"
-              style={{
-                width: "280px",
-                height: "50px",
-                background: "#F8F8F8",
-                border: " 1px solid #DDDDDD",
-                borderRadius: "8px",
-              }}
+              width="280px"
               setValue={(value) => {
                 setsmsCode(value);
                 setCodeVerify(codeVerifyF(value));
@@ -231,6 +218,7 @@ const ResetPasswordForm = function () {
       </Form>
 
       <Modal
+        centered
         title="请输入验证码"
         visible={isModalVisible}
         onCancel={() => setIsModalVisible(false)}

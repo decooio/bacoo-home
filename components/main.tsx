@@ -1,7 +1,7 @@
 import s from "./main.module.scss";
 // import RightSlide from "./RightSlide";
 import { FiCheckCircle, FiChevronDown, FiPlus } from "react-icons/fi";
-import { GrDocument } from "react-icons/gr";
+import { GrDocument, GrFolder } from "react-icons/gr";
 import React, { useContext, useEffect, useState } from "react";
 import i18next from "i18next";
 import BgAnim from "./effect/BgAnim";
@@ -21,6 +21,8 @@ import copyToClipboard from "copy-to-clipboard";
 import { Context } from "./Context/Context";
 import { eloginStatus } from "./Context/types";
 import router from "next/router";
+export const SIZE_LIMIT = 100 * 1024 * 1024;
+
 const token =
   "Bearer c3Vic3RyYXRlLWNUTEJlSGlvd2JDZE1rdjNLaENSQkxzbXNmRDNicVlnVlZURU5DQlp1ZjIxRW5OOEc6MHgwMjFiNTU1OTg3ZGU4OTJlY2JlMmE5MWIzMTI3Mzg4OGIwYTUwYzZmN2ExNzAwNTFhNzVkNjAwMDc2NzhiYjA1YTU0NWIwYjJkNjVkYmRlNTJmNWQyNDU0NzljODRiMzExZDQxMjM5MjU3MzM5MTlhMGFkMzhiZWE0YjRlZGM4OQ";
 const upDataPorps = {
@@ -85,14 +87,22 @@ const DCPanel = styled(COL)<{ invisible: boolean }>`
     max-width: 348px;
   }
 `;
+const CopyText = styled.span`
+  position: absolute;
+  width: 100%;
+  top: -55px;
+  text-align: center;
+  left: 50%;
+  transform: translateX(-53%);
+  color: #fff;
+  font-size: 24px;
+`;
 
 export default function Main() {
   const { state } = useContext(Context) as any;
   const { loginStatus } = state;
   const { isMobile } = useDevice();
   const [shareUrl, setShareUrl] = useState("");
-  //  进度
-  const [progress] = useState(55);
   const [uploadFileTypeShow, setUploadFileTypeShow] = useState(false);
   const [gayewayList, setGayewayList] = useState<getgatewayListRes["data"]>([]);
   const [activeGateway, setActiveGateway] = useState<{
@@ -104,14 +114,35 @@ export default function Main() {
     "initial"
   );
   const [fileList, setFileList] = useState<RcFile[]>([]);
+  const [folder, setFolder] = useState("");
+  const [folderSize, setFolderSize] = useState(0);
 
-  // 复制
-  const onClickCopy = () => {
-    copyToClipboard(shareUrl);
-    message.success("复制成功");
+  const [copytips, setCopytips] = useState(false);
+  const [percent, setPercent] = useState(0);
+
+  /**
+   *每次上传后清除文件列表
+   * */
+  const removeFileList = () => {
+    setFileList([]);
+    setFolder("");
+    setFolderSize(0);
   };
 
-  //获取节点列表
+  /**
+   *  复制
+   * */
+  const onClickCopy = () => {
+    copyToClipboard(shareUrl);
+    setCopytips(true);
+    setTimeout(() => {
+      setCopytips(false);
+    }, 1500);
+  };
+
+  /**
+   * 获取节点列表
+   * */
   const getGatewayList = async () => {
     setLoc("token", token);
     try {
@@ -124,10 +155,15 @@ export default function Main() {
     localStorage.removeItem("token");
   };
 
-  // 手动上传
+  /**
+   * 手动上传方法
+   * */
   const handleUpload = async () => {
     const formData = new FormData();
-    formData.append("file", fileList[0]);
+    fileList.forEach((item) => {
+      formData.append("file", item);
+    });
+
     try {
       setUpLoadStatus("uploading");
       const res = await axios.post(
@@ -137,9 +173,29 @@ export default function Main() {
           headers: {
             authorization: token,
           },
+          onUploadProgress: (progressEvent) => {
+            if (progressEvent.lengthComputable) {
+              const complete =
+                ((progressEvent.loaded / progressEvent.total) * 100) | 0;
+              const percent = complete;
+              setPercent(percent);
+            }
+          },
         }
       );
-      const { Hash, Name } = res.data;
+      let Hash = "";
+      let Name = "";
+
+      if (typeof res.data == "string") {
+        const jsonStr = res.data.replace("}\n{", "},{");
+        const items = JSON.parse(`[${jsonStr}]`);
+        const folder = items[items.length - 1];
+        Hash = folder.Hash;
+        Name = folder.Name;
+      } else {
+        Hash = res.data.Hash;
+        Name = res.data.Name;
+      }
       try {
         setLoc("token", token);
         const updatares = await UPDATA_FILE_API({
@@ -156,15 +212,21 @@ export default function Main() {
           )}/ipfs/${cid}`
         );
       } catch (err) {
-        message.error("文件上传失败,请稍后再试");
+        removeFileList();
+        message.error("服务器异常,请稍后再试");
         setUpLoadStatus("initial");
+        setPercent(0);
       }
     } catch (error) {
-      message.error("文件上传失败,请稍后再试");
+      removeFileList();
+      message.error("服务器异常,请稍后再试");
       setUpLoadStatus("initial");
+      setPercent(0);
     }
   };
-  // 上传文件
+  /**
+   * 上传文件的组件
+   * */
   const InputFile = () => {
     const isEn = i18next.language === "en";
     let fontSize = isEn ? 32 : 38;
@@ -177,9 +239,13 @@ export default function Main() {
           onClick={() => setUploadFileTypeShow(!uploadFileTypeShow)}
         >
           <FiPlus />
-          <span style={{
-            fontSize:"32px"
-          }}>添加文件</span>
+          <span
+            style={{
+              fontSize: "32px",
+            }}
+          >
+            添加文件
+          </span>
         </div>
         {uploadFileTypeShow && (
           <div className={s.uploadFileType}>
@@ -188,6 +254,10 @@ export default function Main() {
               action={`${activeGateway?.host}/api/v0/add?pin=true`}
               {...upDataPorps}
               beforeUpload={async (file) => {
+                if (file.size > SIZE_LIMIT) {
+                  message.error("文件大小不能超过100M");
+                  return false;
+                }
                 setUpLoadStatus("success");
                 setFileList([file]);
                 return false;
@@ -199,13 +269,29 @@ export default function Main() {
               </div>
             </Upload>
 
-            {/* <Upload
+            <Upload
               className={s.uploadFileTypeItem}
               directory
               {...upDataPorps}
-              beforeUpload={async (file) => {
+              beforeUpload={async (file:any) => {
+                setFolder(
+                  file.webkitRelativePath.substring(
+                    0,
+                    file.webkitRelativePath.indexOf("/")
+                  )
+                );
+
+                const locFolder = fileList;
+                let locFolderSize = folderSize;
+                locFolderSize = locFolderSize + file.size;
+                setFolderSize(locFolderSize);
+                locFolder.push(file);
+                if (folderSize > SIZE_LIMIT) {
+                  message.error("文件大小不能超过100M");
+                  return false;
+                }
+                setFileList([...locFolder]);
                 setUpLoadStatus("success");
-                setFileList([file]);
                 return false;
               }}
             >
@@ -213,13 +299,15 @@ export default function Main() {
                 <GrFolder />
                 <span className={s.uploadFileTypeItemText}>文件夹</span>
               </div>
-            </Upload> */}
+            </Upload>
           </div>
         )}
       </div>
     );
   };
-  // 文件上传中
+  /**
+   * 文件上传中的组件 展示进度
+   * */
   const UploadingFile = () => {
     const stroke = isMobile ? 20 : 25;
     const margin = isMobile ? "0 15px" : "0 20px";
@@ -230,46 +318,77 @@ export default function Main() {
           style={{ margin }}
           strokeColor={"#333333"}
           showInfo={false}
-          percent={progress}
+          percent={percent}
         />
       </div>
     );
   };
-  // 分享文件
+  /**
+   *  分享文件的组件
+   * */
   const UploadingFinish = () => {
     return (
-      <div className={s.uploadFinish}>
-        <div className={s.share_link}>
-          <i className={s.icon}>
-            <FiCheckCircle />
-          </i>
-          <span>{shareUrl}</span>
-        </div>
-        <div className={s.btns}>
-          <div className={s.btn} onClick={onClickCopy}>
-            分享链接
+      <div>
+        {copytips && <CopyText>已复制链接</CopyText>}
+        <div className={s.uploadFinish}>
+          <div className={s.share_link}>
+            <i className={s.icon}>
+              <FiCheckCircle />
+            </i>
+            <span>{shareUrl}</span>
           </div>
-          <div className={s.btn2} onClick={() => setUpLoadStatus("initial")}>
-            继续添加
+          <div className={s.btns}>
+            <div className={s.btn} onClick={onClickCopy}>
+              分享链接
+            </div>
+            <div
+              className={s.btn2}
+              onClick={() => {
+                removeFileList();
+                setPercent(0);
+                setUpLoadStatus("initial");
+              }}
+            >
+              继续添加
+            </div>
           </div>
         </div>
       </div>
     );
   };
 
-  // 展示节点的组件
+  /**
+   * 展示节点和文件列表的组件
+   * */
   function DcPanelCom(list: getgatewayListRes["data"]) {
     return (
       <DCPanel invisible={false}>
-        <div className={"title"}>添加文件</div>
-        {fileList.map((item, index) => {
-          return (
-            <div key={index} className={"file_item"}>
-              <div className={"file_name"}>{item.name}</div>
-              <div className={"file_size"}>{changeSize(item.size)}</div>
-            </div>
-          );
-        })}
+        <div className={"title"}>
+          {folder && folderSize ? "添加文件夹" : "添加文件"}
+        </div>
+
+        {folder && folderSize ? (
+          <div className={"file_item"}>
+            <div className={"file_name"}>{folder}</div>
+            <div className={"file_size"}>{changeSize(folderSize)}</div>
+          </div>
+        ) : (
+          <div
+            style={{
+              width: " 100%",
+            }}
+          >
+            {fileList.map((item, index) => {
+              return (
+                <div key={index} className={"file_item"}>
+                  <div className={"file_name"}>{item.name}</div>
+                  <div className={"file_size"}>{changeSize(item.size)}</div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         <div
           style={{
             padding: "10px 0 0 20px",
@@ -303,7 +422,12 @@ export default function Main() {
               height: 36,
               margin: "18px 20px",
             }}
-            onClick={() => handleUpload()}
+            onClick={() => {
+              // console.log(fileList);
+
+              // return;
+              handleUpload();
+            }}
           >
             上传
           </Button>
@@ -331,7 +455,6 @@ export default function Main() {
             {upLoadStatus == "initial" && InputFile()}
             {upLoadStatus == "uploading" && UploadingFile()}
             {upLoadStatus == "finish" && UploadingFinish()}
-            {/* {DcPanelCom()} */}
           </div>
         )}
         {upLoadStatus == "success" && DcPanelCom(gayewayList)}

@@ -7,7 +7,7 @@ export const setLoc = (key: string, value: string) => {
 export const changeSize = (limit: number | undefined) => {
   let size = "";
   if (!limit) {
-    return "0kb";
+    return "0KB";
   }
   if (limit < 1 * 1024) {
     //小于1KB，则转化成B

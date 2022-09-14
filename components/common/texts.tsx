@@ -4,7 +4,7 @@ import copyToClipboard from "copy-to-clipboard";
 import React from "react";
 import { useDevice } from "../../src/assets/style";
 
-export const Text = styled.div<{ flex: number }>`
+export const Text = styled.div<{ flex: number; paddingRight?: string }>`
   overflow: hidden;
   font-size: 14px;
   font-weight: 400;
@@ -13,7 +13,7 @@ export const Text = styled.div<{ flex: number }>`
   line-height: 44px;
   white-space: nowrap;
   text-overflow: ellipsis;
-  padding-right: 20px;
+  ${(p) => `padding-right: ${p.paddingRight || "20px"}`};
   ${(p) => `flex: ${p.flex}`};
   @media (max-width: 768px) {
     flex: 0;
@@ -76,7 +76,7 @@ export const CopyText = (p: { flex: number } | any) => {
       {...p}
       style={{ cursor: "pointer", ...(p.style ?? {}) }}
       onClick={(e) => {
-        const state = copyToClipboard( p.value || p.children );
+        const state = copyToClipboard(p.value || p.children);
         if (state) {
           console.info("----e-->", e);
           const offsetY = isMobile ? 100 : 42;

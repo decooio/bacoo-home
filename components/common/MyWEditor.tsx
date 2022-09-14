@@ -12,10 +12,12 @@ const config = {
 
 const Editor = function ({
   setValue,
+  value,
 }: {
   setValue: (value: string) => void;
+  value:string
 }) {
-  return <ReactWEditor config={config} onChange={(e)=>setValue(e)}></ReactWEditor>;
+  return <ReactWEditor value={value} config={config} onChange={(e)=>setValue(e)}></ReactWEditor>;
 };
 
 export default Editor;
