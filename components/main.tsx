@@ -159,6 +159,10 @@ export default function Main() {
    * 手动上传方法
    * */
   const handleUpload = async () => {
+    if (folderSize > SIZE_LIMIT) {
+      message.error("文件大小不能超过100M");
+      return;
+    }
     const formData = new FormData();
     fileList.forEach((item) => {
       formData.append("file", item);
@@ -254,10 +258,6 @@ export default function Main() {
               action={`${activeGateway?.host}/api/v0/add?pin=true`}
               {...upDataPorps}
               beforeUpload={async (file) => {
-                if (file.size > SIZE_LIMIT) {
-                  message.error("文件大小不能超过100M");
-                  return false;
-                }
                 setUpLoadStatus("success");
                 setFileList([file]);
                 return false;
@@ -273,7 +273,7 @@ export default function Main() {
               className={s.uploadFileTypeItem}
               directory
               {...upDataPorps}
-              beforeUpload={async (file:any) => {
+              beforeUpload={async (file: any) => {
                 setFolder(
                   file.webkitRelativePath.substring(
                     0,
@@ -282,14 +282,7 @@ export default function Main() {
                 );
 
                 const locFolder = fileList;
-                let locFolderSize = folderSize;
-                locFolderSize = locFolderSize + file.size;
-                setFolderSize(locFolderSize);
                 locFolder.push(file);
-                if (folderSize > SIZE_LIMIT) {
-                  message.error("文件大小不能超过100M");
-                  return false;
-                }
                 setFileList([...locFolder]);
                 setUpLoadStatus("success");
                 return false;
@@ -423,9 +416,6 @@ export default function Main() {
               margin: "18px 20px",
             }}
             onClick={() => {
-              // console.log(fileList);
-
-              // return;
               handleUpload();
             }}
           >
@@ -443,6 +433,13 @@ export default function Main() {
     }
     getGatewayList();
   }, []);
+
+  useEffect(() => {
+    const totalSize = fileList
+      .map((item) => item.size)
+      .reduce((prev, curr) => prev + curr, 0);
+    setFolderSize(totalSize);
+  }, [fileList]);
   return (
     <div className={classNames(s.main, isMobile && s.main_mobile)}>
       <BgAnim />
