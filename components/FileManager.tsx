@@ -123,7 +123,7 @@ export default function FileManager() {
   const [uploadFileTypeShow, setUploadFileTypeShow] = useState(false);
 
   const [fileList, setFileList] = useState<RcFile[]>([]);
-  const [folder, setFolder] = useState("");
+  // const [folder, setFolder] = useState("");
 
   //获取节点列表
   const getGatewayList = async () => {
@@ -181,7 +181,7 @@ export default function FileManager() {
    * */
   const removeFileList = () => {
     setFileList([]);
-    setFolder("");
+    
     setUpLoadStatus("");
   };
 
@@ -237,7 +237,7 @@ export default function FileManager() {
           console.log(res);
 
           if (typeof res.data == "string") {
-            const jsonStr = res.data.replaceAll("}\n{", "},{");
+            const jsonStr = res.data.replace("}\n{", "},{");
             const items = JSON.parse(`[${jsonStr}]`);
             const folder = items[items.length - 1];
             Hash = folder.Hash;
@@ -405,12 +405,12 @@ export default function FileManager() {
                 action={`${activeGateway.host}/api/v0/add?pin=true`}
                 headers={{ authorization: getLoc("token") as string }}
                 beforeUpload={async (file: any) => {
-                  setFolder(
-                    file.webkitRelativePath.substring(
-                      0,
-                      file.webkitRelativePath.indexOf("/")
-                    )
-                  );
+                  // setFolder(
+                  //   file.webkitRelativePath.substring(
+                  //     0,
+                  //     file.webkitRelativePath.indexOf("/")
+                  //   )
+                  // );
 
                   const locFolder = fileList;
                   locFolder.push(file);

@@ -192,7 +192,7 @@ export default function Main() {
       let Name = "";
 
       if (typeof res.data == "string") {
-        const jsonStr = res.data.replaceAll("}\n{", "},{");
+        const jsonStr = res.data.replace("}\n{", "},{");
         const items = JSON.parse(`[${jsonStr}]`);
         const folder = items[items.length - 1];
         Hash = folder.Hash;
