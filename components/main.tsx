@@ -127,6 +127,7 @@ export default function Main() {
     setFileList([]);
     setFolder("");
     setFolderSize(0);
+    setUploadFileTypeShow(false)
   };
 
   /**
@@ -362,7 +363,7 @@ export default function Main() {
 
         {folder && folderSize ? (
           <div className={"file_item"}>
-            <div className={"file_name"}>{folder}</div>
+            <div className={"file_name"}>{folder} （{fileList.length}个文件）</div>
             <div className={"file_size"}>{changeSize(folderSize)}</div>
           </div>
         ) : (

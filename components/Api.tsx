@@ -61,11 +61,12 @@ export default function Api() {
   useEffect(() => {
     getApis();
   }, []);
+  
   return (
     <MCol>
       <Table>
         <RowFill style={{ height: 37 }}>
-          <TextTitle flex={8} style={styleItem}>
+          <TextTitle flex={20} style={styleItem}>
             API Key
           </TextTitle>
           <TextTitle flex={flexRight} style={styleItem}>
@@ -79,7 +80,7 @@ export default function Api() {
               key={`apis_${index}`}
               style={{ height: 44, borderTop: "1px solid #eeeeee" }}
             >
-              <CopyText flex={8} style={styleItem}>
+              <CopyText flex={20} style={styleItem}>
                 {item.signature}
               </CopyText>
               <Text flex={flexRight} style={styleItem}>

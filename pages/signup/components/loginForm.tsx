@@ -61,7 +61,7 @@ const LoginForm = function () {
           label=""
           name="username"
           rules={[
-            { required: true, message: "请输入用户名或手机或者邮箱号" },
+            { required: true, message: "请输入用户名或手机号或者邮箱" },
             {
               min: 4,
               message: "请至少输入4位用户名",

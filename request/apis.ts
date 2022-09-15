@@ -155,7 +155,11 @@ export const CHANGE_PASSWORD_API: changePasswordApi = (data: {
   oldPassword: string;
   newPassword: string;
 }) => {
-  return request(CHANGE_PASSWORD, data);
+  return request(CHANGE_PASSWORD, data,{
+    method: "post",
+    hint: false,
+    loading: true,
+  });
 };
 
 /**-----------------------------------------------------------工单列表接口------------------------------------------------------------------------------*/

@@ -106,12 +106,10 @@ const RegisterForm = function () {
   const formRef = createRef<FormInstance>();
   // 获取手机验证码之前的验证
   const verify = () => {
-    (formRef.current as any)
-      .validateFields(["user", "phone"])
-      .then(async () => {
-        getVerifyCodeImg();
-        setIsModalVisible(true);
-      });
+    (formRef.current as any).validateFields(["phone"]).then(async () => {
+      getVerifyCodeImg();
+      setIsModalVisible(true);
+    });
   };
 
   const getVerifyCodeImg = async () => {
@@ -227,10 +225,13 @@ const RegisterForm = function () {
       <Form name="loginForm" ref={formRef}>
         <Form.Item
           name="user"
-          rules={[{ required: true, message: "请输入用户名" },{
-            min: 4,
-            message: "请至少输入4位用户名",
-          },]}
+          rules={[
+            { required: true, message: "请输入用户名" },
+            {
+              min: 4,
+              message: "请至少输入4位用户名",
+            },
+          ]}
         >
           <MyInput
             setValue={(e) => {

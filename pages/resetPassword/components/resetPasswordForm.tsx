@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { createRef, useContext, useState } from "react";
+import React, { createRef, useContext, useEffect, useState } from "react";
 import { Form, FormInstance, message, Modal } from "antd";
 import Button from "../../../components/common/Button";
 import {
@@ -104,6 +104,7 @@ const ResetPasswordForm = function () {
             mobile,
             smsCode,
           });
+          message.success("密码已重置");
         } catch (e) {
           console.log(e);
         }
@@ -113,6 +114,10 @@ const ResetPasswordForm = function () {
         });
       });
   };
+
+  useEffect(() => {
+    setInputVerifyCodeImg("");
+  }, [isModalVisible]);
   return (
     <LoginFormBox>
       <Form name="loginForm" ref={formRef}>
@@ -237,6 +242,7 @@ const ResetPasswordForm = function () {
             help={codeError}
           >
             <MyInput
+              value={inputVerifyCodeImg}
               setValue={(e) => setInputVerifyCodeImg(e)}
               placeholder="请输入验证码"
             />
@@ -260,8 +266,11 @@ const ResetPasswordForm = function () {
             style={{
               width: "45%",
               height: "40px",
+              background: inputVerifyCodeImg.length > 0 ? "#2CC8C2" : "#CCCCCC",
             }}
-            onClick={() => sendSms()}
+            onClick={() => {
+              inputVerifyCodeImg.length > 0 ? sendSms() : null;
+            }}
           >
             确定
           </Button>

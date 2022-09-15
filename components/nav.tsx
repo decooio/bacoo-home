@@ -236,7 +236,7 @@ const Nav = () => {
                 className={"item"}
                 target="_blank"
               >
-                文档
+                联系我们
               </a>
             </div>
           )}

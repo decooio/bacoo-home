@@ -279,7 +279,6 @@ export default function Profile() {
       message.success("提交成功");
     } catch (e: any) {
       console.log(e);
-      
     }
     setBtnloading(false);
     setStorageUsageId(0);
@@ -355,6 +354,17 @@ export default function Profile() {
   useEffect(() => {
     getInfo();
   }, []);
+  useEffect(() => {
+    if ((nPwd && nPwd.length < 4) || nPwd.length > 32) {
+      setInfo("密码长度为6~16位");
+      return;
+    } else if (nPwd && oPwd && oPwd == nPwd && oPwd) {
+      setInfo("新密码不能与之前的密码一致");
+      return;
+    } else {
+      setInfo("");
+    }
+  }, [nPwd]);
   return (
     <Grid>
       <div></div>
@@ -366,8 +376,6 @@ export default function Profile() {
             <SpaceH />
           </div>
           <div className="contentBox">
-            {/* <SubText children={`用户名：${user?.username || "暂无信息"}`} /> */}
-            {/* <MText>{`用户名：${user?.username || "暂无信息"}`}</MText> */}
             <Tips title={user?.username}>
               <MText>{`用户名：${user?.username || "暂无信息"}`}</MText>
             </Tips>
@@ -496,13 +504,7 @@ export default function Profile() {
                 setNPwd(e.target.value);
               }}
             />
-            <span className="errorText">
-              {nPwd && oPwd && oPwd == nPwd && oPwd
-                ? "新密码不能与之前的密码一致"
-                : info == "success"
-                ? ""
-                : info}
-            </span>
+            <span className="errorText">{info == "success" ? "" : info}</span>
           </div>
 
           <Info success={true} />
