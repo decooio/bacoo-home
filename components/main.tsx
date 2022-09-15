@@ -25,7 +25,7 @@ export const SIZE_LIMIT = 100 * 1024 * 1024;
 
 const token =
   "Bearer c3Vic3RyYXRlLWNUTEJlSGlvd2JDZE1rdjNLaENSQkxzbXNmRDNicVlnVlZURU5DQlp1ZjIxRW5OOEc6MHgwMjFiNTU1OTg3ZGU4OTJlY2JlMmE5MWIzMTI3Mzg4OGIwYTUwYzZmN2ExNzAwNTFhNzVkNjAwMDc2NzhiYjA1YTU0NWIwYjJkNjVkYmRlNTJmNWQyNDU0NzljODRiMzExZDQxMjM5MjU3MzM5MTlhMGFkMzhiZWE0YjRlZGM4OQ";
-const upDataPorps = {
+export const upDataPorps = {
   showUploadList: false,
   name: "file",
   headers: {
@@ -192,7 +192,7 @@ export default function Main() {
       let Name = "";
 
       if (typeof res.data == "string") {
-        const jsonStr = res.data.replace("}\n{", "},{");
+        const jsonStr = res.data.replaceAll("}\n{", "},{");
         const items = JSON.parse(`[${jsonStr}]`);
         const folder = items[items.length - 1];
         Hash = folder.Hash;

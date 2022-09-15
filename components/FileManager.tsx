@@ -12,7 +12,6 @@ import {
   GET_FILE_LIST_API,
   GET_FILE_SIZE_API,
   GET_GATEWAY_LIST_API,
-  GET_USER_INFO_API,
   UPDATA_FILE_API,
 } from "@request/apis";
 import {
@@ -31,6 +30,9 @@ import Omit from "./common/Omit";
 import axios, { CancelTokenSource } from "axios";
 import { SIZE_LIMIT } from "./main";
 import { RcFile } from "antd/lib/upload";
+import { styleItemTxt } from "./Api";
+import { GrDocument, GrFolder } from "react-icons/gr";
+import s from "./fileManager.module.scss";
 
 export const Table = styled(COL)`
   width: calc(100% - 62px);
@@ -90,10 +92,13 @@ export const UploadBtn = styled.div`
   align-items: center;
   color: #fff;
 `;
+const UploadBtnBox = styled.div`
+  position: relative;
+`;
 
 export default function FileManager() {
   const { state, dispatch } = useContext(Context) as any;
-  const { loading, uuid } = state;
+  const { loading, uuid, plan } = state;
   const [files, setFiles] = useState<getFilesRes["data"]>([]);
   const [gatewayList, setGatewayList] = useState<getgatewayListRes["data"]>([]);
   const [activeGateway, setActiveGateway] = useState<{
@@ -109,10 +114,16 @@ export default function FileManager() {
   const [upLoadOpen, setUpLoadOpen] = useState(false);
   const [upLoadStatus, setUpLoadStatus] = useState<string | undefined>("");
   const [pageSize, setPageSize] = useState(0);
+
   const [percent, setPercent] = useState(0);
   const [errorText, steErrorText] = useState("");
+  // 上传文件请求控制器
   const [cancelUp, setCancelUp] = useState<CancelTokenSource | null>(null);
-  const [userType, setUserType] = useState(0);
+  // 上传文件框是否显示
+  const [uploadFileTypeShow, setUploadFileTypeShow] = useState(false);
+
+  const [fileList, setFileList] = useState<RcFile[]>([]);
+  const [folder, setFolder] = useState("");
 
   //获取节点列表
   const getGatewayList = async () => {
@@ -155,6 +166,7 @@ export default function FileManager() {
       payload: false,
     });
   };
+  // 获取文件列表大小
   const getFileSize = async () => {
     try {
       const res = await GET_FILE_SIZE_API();
@@ -164,10 +176,103 @@ export default function FileManager() {
     }
   };
 
-  const getInfo = async () => {
+  /**
+   *每次上传后清除文件列表
+   * */
+  const removeFileList = () => {
+    setFileList([]);
+    setFolder("");
+    setUpLoadStatus("");
+  };
+
+  /**
+   * 手动上传文件
+   * */
+  const handleUpload = async () => {
+    setUploadFileTypeShow(false)
+    setUpLoadStatus("");
+    let Hash = "";
+    let Name = "";
+    const url = `${activeGateway.host}/api/v0/add?pin=true`;
+    const headers = { authorization: getLoc("token") as string };
+    const totalSize = fileList
+      .map((item) => item.size)
+      .reduce((prev, curr) => prev + curr, 0);
+
+    // 非付费会员不能上传大于100M的文件
+    if (plan.orderType == 0) {
+      if (totalSize > SIZE_LIMIT) {
+        message.error("文件大小不能超过100M");
+        removeFileList()
+        setUpLoadOpen(false)
+       
+        return;
+      }
+    }
+
+    // 循环添加
+    const formData = new FormData();
+    fileList.forEach((item) => {
+      formData.append("file", item);
+    });
+
     try {
-      const res = await GET_USER_INFO_API();
-      setUserType(res.data.plan.orderType);
+      setUploadFileTypeShow(false);
+      const cancel = axios.CancelToken.source();
+      setCancelUp(cancel);
+      axios
+        .post(url, formData, {
+          headers,
+          onUploadProgress: (progressEvent) => {
+            if (progressEvent.lengthComputable) {
+              const complete =
+                ((progressEvent.loaded / progressEvent.total) * 100) | 0;
+              const percent = complete;
+              setPercent(percent);
+            }
+          },
+          cancelToken: cancel.token,
+        })
+        .then(async (res) => {
+          console.log(res);
+
+          if (typeof res.data == "string") {
+            const jsonStr = res.data.replaceAll("}\n{", "},{");
+            const items = JSON.parse(`[${jsonStr}]`);
+            const folder = items[items.length - 1];
+            Hash = folder.Hash;
+            Name = folder.Name;
+          } else {
+            Hash = res.data.Hash;
+            Name = res.data.Name;
+          }
+          try {
+            setUpLoadStatus("success");
+            await UPDATA_FILE_API({
+              cid: Hash,
+              name: Name,
+            });
+            getFiles();
+            getFileSize();
+          } catch (e: any) {
+            if (e.data.code == 500) {
+              steErrorText("剩余存储空间不足");
+            }
+            steErrorText(e.response.data.message || "上传失败 请稍后重试");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setUpLoadStatus("error");
+          if (err.response) {
+            steErrorText(err.response.data.message || "上传失败 请稍后重试");
+          } else {
+            // setUpLoadOpen(false);
+            steErrorText("上传失败 请稍后重试");
+            setPercent(0);
+            setUpLoadStatus("error");
+          }
+        });
     } catch (e) {
       console.log(e);
     }
@@ -180,79 +285,19 @@ export default function FileManager() {
 
   useEffect(() => {
     getGatewayList();
-    getInfo();
   }, []);
+
+  useEffect(() => {
+    if (upLoadOpen) {
+      handleUpload();
+    }
+  }, [upLoadOpen]);
 
   return (
     <MCol>
       <div style={{ display: "flex", marginBottom: "20px" }}>
-        <Upload
-          showUploadList={false}
-          name="file"
-          action={`${activeGateway.host}/api/v0/add?pin=true`}
-          headers={{ authorization: getLoc("token") as string }}
-          customRequest={(e) => {
-            setUpLoadOpen(true);
-            const { action, file, headers } = e;
-            const form = new FormData();
-            if (userType == 0) {
-              if ((file as RcFile).size > SIZE_LIMIT) {
-                message.error("文件大小不能超过100M");
-                return false;
-              }
-            }
-
-            form.append("file", file); // 文件对象
-            const cancel = axios.CancelToken.source();
-            setCancelUp(cancel);
-            axios
-              .post(action, form, {
-                headers,
-                onUploadProgress: (progressEvent) => {
-                  if (progressEvent.lengthComputable) {
-                    const complete =
-                      ((progressEvent.loaded / progressEvent.total) * 100) | 0;
-                    const percent = complete;
-                    setPercent(percent);
-                  }
-                },
-                cancelToken: cancel.token,
-              })
-              .then(async (res) => {
-                const { Hash, Name } = res.data;
-                try {
-                  setUpLoadStatus("success");
-                  await UPDATA_FILE_API({
-                    cid: Hash,
-                    name: Name,
-                  });
-                  getFiles();
-                  getFileSize();
-                } catch (e: any) {
-                  if (e.data.code == 500) {
-                    steErrorText("剩余存储空间不足");
-                  }
-                  steErrorText(
-                    e.response.data.message || "上传失败 请稍后重试"
-                  );
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-                setUpLoadStatus("error");
-                if (err.response) {
-                  steErrorText(
-                    err.response.data.message || "上传失败 请稍后重试"
-                  );
-                } else {
-                  setUpLoadOpen(false);
-                  setPercent(0);
-                  setUpLoadStatus("");
-                }
-              });
-          }}
-        >
-          <UploadBtn>
+        <UploadBtnBox>
+          <UploadBtn onClick={() => setUploadFileTypeShow(!uploadFileTypeShow)}>
             <span
               style={{
                 marginRight: "12px",
@@ -269,7 +314,184 @@ export default function FileManager() {
               添加文件
             </span>
           </UploadBtn>
-        </Upload>
+          {uploadFileTypeShow && (
+            <div className={s.uploadFileType}>
+              <Upload
+                className={s.uploadFileTypeItem}
+                showUploadList={false}
+                name="file"
+                action={`${activeGateway.host}/api/v0/add?pin=true`}
+                headers={{ authorization: getLoc("token") as string }}
+                beforeUpload={async (file) => {
+                  setUpLoadStatus("success");
+                  setFileList([file]);
+                  setUpLoadOpen(true);
+                  return false;
+                }}
+                // customRequest={(e) => {
+                //   const { action, headers } = e;
+                //   handleUpload(action, headers);
+                //   const form = new FormData();
+                //   if (plan.orderType == 0) {
+                //     if ((file as RcFile).size > SIZE_LIMIT) {
+                //       message.error("文件大小不能超过100M");
+                //       return false;
+                //     }
+                //   }
+
+                //   form.append("file", file); // 文件对象
+                //   const cancel = axios.CancelToken.source();
+                //   setCancelUp(cancel);
+                //   axios
+                //     .post(action, form, {
+                //       headers,
+                //       onUploadProgress: (progressEvent) => {
+                //         if (progressEvent.lengthComputable) {
+                //           const complete =
+                //             ((progressEvent.loaded / progressEvent.total) *
+                //               100) |
+                //             0;
+                //           const percent = complete;
+                //           setPercent(percent);
+                //         }
+                //       },
+                //       cancelToken: cancel.token,
+                //     })
+                //     .then(async (res) => {
+                //       const { Hash, Name } = res.data;
+                //       try {
+                //         setUpLoadStatus("success");
+                //         await UPDATA_FILE_API({
+                //           cid: Hash,
+                //           name: Name,
+                //         });
+                //         getFiles();
+                //         getFileSize();
+                //       } catch (e: any) {
+                //         if (e.data.code == 500) {
+                //           steErrorText("剩余存储空间不足");
+                //         }
+                //         steErrorText(
+                //           e.response.data.message || "上传失败 请稍后重试"
+                //         );
+                //       }
+                //     })
+                //     .catch((err) => {
+                //       console.log(err);
+                //       setUpLoadStatus("error");
+                //       if (err.response) {
+                //         steErrorText(
+                //           err.response.data.message || "上传失败 请稍后重试"
+                //         );
+                //       } else {
+                //         setUpLoadOpen(false);
+                //         setPercent(0);
+                //         setUpLoadStatus("");
+                //       }
+                //     });
+                // }}
+              >
+                <div className={s.box}>
+                  <GrDocument />
+                  <span className={s.uploadFileTypeItemText}>文件</span>
+                </div>
+              </Upload>
+
+              <Upload
+                directory
+                className={s.uploadFileTypeItem}
+                showUploadList={false}
+                name="file"
+                action={`${activeGateway.host}/api/v0/add?pin=true`}
+                headers={{ authorization: getLoc("token") as string }}
+                beforeUpload={async (file: any) => {
+                  setFolder(
+                    file.webkitRelativePath.substring(
+                      0,
+                      file.webkitRelativePath.indexOf("/")
+                    )
+                  );
+
+                  const locFolder = fileList;
+                  locFolder.push(file);
+                  setFileList([...locFolder]);
+                  setUpLoadOpen(true);
+                  return false;
+                }}
+
+                // customRequest={(e) => {
+                //   // const { action, headers } = e;
+                //   // handleUpload(action, headers);
+
+                //   // const { action, file, headers } = e;
+                //   // const form = new FormData();
+                //   // if (plan.orderType == 0) {
+                //   //   if ((file as RcFile).size > SIZE_LIMIT) {
+                //   //     message.error("文件大小不能超过100M");
+                //   //     return false;
+                //   //   }
+                //   // }
+
+                //   // form.append("file", file); // 文件对象
+                //   // const cancel = axios.CancelToken.source();
+                //   // setCancelUp(cancel);
+                //   // axios
+                //   //   .post(action, form, {
+                //   //     headers,
+                //   //     onUploadProgress: (progressEvent) => {
+                //   //       if (progressEvent.lengthComputable) {
+                //   //         const complete =
+                //   //           ((progressEvent.loaded / progressEvent.total) *
+                //   //             100) |
+                //   //           0;
+                //   //         const percent = complete;
+                //   //         setPercent(percent);
+                //   //       }
+                //   //     },
+                //   //     cancelToken: cancel.token,
+                //   //   })
+                //   //   .then(async (res) => {
+                //   //     const { Hash, Name } = res.data;
+                //   //     try {
+                //   //       setUpLoadStatus("success");
+                //   //       await UPDATA_FILE_API({
+                //   //         cid: Hash,
+                //   //         name: Name,
+                //   //       });
+                //   //       getFiles();
+                //   //       getFileSize();
+                //   //     } catch (e: any) {
+                //   //       if (e.data.code == 500) {
+                //   //         steErrorText("剩余存储空间不足");
+                //   //       }
+                //   //       steErrorText(
+                //   //         e.response.data.message || "上传失败 请稍后重试"
+                //   //       );
+                //   //     }
+                //   //   })
+                //   //   .catch((err) => {
+                //   //     console.log(err);
+                //   //     setUpLoadStatus("error");
+                //   //     if (err.response) {
+                //   //       steErrorText(
+                //   //         err.response.data.message || "上传失败 请稍后重试"
+                //   //       );
+                //   //     } else {
+                //   //       setUpLoadOpen(false);
+                //   //       setPercent(0);
+                //   //       setUpLoadStatus("");
+                //   //     }
+                //   //   });
+                // }}
+              >
+                <div className={s.box}>
+                  <GrFolder />
+                  <span className={s.uploadFileTypeItemText}>文件夹</span>
+                </div>
+              </Upload>
+            </div>
+          )}
+        </UploadBtnBox>
 
         <Dropdown
           overlay={
@@ -291,7 +513,9 @@ export default function FileManager() {
       </div>
       <Table>
         <RowFill style={{ height: 37 }}>
-          <TextTitle flex={2}>文件名</TextTitle>
+          <TextTitle flex={2} style={styleItemTxt}>
+            文件名
+          </TextTitle>
           <TextTitle flex={6}>CID</TextTitle>
           <TextTitle flex={6}>访问域名</TextTitle>
           <TextTitle flex={1}></TextTitle>
@@ -307,7 +531,7 @@ export default function FileManager() {
               key={`file_${index}`}
               style={{ height: 44, borderTop: "1px solid #eeeeee" }}
             >
-              <Text flex={2}>
+              <Text flex={2} style={styleItemTxt}>
                 <Tips title={file.name}>
                   <MText>{file.name}</MText>
                 </Tips>
@@ -384,6 +608,7 @@ export default function FileManager() {
 
       <Modal
         title="上传文件"
+        centered
         visible={upLoadOpen}
         footer={null}
         maskClosable={false}
@@ -404,7 +629,13 @@ export default function FileManager() {
           strokeWidth={20}
           strokeColor={"rgb(51 51 51)"}
           percent={percent}
-          status="active"
+          status={
+            upLoadStatus === "success"
+              ? "success"
+              : upLoadStatus === "error"
+              ? "exception"
+              : "active"
+          }
         />
       </Modal>
     </MCol>

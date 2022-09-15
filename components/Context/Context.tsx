@@ -1,3 +1,4 @@
+import { GET_USER_INFO_API } from "@request/apis";
 import { getUserInfoRes } from "@request/types";
 import { getLoc } from "@src/index";
 import router from "next/router";
@@ -105,6 +106,18 @@ const MyContextWrapper = ({ children: children }: any) => {
       type: "UPDATE_USER_NAME",
       payload: userName,
     });
+    if (loginStatus === eloginStatus.login) {
+      GET_USER_INFO_API().then((res) => {
+        dispatch({
+          type: "UPDATE_USER",
+          payload: res.data.info,
+        });
+        dispatch({
+          type: "UPDATE_PLAN",
+          payload: res.data.plan,
+        })
+      });
+    }
 
     if (
       loginStatus !== eloginStatus.login &&

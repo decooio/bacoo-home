@@ -30,7 +30,7 @@ interface detailInfo {
   ticketNo: string;
   type: number;
   title: string;
-  feedbackTime:string
+  feedbackTime: string;
 }
 export const MCol = styled(COL)`
   padding: 0px 32px 20px 0px;
@@ -101,8 +101,25 @@ const Reporter = styled.span`
   color: #666666;
 `;
 const HtmlReporter = styled.div`
-  max-height: 300px;
+  max-height: 600px;
   overflow: auto;
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 16px;
+    background-color: #f5f5f5;
+  }
+
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #f5f5f5;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #555;
+  }
 `;
 
 const ModalText = styled.div`
@@ -150,7 +167,7 @@ export default function HelpAndReport() {
     ticketNo: "",
     type: 0,
     title: "",
-    feedbackTime:""
+    feedbackTime: "",
   });
   const [activeId, setActiveId] = useState(0);
   const [title, setTitle] = useState("");
@@ -308,7 +325,13 @@ export default function HelpAndReport() {
               </Text>
               <Text flex={6}>
                 <Tips title={item.feedback}>
-                  <MText>{item.status ==0?item.feedback:(item.feedback?item.feedback:"-")  }</MText>
+                  <MText>
+                    {item.status == 0
+                      ? item.feedback
+                      : item.feedback
+                      ? item.feedback
+                      : "-"}
+                  </MText>
                 </Tips>
               </Text>
               <Text flex={1.5}>
@@ -403,33 +426,34 @@ export default function HelpAndReport() {
       <Modal
         width={480}
         centered
-        title={`工单 ${detail?.ticketNo || '暂无信息'}`}
+        title={`工单 ${detail?.ticketNo || "暂无信息"}`}
         visible={detailsmodalOpen}
         footer={null}
         onCancel={() => setDetailsModalOpen(false)}
       >
-        <ModalText>类型</ModalText>
-        <Reporter>{detail?.type == 0 ? "技术支持" : "用户意向"}</Reporter>
-        <HeightBox></HeightBox>
-
-        <ModalText>报告人</ModalText>
-        <Reporter>{userName}</Reporter>
-        <HeightBox></HeightBox>
-
-        <ModalText>报告内容</ModalText>
-        <Reporter>{detail?.title}</Reporter>
         <HtmlReporter>
+          <ModalText>类型</ModalText>
+          <Reporter>{detail?.type == 0 ? "技术支持" : "用户意向"}</Reporter>
+          <HeightBox></HeightBox>
+
+          <ModalText>报告人</ModalText>
+          <Reporter>{userName}</Reporter>
+          <HeightBox></HeightBox>
+
+          <ModalText>报告内容</ModalText>
+          <Reporter>{detail?.title}</Reporter>
+
           <div dangerouslySetInnerHTML={{ __html: detail.description }}></div>
+
+          <TimeText>提交时间：{detail?.reportTime}</TimeText>
+          <HeightBox></HeightBox>
+
+          <ModalText>反馈内容</ModalText>
+          <Reporter>{detail?.feedback || "无"}</Reporter>
+          <TimeText>反馈时间：{detail?.feedbackTime}</TimeText>
+
+          <HeightBox></HeightBox>
         </HtmlReporter>
-        <TimeText>提交时间：{detail?.reportTime}</TimeText>
-        <HeightBox></HeightBox>
-
-        <ModalText>反馈内容</ModalText>
-        <Reporter>{detail?.feedback || "无"}</Reporter>
-        <TimeText>反馈时间：{detail?.feedbackTime}</TimeText>
-
-        <HeightBox></HeightBox>
-
         {detail.status !== 2 ? (
           <FlexBox>
             <Button

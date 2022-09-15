@@ -28,7 +28,7 @@ const Table = styled(COL)`
   }
 `;
 
-const styleItemTxt = {
+export const styleItemTxt = {
   paddingLeft: 20,
   paddingRight: 0,
 };

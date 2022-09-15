@@ -2,7 +2,7 @@ import styled from "styled-components";
 import React, { useContext, useState } from "react";
 import { Form } from "antd";
 import Button from "../../../components/common/Button";
-import { LOGIN_API } from "@request/apis";
+import { GET_USER_INFO_API, LOGIN_API } from "@request/apis";
 import { setLoc, usernameVerifyF } from "@src/index";
 import router from "next/router";
 import { Context } from "@components/Context/Context";
@@ -40,10 +40,13 @@ const LoginForm = function () {
         type: "UPDATE_LOGIN_STATUS",
         payload: eloginStatus.login,
       });
-      dispatch({
-        type: "UPDATE_USER_NAME",
-        payload: username,
+      GET_USER_INFO_API().then((res) => {
+        dispatch({
+          type: "UPDATE_USER",
+          payload: res.data.info,
+        });
       });
+
       setLoc("userName", username);
       router.replace("/panel/fileManager");
     } catch (err) {

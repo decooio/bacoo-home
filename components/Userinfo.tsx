@@ -34,14 +34,21 @@ const CButton = styled(Button)`
 const Userinfo: react.FC = () => {
   const router = useRouter();
   const { state, dispatch } = useContext(Context) as any;
-  const { loginStatus,  userName } = state;
-
+  const { loginStatus, user } = state;
 
   const loginOut = async () => {
     localStorage.removeItem("token");
     dispatch({
       type: "UPDATE_LOGIN_STATUS",
       payload: eloginStatus.notLogin,
+    });
+    dispatch({
+      type: "UPDATE_USER",
+      payload: {
+        username: "尚未登录",
+        mobile: "暂无信息",
+        email: "",
+      },
     });
     router.replace("/login");
   };
@@ -50,13 +57,9 @@ const Userinfo: react.FC = () => {
       {loginStatus !== eloginStatus.login ? (
         <>
           {router.pathname == "/login" ? (
-            <CButton onClick={() => router.push('/register')}>
-              注册
-            </CButton>
+            <CButton onClick={() => router.push("/register")}>注册</CButton>
           ) : (
-            <CButton onClick={() => router.push('/login')}>
-              登录
-            </CButton>
+            <CButton onClick={() => router.push("/login")}>登录</CButton>
           )}
         </>
       ) : (
@@ -81,7 +84,7 @@ const Userinfo: react.FC = () => {
                 fontSize: "14px",
               }}
             >
-              {userName}
+              {user.username}
             </span>
             <FiChevronDown></FiChevronDown>
           </Space>
