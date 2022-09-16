@@ -39,7 +39,7 @@ export default function Api() {
   const [apis, setApis] = useState<getApisRes["data"]>([]);
   const device = useDevice();
   const styleItem = device.isMobile ? styleItemTxt_phone : styleItemTxt;
-  const flexRight = device.isMobile ? 1 : 1;
+  const flexRight = device.isMobile ? 1 : 5;
   const getApis = async () => {
     dispatch({
       type: "UPDATE_LOADING",
