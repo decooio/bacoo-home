@@ -133,6 +133,9 @@ export const styleItemTxt = {
   paddingLeft: 20,
   paddingRight: 80,
 };
+export const plStyle = {
+  paddingLeft: 20,
+};
 const typeMap = new Map([
   [0, "技术支持"],
   [1, "用户意向"],
@@ -282,11 +285,17 @@ export default function HelpAndReport() {
       <Line></Line>
       <Table>
         <RowFill style={{ height: 37 }}>
-          <TextTitle flex={3}>工单编号</TextTitle>
+          <TextTitle flex={3} style={plStyle}>
+            工单编号
+          </TextTitle>
           <TextTitle flex={2}>类型</TextTitle>
-          <TextTitle flex={6} style={styleItemTxt}>工单标题</TextTitle>
+          <TextTitle flex={6} style={styleItemTxt}>
+            工单标题
+          </TextTitle>
           <TextTitle flex={2}>状态</TextTitle>
-          <TextTitle flex={6} style={styleItemTxt}>反馈信息</TextTitle>
+          <TextTitle flex={6} style={styleItemTxt}>
+            反馈信息
+          </TextTitle>
           <TextTitle flex={1.5}></TextTitle>
         </RowFill>
         {ticketsList && ticketsList.length === 0 && (
@@ -298,7 +307,7 @@ export default function HelpAndReport() {
               key={`file_${index}`}
               style={{ height: 44, borderTop: "1px solid #eeeeee" }}
             >
-              <Text flex={3}>
+              <Text flex={3} style={plStyle}>
                 <MText>{item.ticketNo}</MText>
               </Text>
               <Text flex={2}>
