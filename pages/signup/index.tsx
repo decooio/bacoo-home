@@ -7,6 +7,9 @@ import LoginForm from "./components/loginForm";
 import router from "next/router";
 
 export const FormWrapper = styled.div`
+  @media (max-width: 1440px) {
+    transform: scale(0.8);
+  }
   @media (min-width: 768px) {
     width: 457px;
   }
@@ -15,10 +18,6 @@ export const Logo = styled.embed`
   width: 165px;
   //height: 55px;
   margin-bottom: 63px;
-  @media (max-height: 800px) {
-    margin-bottom: 20px;
-    transform: scale(0.5);
-  }
 `;
 
 export const FlexBox = styled.div`

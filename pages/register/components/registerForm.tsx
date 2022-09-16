@@ -30,6 +30,7 @@ export const BetweenFlexBox = styled.div`
 `;
 export const LoginFormBox = styled.div`
   width: 100%;
+  
 `;
 export const VerifyBtn = styled.div<IButtonProps>`
   display: inline-flex;
