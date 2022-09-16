@@ -1,5 +1,5 @@
 import { COL, RowFill } from "./common/layouts";
-import { FiBox, FiChevronDown, FiDownload } from "react-icons/fi";
+import { FiBox, FiChevronDown, FiDownload, FiFolder } from "react-icons/fi";
 import styled from "styled-components";
 import { CopyText, EmptyText, Text, TextTitle } from "./common/texts";
 import { useContext, useEffect, useState } from "react";
@@ -38,6 +38,12 @@ export const FlexBox = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-around;
+  align-items: center;
+`;
+
+const FileBox = styled.div`
+  width: 100%;
+  display: flex;
   align-items: center;
 `;
 
@@ -404,10 +410,22 @@ export default function FileManager() {
               style={{ height: 44, borderTop: "1px solid #eeeeee" }}
             >
               <Text flex={3} style={styleItemTxt}>
-                <Tips title={file.name}  align={{
+                <Tips
+                  title={file.name}
+                  align={{
                     offset: [0, 15],
-                  }}>
-                  <MText>{file.name}</MText>
+                  }}
+                >
+                  <FileBox>
+                    <MText>{file.name}</MText>
+                    {file.fileType ? (
+                      <FiFolder
+                        style={{
+                          marginLeft: "10px",
+                        }}
+                      />
+                    ) : null}
+                  </FileBox>
                 </Tips>
               </Text>
 
