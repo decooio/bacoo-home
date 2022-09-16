@@ -404,16 +404,26 @@ export default function FileManager() {
               style={{ height: 44, borderTop: "1px solid #eeeeee" }}
             >
               <Text flex={3} style={styleItemTxt}>
-                <Tips title={file.name}>
+                <Tips title={file.name}  align={{
+                    offset: [0, 15],
+                  }}>
                   <MText>{file.name}</MText>
                 </Tips>
               </Text>
 
-              <Tips title={file.cid} placement="topLeft">
-                <CopyText flex={6} value={file.cid}>
-                  <Omit value={file.cid}></Omit>
-                </CopyText>
-              </Tips>
+              <Text flex={6}>
+                <Tips
+                  title={file.cid}
+                  placement="topLeft"
+                  align={{
+                    offset: [0, 15],
+                  }}
+                >
+                  <CopyText value={file.cid}>
+                    <Omit value={file.cid}></Omit>
+                  </CopyText>
+                </Tips>
+              </Text>
 
               <Text flex={6}>
                 {file.valid !== 1 ? (
