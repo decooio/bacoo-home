@@ -13,7 +13,7 @@ import {
   SET_UNSOLVEd_API,
 } from "@request/apis";
 import { Context } from "./Context/Context";
-import { message, Modal, Select } from "antd";
+import { message, Modal, Select, Spin } from "antd";
 import { HeightBox } from "./Profile";
 import { getticketsListRes } from "@request/types";
 import { MText } from "./FileManager";
@@ -149,7 +149,6 @@ export default function HelpAndReport() {
   const { state, dispatch } = useContext(Context) as any;
   const { userName } = state;
   const editor = useRef(null);
-
   const [pageNum, setPageNum] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const [description, setDescription] = useState("");
@@ -171,6 +170,7 @@ export default function HelpAndReport() {
   });
   const [activeId, setActiveId] = useState(0);
   const [title, setTitle] = useState("");
+  const [btnLoading, setBtnLoading] = useState(false);
 
   const getTicketsList = async () => {
     dispatch({
@@ -194,10 +194,7 @@ export default function HelpAndReport() {
   };
 
   const submitReport = async () => {
-    dispatch({
-      type: "UPDATE_LOADING",
-      payload: true,
-    });
+    setBtnLoading(true);
     try {
       await SUBMIT_TICKETS_API({
         description,
@@ -209,10 +206,7 @@ export default function HelpAndReport() {
     } catch (e) {
       console.log(e);
     }
-    dispatch({
-      type: "UPDATE_LOADING",
-      payload: false,
-    });
+    setBtnLoading(false);
   };
 
   const getDetails = async (id: number) => {
@@ -374,7 +368,7 @@ export default function HelpAndReport() {
         <Select
           defaultValue="技术支持"
           style={{ width: "100%" }}
-          onChange={(e) => setType(e)}
+          onChange={(e: string) => setType(e)}
         >
           {typeList.map((item) => {
             return (
@@ -402,25 +396,45 @@ export default function HelpAndReport() {
         <div id="wangeditor" ref={editor}></div>
 
         <HeightBox></HeightBox>
-        <Button
-          style={
-            description.length === 0 || title.length === 0
-              ? {
-                  width: "100%",
-                  background: " #CCCCCC",
-                }
-              : {
-                  width: "100%",
-                }
-          }
-          onClick={() => {
-            description.length === 0 || title.length === 0
-              ? null
-              : submitReport();
-          }}
-        >
-          确认提交
-        </Button>
+
+        {btnLoading ? (
+          <Spin>
+            <Button
+              style={
+                description.length === 0 || title.length === 0
+                  ? {
+                      width: "100%",
+                      background: " #CCCCCC",
+                    }
+                  : {
+                      width: "100%",
+                    }
+              }
+            >
+              确认提交
+            </Button>
+          </Spin>
+        ) : (
+          <Button
+            style={
+              description.length === 0 || title.length === 0
+                ? {
+                    width: "100%",
+                    background: " #CCCCCC",
+                  }
+                : {
+                    width: "100%",
+                  }
+            }
+            onClick={() => {
+              description.length === 0 || title.length === 0
+                ? null
+                : submitReport();
+            }}
+          >
+            确认提交
+          </Button>
+        )}
       </Modal>
 
       <Modal
