@@ -284,7 +284,7 @@ export default function HelpAndReport() {
       </Tooltip>
       <Line></Line>
       <Table>
-        <RowFill style={{ height: 37 }}>
+        <RowFill style={{ height: 37, marginBottom: "5px" }}>
           <TextTitle flex={3} style={plStyle}>
             工单编号
           </TextTitle>
