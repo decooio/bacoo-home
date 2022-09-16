@@ -63,3 +63,12 @@ button {
 .ant-input:focus {
   border: 1px solid #000 !important;
 }
+
+.ant-message-custom-content {
+  display: flex;
+  align-items: center;
+  
+}
+.ant-message .anticon{
+  top: 0px !important;
+}

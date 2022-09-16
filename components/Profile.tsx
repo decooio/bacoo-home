@@ -359,7 +359,7 @@ export default function Profile() {
       setInfo("密码长度为6~16位");
       return;
     } else if (nPwd && oPwd && oPwd == nPwd && oPwd) {
-      setInfo("新密码不能与之前的密码一致");
+      setInfo("新密码不能与旧密码一致");
       return;
     } else {
       setInfo("");
