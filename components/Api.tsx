@@ -30,7 +30,7 @@ const Table = styled(COL)`
 
 export const styleItemTxt = {
   paddingLeft: 20,
-  paddingRight: 0,
+  paddingRight: 80,
 };
 const styleItemTxt_phone = {};
 // const apis: any[] = [1, 2]
@@ -39,7 +39,7 @@ export default function Api() {
   const [apis, setApis] = useState<getApisRes["data"]>([]);
   const device = useDevice();
   const styleItem = device.isMobile ? styleItemTxt_phone : styleItemTxt;
-  const flexRight = device.isMobile ? 1 : 5;
+  const flexRight = device.isMobile ? 1 : 1;
   const getApis = async () => {
     dispatch({
       type: "UPDATE_LOADING",
@@ -66,7 +66,7 @@ export default function Api() {
     <MCol>
       <Table>
         <RowFill style={{ height: 37 }}>
-          <TextTitle flex={20} style={styleItem}>
+          <TextTitle flex={15} style={styleItem}>
             API Key
           </TextTitle>
           <TextTitle flex={flexRight} style={styleItem}>
@@ -80,7 +80,7 @@ export default function Api() {
               key={`apis_${index}`}
               style={{ height: 44, borderTop: "1px solid #eeeeee" }}
             >
-              <CopyText flex={20} style={styleItem}>
+              <CopyText flex={15} style={styleItem}>
                 {item.signature}
               </CopyText>
               <Text flex={flexRight} style={styleItem}>

@@ -34,6 +34,13 @@ import { styleItemTxt } from "./Api";
 import { GrDocument, GrFolder } from "react-icons/gr";
 import s from "./fileManager.module.scss";
 
+export const FlexBox = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+`;
+
 export const Table = styled(COL)`
   width: calc(100% - 62px);
   flex: 1;
@@ -181,7 +188,7 @@ export default function FileManager() {
    * */
   const removeFileList = () => {
     setFileList([]);
-    
+
     setUpLoadStatus("");
   };
 
@@ -189,7 +196,7 @@ export default function FileManager() {
    * 手动上传文件
    * */
   const handleUpload = async () => {
-    setUploadFileTypeShow(false)
+    setUploadFileTypeShow(false);
     setUpLoadStatus("");
     let Hash = "";
     let Name = "";
@@ -203,9 +210,9 @@ export default function FileManager() {
     if (plan.orderType == 0) {
       if (totalSize > SIZE_LIMIT) {
         message.error("文件大小不能超过100M");
-        removeFileList()
-        setUpLoadOpen(false)
-       
+        removeFileList();
+        setUpLoadOpen(false);
+
         return;
       }
     }
@@ -237,9 +244,8 @@ export default function FileManager() {
           console.log(res);
 
           if (typeof res.data == "string") {
-            const jsonStr = res.data.replace("}\n{", "},{");
-            const items = JSON.parse(`[${jsonStr}]`);
-            const folder = items[items.length - 1];
+            const resultArr = res.data.split("\n");
+            const folder = JSON.parse(resultArr[resultArr.length - 2]);
             Hash = folder.Hash;
             Name = folder.Name;
           } else {
@@ -328,68 +334,6 @@ export default function FileManager() {
                   setUpLoadOpen(true);
                   return false;
                 }}
-                // customRequest={(e) => {
-                //   const { action, headers } = e;
-                //   handleUpload(action, headers);
-                //   const form = new FormData();
-                //   if (plan.orderType == 0) {
-                //     if ((file as RcFile).size > SIZE_LIMIT) {
-                //       message.error("文件大小不能超过100M");
-                //       return false;
-                //     }
-                //   }
-
-                //   form.append("file", file); // 文件对象
-                //   const cancel = axios.CancelToken.source();
-                //   setCancelUp(cancel);
-                //   axios
-                //     .post(action, form, {
-                //       headers,
-                //       onUploadProgress: (progressEvent) => {
-                //         if (progressEvent.lengthComputable) {
-                //           const complete =
-                //             ((progressEvent.loaded / progressEvent.total) *
-                //               100) |
-                //             0;
-                //           const percent = complete;
-                //           setPercent(percent);
-                //         }
-                //       },
-                //       cancelToken: cancel.token,
-                //     })
-                //     .then(async (res) => {
-                //       const { Hash, Name } = res.data;
-                //       try {
-                //         setUpLoadStatus("success");
-                //         await UPDATA_FILE_API({
-                //           cid: Hash,
-                //           name: Name,
-                //         });
-                //         getFiles();
-                //         getFileSize();
-                //       } catch (e: any) {
-                //         if (e.data.code == 500) {
-                //           steErrorText("剩余存储空间不足");
-                //         }
-                //         steErrorText(
-                //           e.response.data.message || "上传失败 请稍后重试"
-                //         );
-                //       }
-                //     })
-                //     .catch((err) => {
-                //       console.log(err);
-                //       setUpLoadStatus("error");
-                //       if (err.response) {
-                //         steErrorText(
-                //           err.response.data.message || "上传失败 请稍后重试"
-                //         );
-                //       } else {
-                //         setUpLoadOpen(false);
-                //         setPercent(0);
-                //         setUpLoadStatus("");
-                //       }
-                //     });
-                // }}
               >
                 <div className={s.box}>
                   <GrDocument />
@@ -405,84 +349,12 @@ export default function FileManager() {
                 action={`${activeGateway.host}/api/v0/add?pin=true`}
                 headers={{ authorization: getLoc("token") as string }}
                 beforeUpload={async (file: any) => {
-                  // setFolder(
-                  //   file.webkitRelativePath.substring(
-                  //     0,
-                  //     file.webkitRelativePath.indexOf("/")
-                  //   )
-                  // );
-
                   const locFolder = fileList;
                   locFolder.push(file);
                   setFileList([...locFolder]);
                   setUpLoadOpen(true);
                   return false;
                 }}
-
-                // customRequest={(e) => {
-                //   // const { action, headers } = e;
-                //   // handleUpload(action, headers);
-
-                //   // const { action, file, headers } = e;
-                //   // const form = new FormData();
-                //   // if (plan.orderType == 0) {
-                //   //   if ((file as RcFile).size > SIZE_LIMIT) {
-                //   //     message.error("文件大小不能超过100M");
-                //   //     return false;
-                //   //   }
-                //   // }
-
-                //   // form.append("file", file); // 文件对象
-                //   // const cancel = axios.CancelToken.source();
-                //   // setCancelUp(cancel);
-                //   // axios
-                //   //   .post(action, form, {
-                //   //     headers,
-                //   //     onUploadProgress: (progressEvent) => {
-                //   //       if (progressEvent.lengthComputable) {
-                //   //         const complete =
-                //   //           ((progressEvent.loaded / progressEvent.total) *
-                //   //             100) |
-                //   //           0;
-                //   //         const percent = complete;
-                //   //         setPercent(percent);
-                //   //       }
-                //   //     },
-                //   //     cancelToken: cancel.token,
-                //   //   })
-                //   //   .then(async (res) => {
-                //   //     const { Hash, Name } = res.data;
-                //   //     try {
-                //   //       setUpLoadStatus("success");
-                //   //       await UPDATA_FILE_API({
-                //   //         cid: Hash,
-                //   //         name: Name,
-                //   //       });
-                //   //       getFiles();
-                //   //       getFileSize();
-                //   //     } catch (e: any) {
-                //   //       if (e.data.code == 500) {
-                //   //         steErrorText("剩余存储空间不足");
-                //   //       }
-                //   //       steErrorText(
-                //   //         e.response.data.message || "上传失败 请稍后重试"
-                //   //       );
-                //   //     }
-                //   //   })
-                //   //   .catch((err) => {
-                //   //     console.log(err);
-                //   //     setUpLoadStatus("error");
-                //   //     if (err.response) {
-                //   //       steErrorText(
-                //   //         err.response.data.message || "上传失败 请稍后重试"
-                //   //       );
-                //   //     } else {
-                //   //       setUpLoadOpen(false);
-                //   //       setPercent(0);
-                //   //       setUpLoadStatus("");
-                //   //     }
-                //   //   });
-                // }}
               >
                 <div className={s.box}>
                   <GrFolder />
@@ -513,7 +385,7 @@ export default function FileManager() {
       </div>
       <Table>
         <RowFill style={{ height: 37 }}>
-          <TextTitle flex={2} style={styleItemTxt}>
+          <TextTitle flex={3} style={styleItemTxt}>
             文件名
           </TextTitle>
           <TextTitle flex={6}>CID</TextTitle>
@@ -531,23 +403,49 @@ export default function FileManager() {
               key={`file_${index}`}
               style={{ height: 44, borderTop: "1px solid #eeeeee" }}
             >
-              <Text flex={2} style={styleItemTxt}>
+              <Text flex={3} style={styleItemTxt}>
                 <Tips title={file.name}>
                   <MText>{file.name}</MText>
                 </Tips>
               </Text>
+
               <Tips title={file.cid} placement="topLeft">
                 <CopyText flex={6} value={file.cid}>
                   <Omit value={file.cid}></Omit>
                 </CopyText>
               </Tips>
 
-              <Text flex={6} paddingRight="0">
+              <Text flex={6}>
                 {file.valid !== 1 ? (
-                  <CopyText flex={6}>{`https://${uuid}.${file.host.replace(
-                    "https://",
-                    ""
-                  )}/ipfs/${file.cid}`}</CopyText>
+                  <FlexBox>
+                    <CopyText flex={6}>{`https://${uuid}.${file.host.replace(
+                      "https://",
+                      ""
+                    )}/ipfs/${file.cid}`}</CopyText>
+                    <DownBtn>
+                      <Tips title="点击下载">
+                        <a
+                          rel="noreferrer"
+                          target="_blank"
+                          href={`https://${uuid}.${file.host.replace(
+                            "https://",
+                            ""
+                          )}/ipfs/${file.cid}`}
+                        >
+                          <FiDownload color="#666666" />
+                        </a>
+                      </Tips>
+                      <Tips title="在IPFS Scan查看文件副本分布">
+                        <a
+                          rel="noreferrer"
+                          target="_blank"
+                          href={`https://ipfs-scan.io/?cid=${file.cid}`}
+                        >
+                          <FiBox color="#666666" />
+                        </a>
+                      </Tips>
+                    </DownBtn>
+                  </FlexBox>
                 ) : (
                   <Tips
                     title={
@@ -561,33 +459,7 @@ export default function FileManager() {
                 )}
               </Text>
 
-              <Text flex={1}>
-                {file.valid !== 1 ? (
-                  <DownBtn>
-                    <Tips title="点击下载">
-                      <a
-                        rel="noreferrer"
-                        target="_blank"
-                        href={`https://${uuid}.${file.host.replace(
-                          "https://",
-                          ""
-                        )}/ipfs/${file.cid}`}
-                      >
-                        <FiDownload color="#666666" />
-                      </a>
-                    </Tips>
-                    <Tips title="在IPFS Scan查看文件副本分布">
-                      <a
-                        rel="noreferrer"
-                        target="_blank"
-                        href={`https://ipfs-scan.io/?cid=${file.cid}`}
-                      >
-                        <FiBox color="#666666" />
-                      </a>
-                    </Tips>
-                  </DownBtn>
-                ) : null}
-              </Text>
+              <Text flex={1}></Text>
               <Text flex={2}>
                 <Tips title={changeSize(file.fileSize)}>
                   {changeSize(file.fileSize)}

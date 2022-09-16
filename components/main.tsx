@@ -127,7 +127,7 @@ export default function Main() {
     setFileList([]);
     setFolder("");
     setFolderSize(0);
-    setUploadFileTypeShow(false)
+    setUploadFileTypeShow(false);
   };
 
   /**
@@ -192,9 +192,8 @@ export default function Main() {
       let Name = "";
 
       if (typeof res.data == "string") {
-        const jsonStr = res.data.replace("}\n{", "},{");
-        const items = JSON.parse(`[${jsonStr}]`);
-        const folder = items[items.length - 1];
+        const resultArr = res.data.split("\n");
+        const folder = JSON.parse(resultArr[resultArr.length - 2]);
         Hash = folder.Hash;
         Name = folder.Name;
       } else {
@@ -363,7 +362,9 @@ export default function Main() {
 
         {folder && folderSize ? (
           <div className={"file_item"}>
-            <div className={"file_name"}>{folder} （{fileList.length}个文件）</div>
+            <div className={"file_name"}>
+              {folder} （{fileList.length}个文件）
+            </div>
             <div className={"file_size"}>{changeSize(folderSize)}</div>
           </div>
         ) : (
@@ -485,6 +486,7 @@ export default function Main() {
             className={"md:hover:text-white"}
             style={{
               fontSize: "14px",
+              color: "rgb(153, 153, 153)",
             }}
             target={"_blank"}
             rel="noreferrer"
@@ -495,12 +497,20 @@ export default function Main() {
             沪ICP备2022024704号
           </a>
           <a
+            style={{
+              fontSize: "14px",
+              color: "rgb(153, 153, 153)",
+            }}
             className={"md:hover:text-white"}
             target={"_blank"}
             rel="noreferrer"
             href={"https://beian.miit.gov.cn/"}
           ></a>
           <a
+            style={{
+              fontSize: "14px",
+              color: "rgb(153, 153, 153)",
+            }}
             target={"_blank"}
             rel="noreferrer"
             className={"md:hover:text-white"}
