@@ -100,8 +100,11 @@ const Reporter = styled.span`
   line-height: 21px;
   color: #666666;
 `;
-const HtmlReporter = styled.div`
+export const HtmlReporter = styled.div<{ h?: string }>`
   max-height: 600px;
+  ${(props) => `
+  ${props.h ? `max-height:${props.h};` : "max-height: 600px;"}
+`}
   overflow: auto;
   ::-webkit-scrollbar {
     width: 6px;

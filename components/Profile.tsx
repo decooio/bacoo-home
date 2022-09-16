@@ -17,6 +17,7 @@ import SelectorBox from "./common/SelectorBox";
 import TextArea from "antd/lib/input/TextArea";
 import router from "next/router";
 import { Tips } from "./common/tips";
+import { HtmlReporter } from "./HelpAndReport";
 
 const Grid = styled(Row)`
   height: 100%;
@@ -526,6 +527,7 @@ export default function Profile() {
       </MCol>
 
       <Modal
+        centered
         width={380}
         title="我们希望了解您的使用意向"
         visible={modalOpen}
@@ -588,45 +590,48 @@ export default function Profile() {
       </Modal>
 
       <Modal
+        centered
         width={380}
         title={<MoadlTitle>存储计划详情</MoadlTitle>}
         visible={detailsModalOpen}
         footer={null}
         onCancel={() => setDetailsModalOpen(false)}
       >
-        <ModalText>存储计划名称</ModalText>
-        <DetailsText>百工链存 - 存储计划Pro</DetailsText>
-        <HeightBox />
+        <HtmlReporter h="400px">
+          <ModalText>存储计划名称</ModalText>
+          <DetailsText>百工链存 - 存储计划Pro</DetailsText>
+          <HeightBox />
 
-        <ModalText>计划配置</ModalText>
-        <DetailsText>
-          存储用量上限：{changeSize(plan?.maxStorageSize)}
-        </DetailsText>
-        <DetailsText>公共IPFS网关：</DetailsText>
-        <DetailsText>状态：可使用</DetailsText>
-        <DetailsText>流量：{changeSize(plan?.maxDownloadSize)}</DetailsText>
-        <DetailsText>
-          专用IPFS网关：
-          <span
-            style={{
-              color: "#2CC8C2",
-            }}
-          >
-            {activeGateway.host || "暂无信息"}
-          </span>
-        </DetailsText>
-        <DetailsText>状态：可使用</DetailsText>
-        <DetailsText>固定配置带宽：上下行200Mbps</DetailsText>
-        <HeightBox />
+          <ModalText>计划配置</ModalText>
+          <DetailsText>
+            存储用量上限：{changeSize(plan?.maxStorageSize)}
+          </DetailsText>
+          <DetailsText>公共IPFS网关：</DetailsText>
+          <DetailsText>状态：可使用</DetailsText>
+          <DetailsText>流量：{changeSize(plan?.maxDownloadSize)}</DetailsText>
+          <DetailsText>
+            专用IPFS网关：
+            <span
+              style={{
+                color: "#2CC8C2",
+              }}
+            >
+              {activeGateway.host || "暂无信息"}
+            </span>
+          </DetailsText>
+          <DetailsText>状态：可使用</DetailsText>
+          <DetailsText>固定配置带宽：上下行200Mbps</DetailsText>
+          <HeightBox />
 
-        <ModalText>用量统计</ModalText>
-        <DetailsText>
-          已消耗存储用量：{changeSize(plan?.usedStorageSize)}
-        </DetailsText>
-        <DetailsText>
-          已消耗公共IPFS网关流量：{changeSize(plan?.usedDownloadSize)}
-        </DetailsText>
-        <DetailsText>到期时间：{plan?.storageExpireTime}</DetailsText>
+          <ModalText>用量统计</ModalText>
+          <DetailsText>
+            已消耗存储用量：{changeSize(plan?.usedStorageSize)}
+          </DetailsText>
+          <DetailsText>
+            已消耗公共IPFS网关流量：{changeSize(plan?.usedDownloadSize)}
+          </DetailsText>
+          <DetailsText>到期时间：{plan?.storageExpireTime}</DetailsText>
+        </HtmlReporter>
       </Modal>
     </Grid>
   );
