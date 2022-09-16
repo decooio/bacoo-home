@@ -460,7 +460,7 @@ export default function HelpAndReport() {
         footer={null}
         onCancel={() => setDetailsModalOpen(false)}
       >
-        <HtmlReporter>
+        <HtmlReporter h="400px">
           <ModalText>类型</ModalText>
           <Reporter>{detail?.type == 0 ? "技术支持" : "用户意向"}</Reporter>
           <HeightBox></HeightBox>
