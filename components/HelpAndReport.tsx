@@ -81,7 +81,7 @@ const TimeText = styled.div`
 `;
 
 export const Table = styled(COL)`
-  width: calc(100% - 62px);
+  width: calc(100% - 30px);
   flex: 1;
   overflow: auto;
   padding: 32px 0px 0px 32px;
@@ -129,7 +129,10 @@ const ModalText = styled.div`
   color: #000000;
   margin-bottom: 10px;
 `;
-
+export const styleItemTxt = {
+  paddingLeft: 20,
+  paddingRight: 80,
+};
 const typeMap = new Map([
   [0, "技术支持"],
   [1, "用户意向"],
@@ -281,9 +284,9 @@ export default function HelpAndReport() {
         <RowFill style={{ height: 37 }}>
           <TextTitle flex={3}>工单编号</TextTitle>
           <TextTitle flex={2}>类型</TextTitle>
-          <TextTitle flex={6}>工单标题</TextTitle>
+          <TextTitle flex={6} style={styleItemTxt}>工单标题</TextTitle>
           <TextTitle flex={2}>状态</TextTitle>
-          <TextTitle flex={6}>反馈信息</TextTitle>
+          <TextTitle flex={6} style={styleItemTxt}>反馈信息</TextTitle>
           <TextTitle flex={1.5}></TextTitle>
         </RowFill>
         {ticketsList && ticketsList.length === 0 && (
@@ -301,7 +304,7 @@ export default function HelpAndReport() {
               <Text flex={2}>
                 <MText>{typeMap.get(item.type)}</MText>
               </Text>
-              <Text flex={6}>
+              <Text flex={6} style={styleItemTxt}>
                 <Tips title={item.title}>
                   <MText>{item.title}</MText>
                 </Tips>
@@ -317,7 +320,7 @@ export default function HelpAndReport() {
                     : "未解决"}
                 </MText>
               </Text>
-              <Text flex={6}>
+              <Text flex={6} style={styleItemTxt}>
                 <Tips title={item.feedback}>
                   <MText>
                     {item.status == 0
