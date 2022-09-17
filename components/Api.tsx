@@ -7,6 +7,7 @@ import { Phone, useDevice } from "../src/assets/style";
 import { GET_APIS_API } from "@request/apis";
 import { getApisRes } from "@request/types";
 import { Context } from "./Context/Context";
+import CopyTips from "./common/CopyTips";
 
 const MCol = styled(COL)`
   padding: 32px;
@@ -61,7 +62,7 @@ export default function Api() {
   useEffect(() => {
     getApis();
   }, []);
-  
+
   return (
     <MCol>
       <Table>
@@ -80,11 +81,13 @@ export default function Api() {
               key={`apis_${index}`}
               style={{ height: 44, borderTop: "1px solid #eeeeee" }}
             >
-              <CopyText flex={15} style={styleItem}>
-                {item.signature}
-              </CopyText>
+              <Text flex={15} style={styleItem}>
+                <CopyTips placement="topLeft" title={item.signature}>
+                  {item.signature}
+                </CopyTips>
+              </Text>
               <Text flex={flexRight} style={styleItem}>
-                {item.valid? "无效" : "有效"}
+                {item.valid ? "无效" : "有效"}
               </Text>
             </RowFill>
           ))

@@ -2,13 +2,7 @@ import s from "./main.module.scss";
 // import RightSlide from "./RightSlide";
 import { FiCheckCircle, FiChevronDown, FiPlus, FiFolder } from "react-icons/fi";
 import { GrDocument } from "react-icons/gr";
-import React, {
- 
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import i18next from "i18next";
 import BgAnim from "./effect/BgAnim";
 // import {pinFile} from "../lib/http";
@@ -248,7 +242,10 @@ export default function Main() {
           id="upload"
           className={s.inputFile}
           style={{ fontSize }}
-          onClick={() => setUploadFileTypeShow(!uploadFileTypeShow)}
+          onClick={(e) => {
+            setUploadFileTypeShow(!uploadFileTypeShow);
+            e.stopPropagation();
+          }}
         >
           <FiPlus />
           <span
@@ -455,14 +452,13 @@ export default function Main() {
     setFolderSize(totalSize);
   }, [fileList]);
 
-
-
-
   return (
     <div
       className={classNames(s.main, isMobile && s.main_mobile)}
       ref={bodyBox}
-      
+      onClick={(e) => {
+        setUploadFileTypeShow(false)
+      }}
     >
       <BgAnim />
       <div className={s.content}>

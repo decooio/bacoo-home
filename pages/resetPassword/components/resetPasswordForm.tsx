@@ -34,7 +34,7 @@ const ResetPasswordForm = function () {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [verifyCodeImg, setVerifyCodeImg] = useState("");
   const [inputVerifyCodeImg, setInputVerifyCodeImg] = useState("");
-  const [countdownNum, setCountdownNum] = useState(60);
+  const [countdownNum, setCountdownNum] = useState(0);
 
   const [mobileVerify, setMobileVerify] = useState(false);
   const [passwordVerify, setPasswordVerify] = useState(false);
@@ -68,7 +68,7 @@ const ResetPasswordForm = function () {
       let num = 60;
       const time = setInterval(() => {
         if (num == 0) {
-          setCountdownNum(60);
+          setCountdownNum(0);
           clearInterval(time);
         } else {
           setCountdownNum(num--);
@@ -154,7 +154,7 @@ const ResetPasswordForm = function () {
               }}
             />
 
-            {countdownNum < 60 ? (
+            {countdownNum <= 60 && countdownNum !==0 ? (
               <CountdownBtn style={{ width: "148px" }}>
                 {countdownNum}s
               </CountdownBtn>

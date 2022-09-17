@@ -71,7 +71,7 @@ const Content = styled.div<{ showSide: boolean }>`
   ${Phone} {
     width: 100%;
     transform: ${(p) =>
-      p.showSide ? "translateX(0px)" : "translateX(-268px)"};
+      p.showSide ? "translateX(0px)" : "translateX(-200px)"};
   }
 `;
 

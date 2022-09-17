@@ -33,7 +33,7 @@ const SetPhone = () => {
   const { dispatch } = useContext(Context) as any;
   const [mobile, setMobile] = useState("");
   const [smsCode, setsmsCode] = useState("");
-  const [countdownNum, setCountdownNum] = useState(60);
+  const [countdownNum, setCountdownNum] = useState(0);
   const [mobileVerify, setMobileVerify] = useState(false);
   const [codeVerify, setcodeVerify] = useState(false);
 
@@ -55,7 +55,7 @@ const SetPhone = () => {
       let num = 60;
       const time = setInterval(() => {
         if (num == 0) {
-          setCountdownNum(60);
+          setCountdownNum(0);
           clearInterval(time);
         } else {
           setCountdownNum(num--);
@@ -160,7 +160,7 @@ const SetPhone = () => {
                   size="large"
                 />
 
-                {countdownNum < 60 ? (
+                {countdownNum <= 60 && countdownNum!=0 ? (
                   <CountdownBtn style={{ width: "148px" }}>
                     {countdownNum}s
                   </CountdownBtn>

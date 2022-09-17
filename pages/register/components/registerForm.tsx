@@ -30,7 +30,6 @@ export const BetweenFlexBox = styled.div`
 `;
 export const LoginFormBox = styled.div`
   width: 100%;
-  
 `;
 export const VerifyBtn = styled.div<IButtonProps>`
   display: inline-flex;
@@ -91,7 +90,7 @@ const RegisterForm = function () {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [verifyCodeImg, setVerifyCodeImg] = useState("");
   const [inputVerifyCodeImg, setInputVerifyCodeImg] = useState("");
-  const [countdownNum, setCountdownNum] = useState(60);
+  const [countdownNum, setCountdownNum] = useState(0);
   const [mailcountdownNum, setMailCountdownNum] = useState(60);
 
   const [usernameVerify, setUsernameVerify] = useState(false);
@@ -132,7 +131,7 @@ const RegisterForm = function () {
       let num = 60;
       const time = setInterval(() => {
         if (num == 0) {
-          setCountdownNum(60);
+          setCountdownNum(0);
           clearInterval(time);
         } else {
           setCountdownNum(num--);
@@ -276,7 +275,7 @@ const RegisterForm = function () {
               placeholder="验证码"
             />
 
-            {mailcountdownNum < 60 ? (
+            {mailcountdownNum < 60 && mailcountdownNum !== 0 ? (
               <CountdownBtn style={{ width: "148px" }}>
                 {mailcountdownNum}s
               </CountdownBtn>

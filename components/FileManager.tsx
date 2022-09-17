@@ -1,7 +1,7 @@
 import { COL, RowFill } from "./common/layouts";
-import { FiBox, FiChevronDown, FiDownload, FiFolder } from "react-icons/fi";
+import { FiBox, FiChevronDown, FiDownload } from "react-icons/fi";
 import styled from "styled-components";
-import { CopyText, EmptyText, Text, TextTitle } from "./common/texts";
+import {  EmptyText, Text, TextTitle } from "./common/texts";
 import { useContext, useEffect, useState } from "react";
 import { Pager } from "./common/Pager";
 import { Tips } from "./common/tips";
@@ -33,6 +33,13 @@ import { RcFile } from "antd/lib/upload";
 import { styleItemTxt } from "./Api";
 import { GrDocument, GrFolder } from "react-icons/gr";
 import s from "./fileManager.module.scss";
+import CopyTips from "./common/CopyTips";
+
+const FiFolder = ()=>{
+  return <img style={{
+    marginLeft:"10px"
+  }} src="/FiFolder.png" alt="" ></img>
+}
 
 export const FlexBox = styled.div`
   width: 100%;
@@ -66,7 +73,7 @@ export const MCol = styled(COL)`
 
 export const MText = styled.div`
   width: min-content;
-  max-width: 100%;
+  max-width: calc(100% - 20px);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -412,46 +419,46 @@ export default function FileManager() {
               <Text flex={3} style={styleItemTxt}>
                 <Tips
                   title={file.name}
+                  placement="topLeft"
                   align={{
                     offset: [0, 15],
                   }}
                 >
                   <FileBox>
                     <MText>{file.name}</MText>
-                    {file.fileType ? (
-                      <FiFolder
-                        style={{
-                          marginLeft: "10px",
-                        }}
-                      />
-                    ) : null}
+                    {file.fileType ? <FiFolder /> : null}
                   </FileBox>
                 </Tips>
               </Text>
 
               <Text flex={6}>
-                <Tips
+                <CopyTips
                   title={file.cid}
                   placement="topLeft"
                   align={{
                     offset: [0, 15],
                   }}
                 >
-                  <CopyText value={file.cid}>
+                  <div>
                     <Omit value={file.cid}></Omit>
-                  </CopyText>
-                </Tips>
+                  </div>
+                </CopyTips>
               </Text>
 
               <Text flex={6}>
                 {file.valid !== 1 ? (
                   <FlexBox>
-                    <CopyText flex={6}>{`https://${uuid}.${file.host.replace(
+                    <Text flex={6}>{`https://${uuid}.${file.host.replace(
                       "https://",
                       ""
-                    )}/ipfs/${file.cid}`}</CopyText>
+                    )}/ipfs/${file.cid}`}</Text>
                     <DownBtn>
-                      <Tips title="点击下载">
+                      <CopyTips
+                        title={`https://${uuid}.${file.host.replace(
+                          "https://",
+                          ""
+                        )}/ipfs/${file.cid}`}
+                      >
                         <a
                           rel="noreferrer"
                           target="_blank"
@@ -462,7 +469,7 @@ export default function FileManager() {
                         >
                           <FiDownload color="#666666" />
                         </a>
-                      </Tips>
+                      </CopyTips>
                       <Tips title="在IPFS Scan查看文件副本分布">
                         <a
                           rel="noreferrer"
