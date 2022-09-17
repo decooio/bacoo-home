@@ -456,7 +456,7 @@ export default function Main() {
     <div
       className={classNames(s.main, isMobile && s.main_mobile)}
       ref={bodyBox}
-      onClick={(e) => {
+      onClick={() => {
         setUploadFileTypeShow(false)
       }}
     >

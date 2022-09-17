@@ -1,6 +1,6 @@
 import { COL, RowFill } from "./common/layouts";
 import styled from "styled-components";
-import { CopyText, TextTitle, Text } from "./common/texts";
+import {  TextTitle, Text } from "./common/texts";
 import { useContext, useEffect, useState } from "react";
 import React from "react";
 import { Phone, useDevice } from "../src/assets/style";
