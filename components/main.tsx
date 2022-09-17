@@ -1,8 +1,14 @@
 import s from "./main.module.scss";
 // import RightSlide from "./RightSlide";
-import { FiCheckCircle, FiChevronDown, FiPlus } from "react-icons/fi";
-import { GrDocument, GrFolder } from "react-icons/gr";
-import React, { useContext, useEffect, useState } from "react";
+import { FiCheckCircle, FiChevronDown, FiPlus, FiFolder } from "react-icons/fi";
+import { GrDocument } from "react-icons/gr";
+import React, {
+ 
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import i18next from "i18next";
 import BgAnim from "./effect/BgAnim";
 // import {pinFile} from "../lib/http";
@@ -119,6 +125,7 @@ export default function Main() {
 
   const [copytips, setCopytips] = useState(false);
   const [percent, setPercent] = useState(0);
+  const bodyBox = useRef(null);
 
   /**
    *每次上传后清除文件列表
@@ -238,6 +245,7 @@ export default function Main() {
     return (
       <div>
         <div
+          id="upload"
           className={s.inputFile}
           style={{ fontSize }}
           onClick={() => setUploadFileTypeShow(!uploadFileTypeShow)}
@@ -289,7 +297,11 @@ export default function Main() {
               }}
             >
               <div className={s.box}>
-                <GrFolder />
+                <FiFolder
+                  style={{
+                    transform: "scale(1.2)",
+                  }}
+                />
                 <span className={s.uploadFileTypeItemText}>文件夹</span>
               </div>
             </Upload>
@@ -442,8 +454,16 @@ export default function Main() {
       .reduce((prev, curr) => prev + curr, 0);
     setFolderSize(totalSize);
   }, [fileList]);
+
+
+
+
   return (
-    <div className={classNames(s.main, isMobile && s.main_mobile)}>
+    <div
+      className={classNames(s.main, isMobile && s.main_mobile)}
+      ref={bodyBox}
+      
+    >
       <BgAnim />
       <div className={s.content}>
         <div className={s.auto_padding} />

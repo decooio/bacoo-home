@@ -18,6 +18,7 @@ import TextArea from "antd/lib/input/TextArea";
 import router from "next/router";
 import { Tips } from "./common/tips";
 import { HtmlReporter } from "./HelpAndReport";
+import MyInput from "./common/MyInput";
 
 const Grid = styled(Row)`
   height: 100%;
@@ -80,28 +81,7 @@ const SubText = styled.div`
   margin-bottom: 8px;
 `;
 
-const InputPwd = styled.input`
-  background: #f8f8f8;
-  width: 100%;
-  font-size: 14px;
-  margin-top: 16px;
-  border-radius: 4px;
-  line-height: 44px;
-  border: 1px solid #cccccc;
-  padding: 0 16px;
-  outline: unset;
 
-  &::placeholder {
-    margin-left: 16px;
-    font-size: 14px;
-    color: #cccccc;
-    line-height: 20px;
-  }
-
-  &:focus {
-    border: 1px solid #999999;
-  }
-`;
 export const Minput = styled.input`
   width: 100%;
   font-size: 14px;
@@ -294,7 +274,6 @@ export default function Profile() {
     });
     try {
       const res = await GET_GATEWAY_LIST_API();
-      console.log(res);
       const data = res.data;
       const activeGateway = data.find((item) => item.nodeType == 1);
       activeGateway
@@ -491,18 +470,20 @@ export default function Profile() {
         <Card onKeyPress={(e) => console.log(e)}>
           <Title children={"修改密码"} />
           <div className="contentBox">
-            <InputPwd
+            <div style={{ height: "10px" }}></div>
+            <MyInput
               placeholder={"旧密码"}
               type={"password"}
               value={oPwd}
-              onChange={(e) => setOPwd(e.target.value)}
+              setValue={(e) => setOPwd(e)}
             />
-            <InputPwd
+            <div style={{ height: "10px" }}></div>
+            <MyInput
               placeholder={"新密码"}
               type={"password"}
               value={nPwd}
-              onChange={(e) => {
-                setNPwd(e.target.value);
+              setValue={(e) => {
+                setNPwd(e);
               }}
             />
             <span className="errorText">{info == "success" ? "" : info}</span>

@@ -102,6 +102,8 @@ const Reporter = styled.span`
 `;
 export const HtmlReporter = styled.div<{ h?: string }>`
   max-height: 600px;
+  color: #666666;
+
   ${(props) => `
   ${props.h ? `max-height:${props.h};` : "max-height: 600px;"}
 `}

@@ -7,8 +7,8 @@ const normalStyle = (w?: string | number) => {
     background: " #F8F8F8",
     border: " 1px solid #DDDDDD",
     borderRadius: "8px",
-
     boxShadow: "none",
+    padding: "10px 24px"
   };
 };
 const placeholderStyle = (w?: string | number) => {
@@ -16,8 +16,8 @@ const placeholderStyle = (w?: string | number) => {
     width: w || "100%",
     height: "50px",
     borderRadius: "8px",
-
     boxShadow: "none",
+    padding: "10px 24px"
   };
 };
 const inputStyle = (w?: string | number) => {
@@ -26,9 +26,9 @@ const inputStyle = (w?: string | number) => {
     height: "50px",
     border: " 1px solid #DDDDDD",
     borderRadius: "8px",
-
     boxShadow: "none",
     background: " #fff",
+    padding: "10px 24px"
   };
 };
 const MyInput = ({

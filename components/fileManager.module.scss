@@ -2,9 +2,12 @@
 
     position: absolute;
     width: 150px;
+    top: 50px;
     border-radius: 8px;
     background-color: #fff;
     padding: 8px;
+    border: 1px solid #EEEEEE;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
 
     .uploadFileTypeItem {
         width: 100%;

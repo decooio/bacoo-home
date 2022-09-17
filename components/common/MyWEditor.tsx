@@ -8,6 +8,10 @@ const config = {
   height: 200,
   mode: "simple",
   menus: ["bold", "link", "image", "fontSize"],
+  image:{
+    link:''
+  }
+  
 };
 
 const Editor = function ({
