@@ -50,6 +50,10 @@ const Userinfo: react.FC = () => {
         email: "",
       },
     });
+    dispatch({
+      type:"UPDATE_PLAN",
+      payload:null
+    })
     router.replace("/login");
   };
   return (

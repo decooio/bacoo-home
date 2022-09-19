@@ -222,17 +222,24 @@ export default function FileManager() {
     let Name = "";
     const url = `${activeGateway.host}/api/v0/add?pin=true`;
     const headers = { authorization: getLoc("token") as string };
+    const remainingStorageSize = plan.maxStorageSize - plan.usedStorageSize;
     const totalSize = fileList
       .map((item) => item.size)
       .reduce((prev, curr) => prev + curr, 0);
 
+    // 文件大于属于储存空间时限制上传
+    if (totalSize > remainingStorageSize) {
+      message.error("剩余存储空间不足");
+      removeFileList();
+      setUpLoadOpen(false);
+      return;
+    }
     // 非付费会员不能上传大于100M的文件
     if (plan.orderType == 0) {
       if (totalSize > SIZE_LIMIT) {
         message.error("文件大小不能超过100M");
         removeFileList();
         setUpLoadOpen(false);
-
         return;
       }
     }
@@ -444,9 +451,13 @@ export default function FileManager() {
                   }}
                 >
                   <FileBox>
-                    <MText style={{
-                      marginRight:"10px"
-                    }}>{file.name}</MText>
+                    <MText
+                      style={{
+                        marginRight: "10px",
+                      }}
+                    >
+                      {file.name}
+                    </MText>
                     {file.fileType ? <FiFolder /> : null}
                   </FileBox>
                 </Tips>

@@ -45,6 +45,10 @@ const LoginForm = function () {
           type: "UPDATE_USER",
           payload: res.data.info,
         });
+        dispatch({
+          type: "UPDATE_PLAN",
+          payload: res.data.plan,
+        })
       });
 
       setLoc("userName", username);
