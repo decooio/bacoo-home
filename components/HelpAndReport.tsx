@@ -483,8 +483,9 @@ export default function HelpAndReport() {
           <Reporter>{detail?.feedback || "无"}</Reporter>
           <TimeText>反馈时间：{detail?.feedbackTime}</TimeText>
 
-          <HeightBox></HeightBox>
+         
         </HtmlReporter>
+        <HeightBox></HeightBox>
         {detail.status !== 2 ? (
           <FlexBox>
             <Button

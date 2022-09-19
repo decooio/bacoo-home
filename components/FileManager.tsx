@@ -1,7 +1,7 @@
 import { COL, RowFill } from "./common/layouts";
 import { FiBox, FiChevronDown, FiDownload } from "react-icons/fi";
 import styled from "styled-components";
-import {  EmptyText, Text, TextTitle } from "./common/texts";
+import { EmptyText, Text, TextTitle } from "./common/texts";
 import { useContext, useEffect, useState } from "react";
 import { Pager } from "./common/Pager";
 import { Tips } from "./common/tips";
@@ -35,11 +35,17 @@ import { GrDocument, GrFolder } from "react-icons/gr";
 import s from "./fileManager.module.scss";
 import CopyTips from "./common/CopyTips";
 
-const FiFolder = ()=>{
-  return <img style={{
-    marginLeft:"10px"
-  }} src="/FiFolder.png" alt="" ></img>
-}
+const FiFolder = () => {
+  return (
+    <img
+      style={{
+        marginLeft: "10px",
+      }}
+      src="/FiFolder.png"
+      alt=""
+    ></img>
+  );
+};
 
 export const FlexBox = styled.div`
   width: 100%;
@@ -448,28 +454,29 @@ export default function FileManager() {
               <Text flex={6}>
                 {file.valid !== 1 ? (
                   <FlexBox>
-                    <Text flex={6}>{`https://${uuid}.${file.host.replace(
-                      "https://",
-                      ""
-                    )}/ipfs/${file.cid}`}</Text>
+                    <CopyTips
+                      title={`https://${uuid}.${file.host.replace(
+                        "https://",
+                        ""
+                      )}/ipfs/${file.cid}`}
+                    >
+                      <Text flex={6}>{`https://${uuid}.${file.host.replace(
+                        "https://",
+                        ""
+                      )}/ipfs/${file.cid}`}</Text>
+                    </CopyTips>
                     <DownBtn>
-                      <CopyTips
-                        title={`https://${uuid}.${file.host.replace(
+                      <a
+                        rel="noreferrer"
+                        target="_blank"
+                        href={`https://${uuid}.${file.host.replace(
                           "https://",
                           ""
                         )}/ipfs/${file.cid}`}
                       >
-                        <a
-                          rel="noreferrer"
-                          target="_blank"
-                          href={`https://${uuid}.${file.host.replace(
-                            "https://",
-                            ""
-                          )}/ipfs/${file.cid}`}
-                        >
-                          <FiDownload color="#666666" />
-                        </a>
-                      </CopyTips>
+                        <FiDownload color="#666666" />
+                      </a>
+
                       <Tips title="在IPFS Scan查看文件副本分布">
                         <a
                           rel="noreferrer"
