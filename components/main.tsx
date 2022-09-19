@@ -242,9 +242,9 @@ export default function Main() {
           id="upload"
           className={s.inputFile}
           style={{ fontSize }}
-          onClick={(e) => {
+          onClick={() => {
             setUploadFileTypeShow(!uploadFileTypeShow);
-            e.stopPropagation();
+            // e.stopPropagation();
           }}
         >
           <FiPlus />
@@ -262,7 +262,7 @@ export default function Main() {
               className={s.uploadFileTypeItem}
               action={`${activeGateway?.host}/api/v0/add?pin=true`}
               {...upDataPorps}
-              beforeUpload={async (file) => {
+              beforeUpload={ (file) => {
                 setUpLoadStatus("success");
                 setFileList([file]);
                 return false;
@@ -456,9 +456,9 @@ export default function Main() {
     <div
       className={classNames(s.main, isMobile && s.main_mobile)}
       ref={bodyBox}
-      onClick={() => {
-        setUploadFileTypeShow(false)
-      }}
+      // onClick={() => {
+      //   setUploadFileTypeShow(false);
+      // }}
     >
       <BgAnim />
       <div className={s.content}>
@@ -535,6 +535,10 @@ export default function Main() {
             用户协议
           </a>
           <a
+            style={{
+              fontSize: "14px",
+              color: "rgb(153, 153, 153)",
+            }}
             className={"md:hover:text-white"}
             target={"_blank"}
             href={"/privacy"}

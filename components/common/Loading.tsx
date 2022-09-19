@@ -23,6 +23,7 @@ const MLoading = styled.div`
   background-color: rgba(0, 0, 0, 0.2);
   justify-content: center;
   align-items: center;
+  z-index: 1001;
 
   // background-color: rgba($color: #000000, $alpha: 0.1);
   svg {
@@ -33,8 +34,6 @@ const MLoading = styled.div`
 export function AppLoading() {
   const { state } = useContext(Context) as any;
   const { loading } = state;
-  console.log(loading);
-  
   if (!loading) {
     return null;
   } else {

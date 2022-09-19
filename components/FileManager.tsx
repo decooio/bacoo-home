@@ -30,8 +30,8 @@ import Omit from "./common/Omit";
 import axios, { CancelTokenSource } from "axios";
 import { SIZE_LIMIT } from "./main";
 import { RcFile } from "antd/lib/upload";
-import { styleItemTxt } from "./Api";
-import { GrDocument, GrFolder } from "react-icons/gr";
+
+import { GrDocument } from "react-icons/gr";
 import s from "./fileManager.module.scss";
 import CopyTips from "./common/CopyTips";
 
@@ -39,7 +39,8 @@ const FiFolder = () => {
   return (
     <img
       style={{
-        marginLeft: "10px",
+        width: "14px",
+        height: "13px",
       }}
       src="/FiFolder.png"
       alt=""
@@ -79,7 +80,7 @@ export const MCol = styled(COL)`
 
 export const MText = styled.div`
   width: min-content;
-  max-width: calc(100% - 20px);
+  max-width: calc(100% - 10px);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -260,8 +261,6 @@ export default function FileManager() {
           cancelToken: cancel.token,
         })
         .then(async (res) => {
-          console.log(res);
-
           if (typeof res.data == "string") {
             const resultArr = res.data.split("\n");
             const folder = JSON.parse(resultArr[resultArr.length - 2]);
@@ -376,7 +375,7 @@ export default function FileManager() {
                 }}
               >
                 <div className={s.box}>
-                  <GrFolder />
+                  <FiFolder />
                   <span className={s.uploadFileTypeItemText}>文件夹</span>
                 </div>
               </Upload>
@@ -404,14 +403,22 @@ export default function FileManager() {
       </div>
       <Table>
         <RowFill style={{ height: 37 }}>
-          <TextTitle flex={3} style={styleItemTxt}>
+          <TextTitle
+            flex={3}
+            style={{
+              paddingLeft: 20,
+              paddingRight: 50,
+            }}
+          >
             文件名
           </TextTitle>
-          <TextTitle flex={6}>CID</TextTitle>
+          <TextTitle flex={4}>CID</TextTitle>
           <TextTitle flex={6}>访问域名</TextTitle>
           <TextTitle flex={1}></TextTitle>
           <TextTitle flex={2}>大小</TextTitle>
-          <TextTitle flex={3}>Pin时间戳</TextTitle>
+          <TextTitle mw="160px" flex={3}>
+            Pin时间戳
+          </TextTitle>
         </RowFill>
         {files && files.length === 0 && !loading && (
           <EmptyText>暂无数据</EmptyText>
@@ -422,7 +429,13 @@ export default function FileManager() {
               key={`file_${index}`}
               style={{ height: 44, borderTop: "1px solid #eeeeee" }}
             >
-              <Text flex={3} style={styleItemTxt}>
+              <Text
+                flex={3}
+                style={{
+                  paddingLeft: 20,
+                  paddingRight: 50,
+                }}
+              >
                 <Tips
                   title={file.name}
                   placement="topLeft"
@@ -431,13 +444,15 @@ export default function FileManager() {
                   }}
                 >
                   <FileBox>
-                    <MText>{file.name}</MText>
+                    <MText style={{
+                      marginRight:"10px"
+                    }}>{file.name}</MText>
                     {file.fileType ? <FiFolder /> : null}
                   </FileBox>
                 </Tips>
               </Text>
 
-              <Text flex={6}>
+              <Text flex={4}>
                 <CopyTips
                   title={file.cid}
                   placement="topLeft"
@@ -455,6 +470,10 @@ export default function FileManager() {
                 {file.valid !== 1 ? (
                   <FlexBox>
                     <CopyTips
+                      placement="topLeft"
+                      align={{
+                        offset: [0, 15],
+                      }}
                       title={`https://${uuid}.${file.host.replace(
                         "https://",
                         ""
@@ -508,7 +527,7 @@ export default function FileManager() {
                   {changeSize(file.fileSize)}
                 </Tips>{" "}
               </Text>
-              <Text flex={3}>
+              <Text mw="160px" flex={3}>
                 <Tips title={file.createTime}>{file.createTime}</Tips>
               </Text>
             </RowFill>

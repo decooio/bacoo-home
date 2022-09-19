@@ -81,7 +81,6 @@ const SubText = styled.div`
   margin-bottom: 8px;
 `;
 
-
 export const Minput = styled.input`
   width: 100%;
   font-size: 14px;
@@ -145,12 +144,19 @@ const FlexBox = styled.div`
   width: 100%;
   justify-content: space-between;
 `;
-const DetailsText = styled.p`
+
+const DetailsText = styled.p<{ color?: string }>`
   font-weight: 400;
   font-size: 14px;
-  line-height: 28px;
-  color: #666666;
+  line-height: 20px;
+  ${(props) =>
+    props.color
+      ? `
+      color: ${props.color};
+    `
+      : `color:#666666`};
 `;
+
 const MText = styled.div`
   width: min-content;
   max-width: 100%;
@@ -177,7 +183,7 @@ const SizeComparison = ({
     <span>
       <span
         style={
-          size > totalSize
+          size >= totalSize
             ? {
                 color: "#EF4C56",
               }
@@ -571,6 +577,9 @@ export default function Profile() {
       </Modal>
 
       <Modal
+        bodyStyle={{
+          padding: "24px 6px 24px 24px",
+        }}
         centered
         width={380}
         title={<MoadlTitle>存储计划详情</MoadlTitle>}
@@ -587,31 +596,70 @@ export default function Profile() {
           <DetailsText>
             存储用量上限：{changeSize(plan?.maxStorageSize)}
           </DetailsText>
-          <DetailsText>公共IPFS网关：</DetailsText>
-          <DetailsText>状态：可使用</DetailsText>
-          <DetailsText>流量：{changeSize(plan?.maxDownloadSize)}</DetailsText>
           <DetailsText>
-            专用IPFS网关：
-            <span
-              style={{
-                color: "#2CC8C2",
-              }}
-            >
-              {activeGateway.host || "暂无信息"}
-            </span>
+            <div>公共IPFS网关：</div>
+            <span> · 状态：可使用</span>
+            <br />
+            <span> · 流量：{changeSize(plan?.maxDownloadSize)}</span>
           </DetailsText>
-          <DetailsText>状态：可使用</DetailsText>
-          <DetailsText>固定配置带宽：上下行200Mbps</DetailsText>
-          <HeightBox />
 
+          <DetailsText>
+            <div>
+              专用IPFS网关：
+              <span
+                style={{
+                  color: "#2CC8C2",
+                }}
+              >
+                {activeGateway.host || "暂无信息"}
+              </span>
+            </div>
+            <span> · 状态：可使用</span>
+            <br />
+            <span> · 固定配置带宽：上下行200Mbps</span>
+          </DetailsText>
+          <HeightBox />
           <ModalText>用量统计</ModalText>
           <DetailsText>
-            已消耗存储用量：{changeSize(plan?.usedStorageSize)}
+            已消耗存储用量：
+            <span
+              style={{
+                color:
+                  plan?.usedStorageSize >= plan?.maxStorageSize
+                    ? "rgb(239, 76, 86)"
+                    : "#666666",
+              }}
+            >
+              {changeSize(plan?.usedStorageSize)}
+            </span>
           </DetailsText>
           <DetailsText>
-            已消耗公共IPFS网关流量：{changeSize(plan?.usedDownloadSize)}
+            已消耗公共IPFS网关流量：
+            <span
+              style={{
+                color:
+                  plan?.usedDownloadSize >= plan?.maxDownloadSize
+                    ? "rgb(239, 76, 86)"
+                    : "#666666",
+              }}
+            >
+              {changeSize(plan?.usedDownloadSize)}
+            </span>
           </DetailsText>
-          <DetailsText>到期时间：{plan?.storageExpireTime}</DetailsText>
+          <DetailsText>
+            到期时间：
+            <span
+              style={
+                new Date() > new Date(plan?.storageExpireTime)
+                  ? {
+                      color: "#EF4C56",
+                    }
+                  : {}
+              }
+            >
+              {plan?.storageExpireTime}
+            </span>
+          </DetailsText>
         </HtmlReporter>
       </Modal>
     </Grid>

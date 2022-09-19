@@ -161,7 +161,7 @@ const SetPhone = () => {
                 />
 
                 {countdownNum <= 60 && countdownNum!=0 ? (
-                  <CountdownBtn style={{ width: "148px" }}>
+                  <CountdownBtn style={{ width: "148px",height:'44px' }}>
                     {countdownNum}s
                   </CountdownBtn>
                 ) : (
@@ -173,8 +173,8 @@ const SetPhone = () => {
                     }}
                     style={
                       mobileVerify
-                        ? { width: "148px", background: "#2cc8c2" }
-                        : { width: "148px", background: "rgb(204, 204, 204)" }
+                        ? { width: "148px", background: "#2cc8c2", }
+                        : { width: "148px", background: "rgb(204, 204, 204)", }
                     }
                   >
                     发送验证码

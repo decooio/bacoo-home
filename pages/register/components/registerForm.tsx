@@ -35,7 +35,7 @@ export const VerifyBtn = styled.div<IButtonProps>`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  height: 52px;
+  height: 44px;
   width: 457px;
   font-size: 16px;
   border-radius: 8px;
@@ -52,7 +52,7 @@ export const CountdownBtn = styled.div<IButtonProps>`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  height: 52px;
+  height: 44px;
   width: 457px;
   font-size: 16px;
   border-radius: 8px;
@@ -91,7 +91,7 @@ const RegisterForm = function () {
   const [verifyCodeImg, setVerifyCodeImg] = useState("");
   const [inputVerifyCodeImg, setInputVerifyCodeImg] = useState("");
   const [countdownNum, setCountdownNum] = useState(0);
-  const [mailcountdownNum, setMailCountdownNum] = useState(60);
+  const [mailcountdownNum, setMailCountdownNum] = useState(0);
 
   const [usernameVerify, setUsernameVerify] = useState(false);
   const [mobileVerify, setMobileVerify] = useState(false);

@@ -1,6 +1,6 @@
 import React from "react";
 import { message, Tooltip, TooltipProps } from "antd";
-import { IoCopyOutline } from "react-icons/io5";
+import { FiCopy } from "react-icons/fi";
 import copyToClipboard from "copy-to-clipboard";
 
 const CopyTips = ({ ...props }: TooltipProps) => {
@@ -8,7 +8,7 @@ const CopyTips = ({ ...props }: TooltipProps) => {
     return (
       <span>
         {props.title}
-        <IoCopyOutline
+        <FiCopy
           onClick={() => {
             copyToClipboard(props.title as string);
             message.success("已复制");

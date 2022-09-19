@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 // import i18next from "i18next";
 
 export const NavOtherLayout = styled.div`
-  height: calc(100% - 80px);
+  height: calc(100% - 68px);
   margin-top: 68px;
 
   ${Phone} {

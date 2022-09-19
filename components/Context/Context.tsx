@@ -11,7 +11,7 @@ interface initialStateType {
   userName: string;
   uuid: string;
   user: getUserInfoRes["data"]["info"];
-  plan: getUserInfoRes["data"]["plan"] | null;
+  plan: getUserInfoRes["data"]["plan"]|null
 }
 // 生成 state 以及 dispatch
 export const Context = createContext({});

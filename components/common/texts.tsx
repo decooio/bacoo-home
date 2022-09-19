@@ -4,7 +4,7 @@ import copyToClipboard from "copy-to-clipboard";
 import React from "react";
 import { useDevice } from "../../src/assets/style";
 
-export const Text = styled.div<{ flex: number; paddingRight?: string }>`
+export const Text = styled.div<{ flex: number; paddingRight?: string,mw?:string }>`
   overflow: hidden;
   font-size: 14px;
   font-weight: 400;
@@ -13,6 +13,7 @@ export const Text = styled.div<{ flex: number; paddingRight?: string }>`
   line-height: 44px;
   white-space: nowrap;
   text-overflow: ellipsis;
+  ${(p)=> p.mw?`min-width:${p.mw};`:``}
   ${(p) => `padding-right: ${p.paddingRight || "20px"}`};
   ${(p) => `flex: ${p.flex}`};
   @media (max-width: 768px) {
@@ -20,7 +21,7 @@ export const Text = styled.div<{ flex: number; paddingRight?: string }>`
     min-width: 50%;
   }
 `;
-export const TextTitle = styled.div<{ flex: number }>`
+export const TextTitle = styled.div<{ flex: number,mw?:string }>`
   font-size: 18px;
   font-weight: 500;
   color: #333333;
@@ -29,6 +30,7 @@ export const TextTitle = styled.div<{ flex: number }>`
   padding-right: 20px;
   white-space: nowrap;
   text-overflow: ellipsis;
+  ${(p)=> p.mw?`min-width:${p.mw};`:``}
   ${(p) => `flex: ${p.flex}`};
   @media (max-width: 768px) {
     min-width: 50%;

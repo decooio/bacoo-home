@@ -252,7 +252,7 @@ const ResetPasswordForm = function () {
         <BtnBox>
           <Button
             style={{
-              width: "45%",
+              width: "48%",
               height: "40px",
               background: "rgba(44, 200, 194, 0.06)",
               border: "1px solid #2CC8C2",
@@ -264,7 +264,7 @@ const ResetPasswordForm = function () {
           </Button>
           <Button
             style={{
-              width: "45%",
+              width: "48%",
               height: "40px",
               background: inputVerifyCodeImg.length > 0 ? "#2CC8C2" : "#CCCCCC",
             }}

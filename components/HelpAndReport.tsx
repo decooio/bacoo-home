@@ -41,12 +41,13 @@ export const MCol = styled(COL)`
   }
 `;
 const FlexBox = styled.div`
+  padding-right:24px;
   width: 100%;
   display: flex;
   justify-content: space-between;
 `;
 const Tooltip = styled(COL)`
-  padding: 24px 32px 20px 24px;
+  padding: 24px 32px 20px 32px;
   width: 100%;
   display: flex;
   flex-direction: initial;
@@ -140,6 +141,8 @@ export const styleItemTxt = {
 };
 export const plStyle = {
   paddingLeft: 20,
+  minWidth:'100px'
+  
 };
 const typeMap = new Map([
   [0, "技术支持"],
@@ -313,13 +316,15 @@ export default function HelpAndReport() {
               style={{ height: 44, borderTop: "1px solid #eeeeee" }}
             >
               <Text flex={3} style={plStyle}>
-                <MText>{item.ticketNo}</MText>
+                <div style={{
+                  minWidth:'100px'
+                }}>{item.ticketNo}</div>
               </Text>
               <Text flex={2}>
                 <MText>{typeMap.get(item.type)}</MText>
               </Text>
               <Text flex={6} style={styleItemTxt}>
-                <Tips title={item.title}>
+                <Tips title={item.title} placement="topLeft">
                   <MText>{item.title}</MText>
                 </Tips>
               </Text>
@@ -334,8 +339,8 @@ export default function HelpAndReport() {
                     : "未解决"}
                 </MText>
               </Text>
-              <Text flex={6} style={styleItemTxt}>
-                <Tips title={item.feedback}>
+              <Text flex={6} style={styleItemTxt} >
+                <Tips title={item.feedback} placement="topLeft">
                   <MText>
                     {item.status == 0
                       ? item.feedback
@@ -455,6 +460,10 @@ export default function HelpAndReport() {
       </Modal>
 
       <Modal
+        bodyStyle={{
+          padding:"24px 6px 24px 24px"
+        }}
+        zIndex={999}
         width={480}
         centered
         title={`工单 ${detail?.ticketNo || "暂无信息"}`}
@@ -482,8 +491,6 @@ export default function HelpAndReport() {
           <ModalText>反馈内容</ModalText>
           <Reporter>{detail?.feedback || "无"}</Reporter>
           <TimeText>反馈时间：{detail?.feedbackTime}</TimeText>
-
-         
         </HtmlReporter>
         <HeightBox></HeightBox>
         {detail.status !== 2 ? (
