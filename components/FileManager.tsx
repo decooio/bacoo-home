@@ -466,17 +466,18 @@ export default function FileManager() {
                       )}/ipfs/${file.cid}`}</Text>
                     </CopyTips>
                     <DownBtn>
-                      <a
-                        rel="noreferrer"
-                        target="_blank"
-                        href={`https://${uuid}.${file.host.replace(
-                          "https://",
-                          ""
-                        )}/ipfs/${file.cid}`}
-                      >
-                        <FiDownload color="#666666" />
-                      </a>
-
+                      <Tips title="点击下载">
+                        <a
+                          rel="noreferrer"
+                          target="_blank"
+                          href={`https://${uuid}.${file.host.replace(
+                            "https://",
+                            ""
+                          )}/ipfs/${file.cid}`}
+                        >
+                          <FiDownload color="#666666" />
+                        </a>
+                      </Tips>
                       <Tips title="在IPFS Scan查看文件副本分布">
                         <a
                           rel="noreferrer"
