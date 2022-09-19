@@ -72,3 +72,13 @@ button {
 .ant-message .anticon{
   top: 0px !important;
 }
+.w-e-toolbar .w-e-menu:hover i {
+  color:#2CC8C2!important;
+}
+.w-e-menu .w-e-panel-container .w-e-panel-tab-content input[type=text]:focus{
+  border-bottom: 2px solid #2CC8C2 !important;
+}
+.w-e-menu .w-e-panel-container .w-e-panel-tab-content .w-e-button-container button {
+
+  color:#2CC8C2!important;
+}
