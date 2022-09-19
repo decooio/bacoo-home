@@ -243,7 +243,14 @@ export default function Profile() {
   const [storageUsageId, setStorageUsageId] = useState(0);
   const [gatewayID, setGatewayID] = useState(0);
   const [requirement, setRequirement] = useState("");
-  const [activeGateway, setActiveGateway] = useState<{
+  const [activeGateway, setActiveGateway] = useState<
+    {
+      host: string;
+      nodeType: number;
+      name: string;
+    }[]
+  >([]);
+  const [publicGateway, setPublicGateway] = useState<{
     host: string;
     nodeType: number;
     name: string;
@@ -281,10 +288,12 @@ export default function Profile() {
     try {
       const res = await GET_GATEWAY_LIST_API();
       const data = res.data;
-      const activeGateway = data.find((item) => item.nodeType == 1);
-      activeGateway
-        ? setActiveGateway(activeGateway)
-        : setActiveGateway(data[0]);
+      const activeGateway = data.filter((item) => item.nodeType == 1);
+      activeGateway ? setActiveGateway(activeGateway) : setActiveGateway([]);
+      const publicGateway = data.find((item) => item.nodeType == 0);
+      publicGateway
+        ? setPublicGateway(publicGateway)
+        : setPublicGateway(data[0]);
     } catch (e) {
       console.log(e);
     }
@@ -597,27 +606,40 @@ export default function Profile() {
             存储用量上限：{changeSize(plan?.maxStorageSize)}
           </DetailsText>
           <DetailsText>
-            <div>公共IPFS网关：</div>
-            <span> · 状态：可使用</span>
-            <br />
-            <span> · 流量：{changeSize(plan?.maxDownloadSize)}</span>
-          </DetailsText>
-
-          <DetailsText>
             <div>
-              专用IPFS网关：
+              公共IPFS网关：
               <span
                 style={{
                   color: "#2CC8C2",
                 }}
               >
-                {activeGateway.host || "暂无信息"}
+                {publicGateway.host || "暂无信息"}
               </span>
             </div>
             <span> · 状态：可使用</span>
             <br />
-            <span> · 固定配置带宽：上下行200Mbps</span>
+            <span> · 流量：{changeSize(plan?.maxDownloadSize)}</span>
           </DetailsText>
+
+          {activeGateway.map((item, i) => {
+            return (
+              <DetailsText key={i}>
+                <div>
+                  专用IPFS网关：
+                  <span
+                    style={{
+                      color: "#2CC8C2",
+                    }}
+                  >
+                    {item.host || "暂无信息"}
+                  </span>
+                </div>
+                <span> · 状态：可使用</span>
+                <br />
+                <span> · 固定配置带宽：上下行200Mbps</span>
+              </DetailsText>
+            );
+          })}
           <HeightBox />
           <ModalText>用量统计</ModalText>
           <DetailsText>
