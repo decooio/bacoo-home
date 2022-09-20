@@ -1,7 +1,6 @@
 import react, { useContext } from "react";
 import { Context } from "@components/Context/Context";
 import styled from "styled-components";
-import { FiChevronDown } from "react-icons/fi";
 import Button from "./common/Button";
 import { useRouter } from "next/router";
 import React from "react";
