@@ -31,12 +31,9 @@ import axios, { CancelTokenSource } from "axios";
 import { SIZE_LIMIT } from "./main";
 import { RcFile } from "antd/lib/upload";
 
-
 import s from "./fileManager.module.scss";
 import CopyTips from "./common/CopyTips";
 import { GrDocument } from "react-icons/gr";
-
-
 
 export const FlexBox = styled.div`
   width: 100%;
@@ -198,10 +195,48 @@ export default function FileManager() {
    * */
   const removeFileList = () => {
     setFileList([]);
-
     setUpLoadStatus("");
   };
 
+  // 上传前检查大小和用户过期时间
+  const censorSizeAndTime = () => {
+    const errFun = () => {
+      removeFileList();
+      setUpLoadOpen(false);
+      return false;
+    };
+    const remainingStorageSize = plan.maxStorageSize - plan.usedStorageSize;
+    const totalSize = fileList
+      .map((item) => item.size)
+      .reduce((prev, curr) => prev + curr, 0);
+
+    // 文件大于属于储存空间时限制上传
+    if (totalSize > remainingStorageSize) {
+      plan.orderType == 0
+        ? message.error(
+            "大于试用计划的使用容量上限。如需继续上传，请更新存储计划。"
+          )
+        : message.error(
+            "大于当前存储计划的使用容量上限。如需继续上传，请更新存储计划。"
+          );
+
+      return errFun();
+    }
+    // 非付费会员不能上传大于100M的文件
+    if (plan.orderType == 0) {
+      if (totalSize > SIZE_LIMIT) {
+        message.error("试用计划用户上传单个文件不得大于100M");
+        return errFun();
+      }
+    }
+
+    if (new Date() > new Date(plan.storageExpireTime)) {
+      message.error("存储计划已到期，请更新存储计划。");
+      return errFun()
+    }
+
+    return true;
+  };
   /**
    * 手动上传文件
    * */
@@ -212,26 +247,9 @@ export default function FileManager() {
     let Name = "";
     const url = `${activeGateway.host}/api/v0/add?pin=true`;
     const headers = { authorization: getLoc("token") as string };
-    const remainingStorageSize = plan.maxStorageSize - plan.usedStorageSize;
-    const totalSize = fileList
-      .map((item) => item.size)
-      .reduce((prev, curr) => prev + curr, 0);
 
-    // 文件大于属于储存空间时限制上传
-    if (totalSize > remainingStorageSize) {
-      message.error("剩余存储空间不足");
-      removeFileList();
-      setUpLoadOpen(false);
+    if (!censorSizeAndTime()) {
       return;
-    }
-    // 非付费会员不能上传大于100M的文件
-    if (plan.orderType == 0) {
-      if (totalSize > SIZE_LIMIT) {
-        message.error("文件大小不能超过100M");
-        removeFileList();
-        setUpLoadOpen(false);
-        return;
-      }
     }
 
     // 循环添加
@@ -372,9 +390,11 @@ export default function FileManager() {
                 }}
               >
                 <div className={s.box}>
-                  <FiFolder   style={{
-                    transform: "scale(1.1)",
-                  }}/>
+                  <FiFolder
+                    style={{
+                      transform: "scale(1.1)",
+                    }}
+                  />
                   <span className={s.uploadFileTypeItemText}>文件夹</span>
                 </div>
               </Upload>
@@ -450,7 +470,16 @@ export default function FileManager() {
                     >
                       {file.name}
                     </MText>
-                    {file.fileType ? <FiFolder /> : null}
+                    {file.fileType ? (
+                      <div
+                        style={{
+                          width: "14px",
+                          height: "14px",
+                        }}
+                      >
+                        <FiFolder />
+                      </div>
+                    ) : null}
                   </FileBox>
                 </Tips>
               </Text>
