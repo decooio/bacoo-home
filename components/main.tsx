@@ -191,7 +191,7 @@ export default function Main() {
       );
       let Hash = "";
       let Name = "";
-
+      setPercent(100)
       if (typeof res.data == "string") {
         const resultArr = res.data.split("\n");
         const folder = JSON.parse(resultArr[resultArr.length - 2]);

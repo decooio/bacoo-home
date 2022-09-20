@@ -276,6 +276,7 @@ export default function FileManager() {
           cancelToken: cancel.token,
         })
         .then(async (res) => {
+          setPercent(100)
           if (typeof res.data == "string") {
             const resultArr = res.data.split("\n");
             const folder = JSON.parse(resultArr[resultArr.length - 2]);
