@@ -8,6 +8,9 @@ const Logo = styled.embed`
   width: 165px;
   //height: 55px;
   margin-bottom: 63px;
+  @media (max-height: 800px) {
+    margin-bottom: 20px;
+  }
   @media (max-height: 650px) {
     display: none;
   }

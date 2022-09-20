@@ -31,12 +31,8 @@ export const BetweenFlexBox = styled.div`
 `;
 export const LoginFormBox = styled.div`
   width: 100%;
-  @media (max-width: 1440px) {
-    transform: scale(0.8);
-  }
- 
-  @media (max-height: 650px) {
-    transform: scale(0.8);
+  @media (max-height: 800px) {
+    transform: scale(0.9);
   }
 `;
 export const VerifyBtn = styled.div<IButtonProps>`
@@ -148,7 +144,7 @@ const RegisterForm = function () {
 
       setCodeError("");
       setIsModalVisible(false);
-      setInputVerifyCodeImg('')
+      setInputVerifyCodeImg("");
     } catch (error: any) {
       if (error.data.message) {
         setCodeError(error.data.message as string);
@@ -243,8 +239,12 @@ const RegisterForm = function () {
             { required: true, message: "请输入用户名" },
             {
               min: 4,
-              message: "请至少输入4位用户名",
+              message: "请输入4至32位用户名",
             },
+            {
+              max:32,
+              message: "请输入4至32位用户名",
+            }
           ]}
         >
           <MyInput
