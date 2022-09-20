@@ -91,7 +91,7 @@ export const Table = styled(COL)`
   }
 `;
 const Line = styled.div`
-  width: 100%;
+  width: calc(100% + 30px);
   background: #f8f8f8;
   height: 10px;
 `;

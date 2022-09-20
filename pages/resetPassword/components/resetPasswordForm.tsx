@@ -142,7 +142,7 @@ const ResetPasswordForm = function () {
         <Form.Item
           label=""
           name="code"
-          rules={[{ required: true, message: "请输入验证码" }]}
+          rules={[{ required: true, message: "请输入验证码" },{pattern:/^\d{6}$/,message:"请输入6位数字验证码"}]}
         >
           <BetweenFlexBox>
             <MyInput

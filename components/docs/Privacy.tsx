@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
+import Head from 'next/head'
 export const PWraper = styled.div`
   margin-top: 80px;
   overflow: auto;
@@ -18,6 +18,9 @@ export const PWraper = styled.div`
 
 export default function PrivacyCN() {
   return <PWraper>
+    <Head>
+      <title>百工链存-隐私政策</title>
+    </Head>
     <h1>百工隐私政策</h1>
     引言
     <p>百工是一个向广大用户提供数据存储、同步、管理和分享等的在线数据存储平台。为向您提供上述服务，我们会收集您必要的个人信息，此隐私政策旨在帮助您了解我们收集您个人信息的类型及我们如何利用和保护您的个人信息，同时我们也向您介绍了我们的隐私控制功能，您可以利用这些功能自主控制您个人信息的使用方式。</p>

@@ -162,7 +162,7 @@ export default function Main() {
    * */
   const handleUpload = async () => {
     if (folderSize > SIZE_LIMIT) {
-      message.error("试用计划用户上传单个文件不得大于100M");
+      message.error("上传单个文件不得大于100M");
       return;
     }
     const formData = new FormData();

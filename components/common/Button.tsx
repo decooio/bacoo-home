@@ -15,7 +15,7 @@ const CtmButton = styled.button<IButtonProps>`
     cursor: pointer;
     max-width: 100%;
     ${props => props.size === 'large' && css`
-        height: 52px;
+        height: 44px;
         width: 457px;
     `}
     &:hover {

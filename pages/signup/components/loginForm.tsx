@@ -48,10 +48,8 @@ const LoginForm = function () {
         dispatch({
           type: "UPDATE_PLAN",
           payload: res.data.plan,
-        })
+        });
       });
-
-      setLoc("userName", username);
       router.replace("/panel/fileManager");
     } catch (err) {
       console.log(err);

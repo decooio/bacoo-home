@@ -30,7 +30,7 @@ const Side = styled(COL)<{ show: boolean }>`
   transition: all ease-in-out ${AnimDuration};
   position: relative;
   ${Phone} {
-    transform: ${(p) => (p.show ? "translateX(0px)" : "translateX(-256px)")};
+    transform: ${(p) => (p.show ? "translateX(0px)" : "translateX(-180px)")};
   }
 `;
 
@@ -42,7 +42,7 @@ const MRowFill = styled(RowFill)<{ showSide: boolean }>`
     visibility: hidden;
     position: absolute;
     transition: left ease-in-out ${AnimDuration};
-    left: ${(p) => (p.showSide ? "256px" : "0px")};
+    left: ${(p) => (p.showSide ? "180px" : "0px")};
     bottom: 30px;
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;

@@ -3,6 +3,7 @@ import React, { createRef, useContext, useState } from "react";
 import { Checkbox, Form, message, Modal } from "antd";
 import Button from "../../../components/common/Button";
 import {
+  GET_USER_INFO_API,
   REGISTERED_API,
   SEMDSMS_API,
   SEMD_MAILCODE_API,
@@ -178,11 +179,16 @@ const RegisterForm = function () {
             type: "UPDATE_LOGIN_STATUS",
             payload: eloginStatus.login,
           });
-          dispatch({
-            type: "UPDATE_USER_NAME",
-            payload: username,
+          GET_USER_INFO_API().then((res) => {
+            dispatch({
+              type: "UPDATE_USER",
+              payload: res.data.info,
+            });
+            dispatch({
+              type: "UPDATE_PLAN",
+              payload: res.data.plan,
+            });
           });
-          setLoc("userName", username);
           router.replace("/panel/fileManager");
         } catch (err) {
           console.log(err);
@@ -205,7 +211,7 @@ const RegisterForm = function () {
       let num = 60;
       const time = setInterval(() => {
         if (num == 0) {
-          setMailCountdownNum(60);
+          setMailCountdownNum(0);
           clearInterval(time);
         } else {
           setMailCountdownNum(num--);
@@ -263,7 +269,10 @@ const RegisterForm = function () {
 
         <Form.Item
           name="mailCode"
-          rules={[{ required: true, message: "请输入验证码" }]}
+          rules={[
+            { required: true, message: "请输入验证码" },
+            { pattern: /^\d{6}$/, message: "请输入6位数字验证码" },
+          ]}
         >
           <BetweenFlexBox>
             <MyInput
@@ -322,7 +331,10 @@ const RegisterForm = function () {
 
         <Form.Item
           name="code"
-          rules={[{ required: true, message: "请输入验证码" }]}
+          rules={[
+            { required: true, message: "请输入验证码" },
+            { pattern: /^\d{6}$/, message: "请输入6位数字验证码" },
+          ]}
         >
           <BetweenFlexBox>
             <MyInput

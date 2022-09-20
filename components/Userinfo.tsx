@@ -51,9 +51,9 @@ const Userinfo: react.FC = () => {
       },
     });
     dispatch({
-      type:"UPDATE_PLAN",
-      payload:null
-    })
+      type: "UPDATE_PLAN",
+      payload: null,
+    });
     router.replace("/login");
   };
   return (
@@ -68,7 +68,7 @@ const Userinfo: react.FC = () => {
         </>
       ) : (
         <Dropdown
-          placement={"bottomRight"}
+          placement="bottomRight"
           trigger={["click"]}
           overlay={
             <Menu style={{ width: 86 }}>
@@ -82,16 +82,7 @@ const Userinfo: react.FC = () => {
             </Menu>
           }
         >
-          <Space size={14}>
-            <span
-              style={{
-                fontSize: "14px",
-              }}
-            >
-              {user.username}
-            </span>
-            <FiChevronDown></FiChevronDown>
-          </Space>
+          <Space size={14}>{user.username}</Space>
         </Dropdown>
       )}
     </Wrapper>
