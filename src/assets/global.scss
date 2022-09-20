@@ -97,6 +97,13 @@ button {
   box-shadow: none!important;
 }
 
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled){
+  background-color: #f5f5f5!important;
+  font-weight: normal!important;
+}
+.ant-select-item-option-active{
+  background-color: #fff!important;
+}
 
 
 

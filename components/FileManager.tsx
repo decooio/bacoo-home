@@ -205,11 +205,24 @@ export default function FileManager() {
       setUpLoadOpen(false);
       return false;
     };
+
     const remainingStorageSize = plan.maxStorageSize - plan.usedStorageSize;
     const totalSize = fileList
       .map((item) => item.size)
       .reduce((prev, curr) => prev + curr, 0);
 
+    //到期时间判断
+    if (new Date() > new Date(plan.storageExpireTime)) {
+      message.error("存储计划已到期，请更新存储计划。");
+      return errFun();
+    }
+    // 非付费会员不能上传大于100M的文件
+    if (plan.orderType == 0) {
+      if (totalSize > SIZE_LIMIT) {
+        message.error("试用计划用户上传单个文件不得大于100M");
+        return errFun();
+      }
+    }
     // 文件大于属于储存空间时限制上传
     if (totalSize > remainingStorageSize) {
       plan.orderType == 0
@@ -221,18 +234,6 @@ export default function FileManager() {
           );
 
       return errFun();
-    }
-    // 非付费会员不能上传大于100M的文件
-    if (plan.orderType == 0) {
-      if (totalSize > SIZE_LIMIT) {
-        message.error("试用计划用户上传单个文件不得大于100M");
-        return errFun();
-      }
-    }
-
-    if (new Date() > new Date(plan.storageExpireTime)) {
-      message.error("存储计划已到期，请更新存储计划。");
-      return errFun()
     }
 
     return true;
@@ -276,7 +277,7 @@ export default function FileManager() {
           cancelToken: cancel.token,
         })
         .then(async (res) => {
-          setPercent(100)
+          setPercent(100);
           if (typeof res.data == "string") {
             const resultArr = res.data.split("\n");
             const folder = JSON.parse(resultArr[resultArr.length - 2]);
@@ -363,7 +364,6 @@ export default function FileManager() {
                 action={`${activeGateway.host}/api/v0/add?pin=true`}
                 headers={{ authorization: getLoc("token") as string }}
                 beforeUpload={async (file) => {
-                  setUpLoadStatus("success");
                   setFileList([file]);
                   setUpLoadOpen(true);
                   return false;
