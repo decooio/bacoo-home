@@ -557,6 +557,9 @@ export default function Profile() {
           onInput={(e) => {
             setRequirement((e.target as any).value);
           }}
+          style={{
+            boxShadow: "none",
+          }}
         />
         <TipsText>*您可简单描述您对文件副本数量以及地域分布的需求。</TipsText>
         <HeightBox />

@@ -41,7 +41,7 @@ export const MCol = styled(COL)`
   }
 `;
 const FlexBox = styled.div`
-  padding-right:24px;
+  padding-right: 24px;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -104,6 +104,7 @@ const Reporter = styled.span`
 export const HtmlReporter = styled.div<{ h?: string }>`
   max-height: 600px;
   color: #666666;
+  padding-right: 18px;
 
   ${(props) => `
   ${props.h ? `max-height:${props.h};` : "max-height: 600px;"}
@@ -141,8 +142,7 @@ export const styleItemTxt = {
 };
 export const plStyle = {
   paddingLeft: 20,
-  minWidth:'100px'
-  
+  minWidth: "100px",
 };
 const typeMap = new Map([
   [0, "技术支持"],
@@ -316,15 +316,25 @@ export default function HelpAndReport() {
               style={{ height: 44, borderTop: "1px solid #eeeeee" }}
             >
               <Text flex={3} style={plStyle}>
-                <div style={{
-                  minWidth:'100px'
-                }}>{item.ticketNo}</div>
+                <div
+                  style={{
+                    minWidth: "100px",
+                  }}
+                >
+                  {item.ticketNo}
+                </div>
               </Text>
               <Text flex={2}>
                 <MText>{typeMap.get(item.type)}</MText>
               </Text>
               <Text flex={6} style={styleItemTxt}>
-                <Tips title={item.title} placement="topLeft">
+                <Tips
+                  title={item.title}
+                  placement="topLeft"
+                  align={{
+                    offset: [0, 15],
+                  }}
+                >
                   <MText>{item.title}</MText>
                 </Tips>
               </Text>
@@ -339,8 +349,14 @@ export default function HelpAndReport() {
                     : "未解决"}
                 </MText>
               </Text>
-              <Text flex={6} style={styleItemTxt} >
-                <Tips title={item.feedback} placement="topLeft">
+              <Text flex={6} style={styleItemTxt}>
+                <Tips
+                  title={item.feedback}
+                  placement="topLeft"
+                  align={{
+                    offset: [0, 15],
+                  }}
+                >
                   <MText>
                     {item.status == 0
                       ? item.feedback
@@ -461,7 +477,7 @@ export default function HelpAndReport() {
 
       <Modal
         bodyStyle={{
-          padding:"24px 6px 24px 24px"
+          padding: "24px 6px 24px 24px",
         }}
         zIndex={999}
         width={480}

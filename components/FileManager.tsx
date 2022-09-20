@@ -49,7 +49,7 @@ const FileBox = styled.div`
 `;
 
 export const Table = styled(COL)`
-  width: calc(100% - 62px);
+  width: calc(100% - 18px);
   flex: 1;
   overflow: auto;
   ${Phone} {

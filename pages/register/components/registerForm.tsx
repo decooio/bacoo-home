@@ -70,7 +70,7 @@ export const ErrorBox = styled.div``;
 export const BtnBox = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 25px;
+  margin-top: 5px;
 `;
 interface IButtonProps {
   onClick?: () => void;
@@ -141,6 +141,7 @@ const RegisterForm = function () {
 
       setCodeError("");
       setIsModalVisible(false);
+      setInputVerifyCodeImg('')
     } catch (error: any) {
       if (error.data.message) {
         setCodeError(error.data.message as string);
