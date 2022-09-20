@@ -275,7 +275,7 @@ const RegisterForm = function () {
               placeholder="验证码"
             />
 
-            {mailcountdownNum < 60 && mailcountdownNum !== 0 ? (
+            {mailcountdownNum <= 60 && mailcountdownNum !== 0 ? (
               <CountdownBtn style={{ width: "148px" }}>
                 {mailcountdownNum}s
               </CountdownBtn>
@@ -334,7 +334,7 @@ const RegisterForm = function () {
               placeholder="验证码"
             />
 
-            {countdownNum < 60 ? (
+            {countdownNum <= 60 && countdownNum !== 0 ? (
               <CountdownBtn style={{ width: "148px" }}>
                 {countdownNum}s
               </CountdownBtn>

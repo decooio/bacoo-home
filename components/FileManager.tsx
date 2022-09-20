@@ -1,5 +1,5 @@
 import { COL, RowFill } from "./common/layouts";
-import { FiBox, FiChevronDown, FiDownload } from "react-icons/fi";
+import { FiBox, FiChevronDown, FiDownload, FiFolder } from "react-icons/fi";
 import styled from "styled-components";
 import { EmptyText, Text, TextTitle } from "./common/texts";
 import { useContext, useEffect, useState } from "react";
@@ -31,22 +31,12 @@ import axios, { CancelTokenSource } from "axios";
 import { SIZE_LIMIT } from "./main";
 import { RcFile } from "antd/lib/upload";
 
-import { GrDocument } from "react-icons/gr";
+
 import s from "./fileManager.module.scss";
 import CopyTips from "./common/CopyTips";
+import { GrDocument } from "react-icons/gr";
 
-const FiFolder = () => {
-  return (
-    <img
-      style={{
-        width: "14px",
-        height: "13px",
-      }}
-      src="/FiFolder.png"
-      alt=""
-    ></img>
-  );
-};
+
 
 export const FlexBox = styled.div`
   width: 100%;
@@ -382,7 +372,9 @@ export default function FileManager() {
                 }}
               >
                 <div className={s.box}>
-                  <FiFolder />
+                  <FiFolder   style={{
+                    transform: "scale(1.1)",
+                  }}/>
                   <span className={s.uploadFileTypeItemText}>文件夹</span>
                 </div>
               </Upload>
