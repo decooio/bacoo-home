@@ -31,6 +31,13 @@ export const BetweenFlexBox = styled.div`
 `;
 export const LoginFormBox = styled.div`
   width: 100%;
+  @media (max-width: 1440px) {
+    transform: scale(0.8);
+  }
+ 
+  @media (max-height: 650px) {
+    transform: scale(0.8);
+  }
 `;
 export const VerifyBtn = styled.div<IButtonProps>`
   display: inline-flex;

@@ -1,8 +1,17 @@
-import { FormWrapper, Logo } from "@pages/signup";
+import { FormWrapper } from "@pages/signup";
 import React from "react";
+import styled from "styled-components";
 import { getLogoDark } from "../../src/helper/utils";
 import RegisterForm from "./components/registerForm";
 
+const Logo = styled.embed`
+  width: 165px;
+  //height: 55px;
+  margin-bottom: 63px;
+  @media (max-height: 650px) {
+    display: none;
+  }
+`;
 export default function Register() {
   return (
     <div className="w-full h-full flex relative items-center justify-center">
