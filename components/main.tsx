@@ -512,10 +512,10 @@ export default function Main() {
             target={"_blank"}
             rel="noreferrer"
             href={
-              "http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=2022024704"
+              "https://beian.miit.gov.cn/#/Integrated/index"
             }
           >
-            沪ICP备2022024704号
+            沪ICP备2022024704号-1
           </a>
           <a
             style={{
