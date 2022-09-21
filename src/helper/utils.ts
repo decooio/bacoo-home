@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import CryptoJS from "crypto-js";
 import _ from "lodash";
 import utc from "dayjs/plugin/utc";
-import { Order } from "../../lib/http_billing";
+
 
 dayjs.extend(utc);
 
@@ -73,15 +73,7 @@ export function formatSize(size: number, round = 1) {
   return PB + "PB";
 }
 
-export function getOrderStatus(order: Order) {
-  const orderCreated = order.orderStatus === 0;
-  if (orderCreated && !order.tradeNo) return "Unpaid";
-  if (orderCreated && order.tradeNo) return "Waiting for confirmation";
-  if (order.orderStatus === 1) return "Success";
-  if (order.orderStatus === 2) return "Canceled";
-  if (order.orderStatus === 3) return "Fail";
-  return "Unknown";
-}
+
 
 export function loadFromLocalStorage(key: string) {
   try {

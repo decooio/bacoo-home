@@ -5,7 +5,6 @@ import Userinfo from "./Userinfo";
 import _ from "lodash";
 import styled, { css } from "styled-components";
 import { WIKI_URL } from "../src/helper/const";
-import { useUser } from "../lib/useUser";
 import { Phone, useDevice } from "../src/assets/style";
 import { Drawer } from "antd";
 import { FiMenu, FiX } from "react-icons/fi";
@@ -87,7 +86,7 @@ const NavDiv = styled.div<{ isHome: boolean }>`
     padding-right: 20px;
     font-size: 14px;
     cursor: pointer;
-    color:#fff !important;
+    color: #fff !important;
 
     &:hover {
       color: #2cc8c2;
@@ -159,7 +158,7 @@ const Nav = () => {
   const showNavTitle = !!navTitle;
   const panelStyle = { fontSize: 18 };
   if (isMobile) panelStyle.fontSize = 12;
-  const { user } = useUser();
+
   const unPrice = router.pathname !== "/pricing";
   const showDocumentation = unPrice;
   const showMenu = showDocumentation;
@@ -181,19 +180,9 @@ const Nav = () => {
       {isMobile ? (
         <>
           <Row>
-            {user ? (
-              <>
-                <Userinfo />
-                <SpaceW />
-                {showMenu && <MMenu onClick={() => setVisible(true)} />}
-              </>
-            ) : (
-              <>
-                {showMenu && <MMenu onClick={() => setVisible(true)} />}
-                <SpaceW />
-                <Userinfo />
-              </>
-            )}
+            {showMenu && <MMenu onClick={() => setVisible(true)} />}
+            <SpaceW />
+            <Userinfo />
           </Row>
           <Drawer
             visible={visible}

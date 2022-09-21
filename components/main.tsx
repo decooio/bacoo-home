@@ -5,7 +5,6 @@ import { GrDocument } from "react-icons/gr";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import i18next from "i18next";
 import BgAnim from "./effect/BgAnim";
-// import {pinFile} from "../lib/http";
 import styled from "styled-components";
 import { Phone, useDevice } from "../src/assets/style";
 import classNames from "classnames";
