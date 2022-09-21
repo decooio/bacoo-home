@@ -364,7 +364,6 @@ export default function FileManager() {
               display:uploadFileTypeShow?"block":"none"
             }}>
               <Upload
-                className={s.uploadFileTypeItem}
                 showUploadList={false}
                 name="file"
                 action={`${activeGateway.host}/api/v0/add?pin=true`}
@@ -375,6 +374,7 @@ export default function FileManager() {
                   return false;
                 }}
               >
+                
                 <div className={s.box}>
                   <GrDocument />
                   <span className={s.uploadFileTypeItemText}>文件</span>
@@ -383,7 +383,6 @@ export default function FileManager() {
 
               <Upload
                 directory
-                className={s.uploadFileTypeItem}
                 showUploadList={false}
                 name="file"
                 action={`${activeGateway.host}/api/v0/add?pin=true`}

@@ -263,7 +263,6 @@ export default function Main() {
           }}
         >
           <Upload
-            className={s.uploadFileTypeItem}
             action={`${activeGateway?.host}/api/v0/add?pin=true`}
             {...upDataPorps}
             beforeUpload={(file) => {
@@ -279,7 +278,6 @@ export default function Main() {
           </Upload>
 
           <Upload
-            className={s.uploadFileTypeItem}
             directory
             {...upDataPorps}
             beforeUpload={async (file: any) => {
