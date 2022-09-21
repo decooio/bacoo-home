@@ -335,7 +335,11 @@ export default function FileManager() {
   }, [upLoadOpen]);
 
   return (
-    <MCol>
+    <MCol onClick={()=>{
+      if(uploadFileTypeShow){
+        setUploadFileTypeShow(false)
+      }
+    }}>
       <div style={{ display: "flex", marginBottom: "20px" }}>
         <UploadBtnBox>
           <UploadBtn onClick={() => setUploadFileTypeShow(!uploadFileTypeShow)}>

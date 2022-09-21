@@ -239,11 +239,11 @@ const RegisterForm = function () {
             { required: true, message: "请输入用户名" },
             {
               min: 4,
-              message: "请输入4至32位用户名",
+              message: "请输入4-32位用户名",
             },
             {
               max:32,
-              message: "请输入4至32位用户名",
+              message: "请输入4-32位用户名",
             }
           ]}
         >

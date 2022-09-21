@@ -452,13 +452,18 @@ export default function Main() {
     setFolderSize(totalSize);
   }, [fileList]);
 
+
+ 
+
   return (
     <div
       className={classNames(s.main, isMobile && s.main_mobile)}
       ref={bodyBox}
-      // onClick={() => {
-      //   setUploadFileTypeShow(false);
-      // }}
+      onClick={() => {
+        if(uploadFileTypeShow){
+          setUploadFileTypeShow(false)
+        }
+      }}
     >
       <BgAnim />
       <div className={s.content}>
