@@ -106,6 +106,9 @@ export const UploadBtn = styled.div`
   align-items: center;
   color: #fff;
   cursor: pointer;
+  :hover {
+    background: #15c1ba;
+  }
 `;
 const UploadBtnBox = styled.div`
   position: relative;

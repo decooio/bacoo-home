@@ -41,7 +41,7 @@ export const MCol = styled(COL)`
   }
 `;
 const FlexBox = styled.div`
-  padding-right: 24px;
+ 
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -400,12 +400,10 @@ export default function HelpAndReport() {
         title="发起报告"
         visible={modalOpen}
         footer={null}
-        bodyStyle={{
-          padding: "24px 6px 24px 24px",
-        }}
+       
         onCancel={() => setModalOpen(false)}
       >
-        <HtmlReporter h="400px">
+        
           <ModalText>类型</ModalText>
           <Select
             defaultValue="技术支持"
@@ -420,13 +418,13 @@ export default function HelpAndReport() {
               );
             })}
           </Select>
-          <HeightBox></HeightBox>
+          <HeightBox h="10px"></HeightBox>
           <ModalText>报告人</ModalText>
           <Reporter>{userName}</Reporter>
-          <HeightBox></HeightBox>
+          <HeightBox h="10px"></HeightBox>
           <ModalText>报告标题</ModalText>
           <MyInput value={title} setValue={(value) => setTitle(value)} />
-          <HeightBox></HeightBox>
+          <HeightBox h="10px"></HeightBox>
           <ModalText>报告内容</ModalText>
 
           <Editor
@@ -437,14 +435,16 @@ export default function HelpAndReport() {
           />
           <div id="wangeditor" ref={editor}></div>
 
-          <HeightBox></HeightBox>
-        </HtmlReporter>
+          <HeightBox h="10px"></HeightBox>
+       
 
         {btnLoading ? (
-          <FlexBox>
-            <Spin style={{
-              width: "100%"
-            }}>
+          <Spin
+            style={{
+              width: "100%",
+            }}
+          >
+            <FlexBox>
               <Button
                 style={
                   description.length === 0 || title.length === 0
@@ -459,8 +459,8 @@ export default function HelpAndReport() {
               >
                 确认提交
               </Button>
-            </Spin>
-          </FlexBox>
+            </FlexBox>
+          </Spin>
         ) : (
           <FlexBox>
             <Button

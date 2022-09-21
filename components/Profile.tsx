@@ -123,8 +123,13 @@ const MCol = styled(COL)`
     justify-content: flex-start;
   }
 `;
-export const HeightBox = styled.div`
-  height: 20px;
+export const HeightBox = styled.div<{ h?: string }>`
+  ${(props) =>
+    props.h
+      ? `
+    height: ${props.h};
+  `
+      : `height:20px`};
 `;
 
 const TipsText = styled.span`
@@ -350,7 +355,7 @@ export default function Profile() {
     getInfo();
   }, []);
   useEffect(() => {
-    if ((nPwd && nPwd.length < 4) || nPwd.length > 32) {
+    if ((nPwd && nPwd.length < 6) || nPwd.length > 16) {
       setInfo("密码长度为6~16位");
       return;
     } else if (nPwd && oPwd && oPwd == nPwd && oPwd) {
@@ -514,9 +519,10 @@ export default function Profile() {
               borderRadius: 8,
               fontSize: 16,
               height: 48,
+              background: info == "" ? "#2CC8C2" : "#CCCCCC",
             }}
             onClick={() => {
-              nPwd && oPwd && oPwd !== nPwd && changePassword();
+              info == "" && changePassword();
             }}
           />
         </Card>
@@ -559,7 +565,7 @@ export default function Profile() {
           }}
           style={{
             boxShadow: "none",
-            borderRadius:"8px"
+            borderRadius: "8px",
           }}
         />
         <TipsText>*您可简单描述您对文件副本数量以及地域分布的需求。</TipsText>
