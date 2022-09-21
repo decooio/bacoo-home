@@ -502,6 +502,7 @@ export default function Main() {
           <div className={"w-full text-center md:w-auto"}>
             百工智联（上海）工业科技有限公司
           </div>
+
           <a
             className={"md:hover:text-white"}
             style={{
@@ -510,9 +511,9 @@ export default function Main() {
             }}
             target={"_blank"}
             rel="noreferrer"
-            href={"https://beian.miit.gov.cn/#/Integrated/index"}
+            href={"https://beian.miit.gov.cn/"}
           >
-            沪ICP备2022024704号-1
+           沪ICP备2022024704号-1
           </a>
 
           <a
