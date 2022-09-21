@@ -86,11 +86,16 @@ button {
 .ant-select-selector {
   border: 1px solid #d9d9d9 !important;
   box-shadow: none!important;
+ 
+}
+.ant-select:not(.ant-select-customize-input) .ant-select-selector{
+  border-radius: 8px!important;
 }
 
 .ant-select-selection {
   border: 1px solid #d9d9d9 !important;
   box-shadow: none!important;
+ 
 }
 .ant-select-open{
   // border: 1px solid #d9d9d9 !important;
@@ -106,6 +111,7 @@ button {
 }
 .ant-dropdown-placement-bottomRight{
   min-width:auto!important;
+ 
 }
 
 
@@ -122,4 +128,11 @@ button {
 .w-e-menu .w-e-panel-container .w-e-panel-tab-content .w-e-button-container button {
 
   color: #2CC8C2 !important;
+}
+
+.w-e-toolbar {
+  border-radius: 8px 8px 0 0 ;
+}
+.w-e-text-container{
+  border-radius: 0 0 8px 8px ;
 }
