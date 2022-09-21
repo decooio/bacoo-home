@@ -400,43 +400,69 @@ export default function HelpAndReport() {
         title="发起报告"
         visible={modalOpen}
         footer={null}
+        bodyStyle={{
+          padding: "24px 6px 24px 24px",
+        }}
         onCancel={() => setModalOpen(false)}
       >
-        <ModalText>类型</ModalText>
-        <Select
-          defaultValue="技术支持"
-          style={{ width: "100%" }}
-          onChange={(e: string) => setType(e)}
-        >
-          {typeList.map((item) => {
-            return (
-              <Option value={item.type} key={item.type}>
-                {item.text}
-              </Option>
-            );
-          })}
-        </Select>
-        <HeightBox></HeightBox>
-        <ModalText>报告人</ModalText>
-        <Reporter>{userName}</Reporter>
-        <HeightBox></HeightBox>
-        <ModalText>报告标题</ModalText>
-        <MyInput value={title} setValue={(value) => setTitle(value)} />
-        <HeightBox></HeightBox>
-        <ModalText>报告内容</ModalText>
+        <HtmlReporter h="400px">
+          <ModalText>类型</ModalText>
+          <Select
+            defaultValue="技术支持"
+            style={{ width: "100%" }}
+            onChange={(e: string) => setType(e)}
+          >
+            {typeList.map((item) => {
+              return (
+                <Option value={item.type} key={item.type}>
+                  {item.text}
+                </Option>
+              );
+            })}
+          </Select>
+          <HeightBox></HeightBox>
+          <ModalText>报告人</ModalText>
+          <Reporter>{userName}</Reporter>
+          <HeightBox></HeightBox>
+          <ModalText>报告标题</ModalText>
+          <MyInput value={title} setValue={(value) => setTitle(value)} />
+          <HeightBox></HeightBox>
+          <ModalText>报告内容</ModalText>
 
-        <Editor
-          value={description}
-          setValue={(e) => {
-            setDescription(e);
-          }}
-        />
-        <div id="wangeditor" ref={editor}></div>
+          <Editor
+            value={description}
+            setValue={(e) => {
+              setDescription(e);
+            }}
+          />
+          <div id="wangeditor" ref={editor}></div>
 
-        <HeightBox></HeightBox>
+          <HeightBox></HeightBox>
+        </HtmlReporter>
 
         {btnLoading ? (
-          <Spin>
+          <FlexBox>
+            <Spin style={{
+              width: "100%"
+            }}>
+              <Button
+                style={
+                  description.length === 0 || title.length === 0
+                    ? {
+                        width: "100%",
+                        background: " #CCCCCC",
+                      }
+                    : {
+                        width: "100%",
+                      }
+                }
+              >
+                确认提交
+              </Button>
+            </Spin>
+          </FlexBox>
+        ) : (
+          <FlexBox>
             <Button
               style={
                 description.length === 0 || title.length === 0
@@ -448,30 +474,15 @@ export default function HelpAndReport() {
                       width: "100%",
                     }
               }
+              onClick={() => {
+                description.length === 0 || title.length === 0
+                  ? null
+                  : submitReport();
+              }}
             >
               确认提交
             </Button>
-          </Spin>
-        ) : (
-          <Button
-            style={
-              description.length === 0 || title.length === 0
-                ? {
-                    width: "100%",
-                    background: " #CCCCCC",
-                  }
-                : {
-                    width: "100%",
-                  }
-            }
-            onClick={() => {
-              description.length === 0 || title.length === 0
-                ? null
-                : submitReport();
-            }}
-          >
-            确认提交
-          </Button>
+          </FlexBox>
         )}
       </Modal>
 
