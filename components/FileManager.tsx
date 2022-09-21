@@ -106,7 +106,6 @@ export const UploadBtn = styled.div`
   align-items: center;
   color: #fff;
   cursor: pointer;
-
 `;
 const UploadBtnBox = styled.div`
   position: relative;
@@ -337,11 +336,13 @@ export default function FileManager() {
   }, [upLoadOpen]);
 
   return (
-    <MCol onClick={()=>{
-      if(uploadFileTypeShow){
-        setUploadFileTypeShow(false)
-      }
-    }}>
+    <MCol
+      onClick={() => {
+        if (uploadFileTypeShow) {
+          setUploadFileTypeShow(false);
+        }
+      }}
+    >
       <div style={{ display: "flex", marginBottom: "20px" }}>
         <UploadBtnBox>
           <UploadBtn onClick={() => setUploadFileTypeShow(!uploadFileTypeShow)}>
@@ -361,53 +362,54 @@ export default function FileManager() {
               添加文件
             </span>
           </UploadBtn>
-         
-            <div className={s.uploadFileType}  style={{
-              display:uploadFileTypeShow?"block":"none"
-            }}>
-              <Upload
-                showUploadList={false}
-                name="file"
-                action={`${activeGateway.host}/api/v0/add?pin=true`}
-                headers={{ authorization: getLoc("token") as string }}
-                beforeUpload={async (file) => {
-                  setFileList([file]);
-                  setUpLoadOpen(true);
-                  return false;
-                }}
-              >
-                
-                <div className={s.box}>
-                  <GrDocument />
-                  <span className={s.uploadFileTypeItemText}>文件</span>
-                </div>
-              </Upload>
 
-              <Upload
-                directory
-                showUploadList={false}
-                name="file"
-                action={`${activeGateway.host}/api/v0/add?pin=true`}
-                headers={{ authorization: getLoc("token") as string }}
-                beforeUpload={async (file: any) => {
-                  const locFolder = fileList;
-                  locFolder.push(file);
-                  setFileList([...locFolder]);
-                  setUpLoadOpen(true);
-                  return false;
-                }}
-              >
-                <div className={s.box}>
-                  <FiFolder
-                    style={{
-                      transform: "scale(1.1)",
-                    }}
-                  />
-                  <span className={s.uploadFileTypeItemText}>文件夹</span>
-                </div>
-              </Upload>
-            </div>
-          
+          <div
+            className={s.uploadFileType}
+            style={{
+              display: uploadFileTypeShow ? "block" : "none",
+            }}
+          >
+            <Upload
+              showUploadList={false}
+              name="file"
+              action={`${activeGateway.host}/api/v0/add?pin=true`}
+              headers={{ authorization: getLoc("token") as string }}
+              beforeUpload={async (file) => {
+                setFileList([file]);
+                setUpLoadOpen(true);
+                return false;
+              }}
+            >
+              <div className={s.box}>
+                <GrDocument />
+                <span className={s.uploadFileTypeItemText}>文件</span>
+              </div>
+            </Upload>
+
+            <Upload
+              directory
+              showUploadList={false}
+              name="file"
+              action={`${activeGateway.host}/api/v0/add?pin=true`}
+              headers={{ authorization: getLoc("token") as string }}
+              beforeUpload={async (file: any) => {
+                const locFolder = fileList;
+                locFolder.push(file);
+                setFileList([...locFolder]);
+                setUpLoadOpen(true);
+                return false;
+              }}
+            >
+              <div className={s.box}>
+                <FiFolder
+                  style={{
+                    transform: "scale(1.1)",
+                  }}
+                />
+                <span className={s.uploadFileTypeItemText}>文件夹</span>
+              </div>
+            </Upload>
+          </div>
         </UploadBtnBox>
 
         <Dropdown
@@ -519,7 +521,7 @@ export default function FileManager() {
                         ""
                       )}/ipfs/${file.cid}`}
                     >
-                      <Text flex={6}>{`https://${uuid}.${file.host.replace(
+                      <Text flex={1}>{`https://${uuid}.${file.host.replace(
                         "https://",
                         ""
                       )}/ipfs/${file.cid}`}</Text>
@@ -549,15 +551,18 @@ export default function FileManager() {
                     </DownBtn>
                   </FlexBox>
                 ) : (
-                  <Tips
-                    title={
-                      "因遵守当地相关法律法规要求，暂不提供针对该内容的服务。"
-                    }
-                  >
-                    <MText>
-                      因遵守当地相关法律法规要求，暂不提供针对该内容的服务。
-                    </MText>
-                  </Tips>
+                  <FlexBox>
+                    <Tips
+                      title={
+                        "因遵守当地相关法律法规要求，暂不提供针对该内容的服务。"
+                      }
+                    >
+                      <Text flex={1}>
+                        因遵守当地相关法律法规要求，暂不提供针对该内容的服务。
+                      </Text>
+                    </Tips>
+                    <DownBtn></DownBtn>
+                  </FlexBox>
                 )}
               </Text>
 

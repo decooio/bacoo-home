@@ -559,6 +559,7 @@ export default function Profile() {
           }}
           style={{
             boxShadow: "none",
+            borderRadius:"8px"
           }}
         />
         <TipsText>*您可简单描述您对文件副本数量以及地域分布的需求。</TipsText>
@@ -578,8 +579,11 @@ export default function Profile() {
           <Button
             style={{
               width: "100%",
+              background: requirement ? "#2CC8C2" : "rgb(204, 204, 204)",
             }}
-            onClick={() => postIntention()}
+            onClick={() => {
+              requirement && postIntention();
+            }}
           >
             点击提交您的存储使用意向
           </Button>
