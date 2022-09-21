@@ -255,56 +255,58 @@ export default function Main() {
             添加文件
           </span>
         </div>
-         
-          <div className={s.uploadFileType} style={{
-            display:uploadFileTypeShow?"flex":"none"
-          }}>
-            <Upload
-              className={s.uploadFileTypeItem}
-              action={`${activeGateway?.host}/api/v0/add?pin=true`}
-              {...upDataPorps}
-              beforeUpload={(file) => {
-                setUpLoadStatus("success");
-                setFileList([file]);
-                return false;
-              }}
-            >
-              <div className={s.box}>
-                <GrDocument />
-                <span className={s.uploadFileTypeItemText}>文件</span>
-              </div>
-            </Upload>
 
-            <Upload
-              className={s.uploadFileTypeItem}
-              directory
-              {...upDataPorps}
-              beforeUpload={async (file: any) => {
-                setFolder(
-                  file.webkitRelativePath.substring(
-                    0,
-                    file.webkitRelativePath.indexOf("/")
-                  )
-                );
+        <div
+          className={s.uploadFileType}
+          style={{
+            display: uploadFileTypeShow ? "flex" : "none",
+          }}
+        >
+          <Upload
+            className={s.uploadFileTypeItem}
+            action={`${activeGateway?.host}/api/v0/add?pin=true`}
+            {...upDataPorps}
+            beforeUpload={(file) => {
+              setUpLoadStatus("success");
+              setFileList([file]);
+              return false;
+            }}
+          >
+            <div className={s.box}>
+              <GrDocument />
+              <span className={s.uploadFileTypeItemText}>文件</span>
+            </div>
+          </Upload>
 
-                const locFolder = fileList;
-                locFolder.push(file);
-                setFileList([...locFolder]);
-                setUpLoadStatus("success");
-                return false;
-              }}
-            >
-              <div className={s.box}>
-                <FiFolder
-                  style={{
-                    transform: "scale(1.2)",
-                  }}
-                />
-                <span className={s.uploadFileTypeItemText}>文件夹</span>
-              </div>
-            </Upload>
-          </div>
-        
+          <Upload
+            className={s.uploadFileTypeItem}
+            directory
+            {...upDataPorps}
+            beforeUpload={async (file: any) => {
+              setFolder(
+                file.webkitRelativePath.substring(
+                  0,
+                  file.webkitRelativePath.indexOf("/")
+                )
+              );
+
+              const locFolder = fileList;
+              locFolder.push(file);
+              setFileList([...locFolder]);
+              setUpLoadStatus("success");
+              return false;
+            }}
+          >
+            <div className={s.box}>
+              <FiFolder
+                style={{
+                  transform: "scale(1.2)",
+                }}
+              />
+              <span className={s.uploadFileTypeItemText}>文件夹</span>
+            </div>
+          </Upload>
+        </div>
       </div>
     );
   };
@@ -457,9 +459,8 @@ export default function Main() {
     <div
       className={classNames(s.main, isMobile && s.main_mobile)}
       ref={bodyBox}
-      onClick={(e) => {
+      onClick={() => {
         if (uploadFileTypeShow) {
-         
           setUploadFileTypeShow(false);
         }
       }}
@@ -513,7 +514,7 @@ export default function Main() {
             rel="noreferrer"
             href={"https://beian.miit.gov.cn/"}
           >
-           沪ICP备2022024704号-1
+            沪ICP备2022024704号-1
           </a>
 
           <a
