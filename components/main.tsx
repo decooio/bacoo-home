@@ -191,7 +191,7 @@ export default function Main() {
       );
       let Hash = "";
       let Name = "";
-      setPercent(100)
+      setPercent(100);
       if (typeof res.data == "string") {
         const resultArr = res.data.split("\n");
         const folder = JSON.parse(resultArr[resultArr.length - 2]);
@@ -244,7 +244,6 @@ export default function Main() {
           style={{ fontSize }}
           onClick={() => {
             setUploadFileTypeShow(!uploadFileTypeShow);
-            // e.stopPropagation();
           }}
         >
           <FiPlus />
@@ -256,13 +255,15 @@ export default function Main() {
             添加文件
           </span>
         </div>
-        {uploadFileTypeShow && (
-          <div className={s.uploadFileType}>
+         
+          <div className={s.uploadFileType} style={{
+            display:uploadFileTypeShow?"flex":"none"
+          }}>
             <Upload
               className={s.uploadFileTypeItem}
               action={`${activeGateway?.host}/api/v0/add?pin=true`}
               {...upDataPorps}
-              beforeUpload={ (file) => {
+              beforeUpload={(file) => {
                 setUpLoadStatus("success");
                 setFileList([file]);
                 return false;
@@ -303,7 +304,7 @@ export default function Main() {
               </div>
             </Upload>
           </div>
-        )}
+        
       </div>
     );
   };
@@ -452,16 +453,14 @@ export default function Main() {
     setFolderSize(totalSize);
   }, [fileList]);
 
-
- 
-
   return (
     <div
       className={classNames(s.main, isMobile && s.main_mobile)}
       ref={bodyBox}
-      onClick={() => {
-        if(uploadFileTypeShow){
-          setUploadFileTypeShow(false)
+      onClick={(e) => {
+        if (uploadFileTypeShow) {
+         
+          setUploadFileTypeShow(false);
         }
       }}
     >
@@ -511,12 +510,11 @@ export default function Main() {
             }}
             target={"_blank"}
             rel="noreferrer"
-            href={
-              "https://beian.miit.gov.cn/#/Integrated/index"
-            }
+            href={"https://beian.miit.gov.cn/#/Integrated/index"}
           >
             沪ICP备2022024704号-1
           </a>
+
           <a
             style={{
               fontSize: "14px",

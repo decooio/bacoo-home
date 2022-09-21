@@ -359,8 +359,10 @@ export default function FileManager() {
               添加文件
             </span>
           </UploadBtn>
-          {uploadFileTypeShow && (
-            <div className={s.uploadFileType}>
+         
+            <div className={s.uploadFileType}  style={{
+              display:uploadFileTypeShow?"block":"none"
+            }}>
               <Upload
                 className={s.uploadFileTypeItem}
                 showUploadList={false}
@@ -404,7 +406,7 @@ export default function FileManager() {
                 </div>
               </Upload>
             </div>
-          )}
+          
         </UploadBtnBox>
 
         <Dropdown
