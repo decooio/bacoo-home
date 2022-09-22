@@ -318,8 +318,8 @@ export default function FileManager() {
           if (e.response) {
             steErrorText(
               e.response.data.code == 500
-                ? "上传失败 请稍后重试"
-                : e.response.data.message || "上传失败 请稍后重试"
+                ? "上传失败，请稍后重试"
+                : e.response.data.message || "上传失败，请稍后重试"
             );
           }
         }
@@ -329,11 +329,11 @@ export default function FileManager() {
         if (err.response) {
           steErrorText(
             err.response.data.code == 500
-              ? "上传失败 请稍后重试"
-              : err.response.data.message || "上传失败 请稍后重试"
+              ? "上传失败，请稍后重试"
+              : err.response.data.message || "上传失败，请稍后重试"
           );
         } else {
-          steErrorText("上传失败 请稍后重试");
+          steErrorText("上传失败，请稍后重试");
           setPercent(0);
         }
       });
