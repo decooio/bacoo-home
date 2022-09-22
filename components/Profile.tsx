@@ -332,11 +332,11 @@ export default function Profile() {
         type: "UPDATE_LOADING",
         payload: true,
       });
-      const res = await CHANGE_PASSWORD_API({
+      await CHANGE_PASSWORD_API({
         oldPassword: oPwd,
         newPassword: nPwd,
       });
-      setInfo(res.message);
+      setInfo('');
       message.success("修改成功");
       dispatch({
         type: "UPDATE_LOADING",
