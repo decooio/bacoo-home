@@ -12,6 +12,7 @@ import {
   GET_FILE_LIST_API,
   GET_FILE_SIZE_API,
   GET_GATEWAY_LIST_API,
+  GET_USER_INFO_API,
   UPDATA_FILE_API,
 } from "@request/apis";
 import {
@@ -143,6 +144,19 @@ export default function FileManager() {
   const [fileList, setFileList] = useState<RcFile[]>([]);
   // const [folder, setFolder] = useState("");
 
+  // 更新用户plan
+  const updataPlan = async () => {
+    try {
+      const res = await GET_USER_INFO_API();
+      dispatch({
+        type: "UPDATE_PLAN",
+        payload: res.data.plan,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   //获取节点列表
   const getGatewayList = async () => {
     dispatch({
@@ -151,7 +165,6 @@ export default function FileManager() {
     });
     try {
       const res = await GET_GATEWAY_LIST_API();
-      console.log(res);
       const data = res.data;
       setGatewayList([...data]);
       setActiveGateway(data[0]);
@@ -163,7 +176,7 @@ export default function FileManager() {
       payload: false,
     });
   };
-  //获取已经上传的文件
+  //获取已经上传的文件列表
   const getFiles = async () => {
     dispatch({
       type: "UPDATE_LOADING",
@@ -174,10 +187,10 @@ export default function FileManager() {
         pageSize: 10,
         pageNum: pageNum + 1,
       });
-      console.log(res);
       setFiles([...res.data]);
     } catch (e) {
       console.log(e);
+      setFiles([]);
     }
     dispatch({
       type: "UPDATE_LOADING",
@@ -253,74 +266,74 @@ export default function FileManager() {
     const url = `${activeGateway.host}/api/v0/add?pin=true`;
     const headers = { authorization: getLoc("token") as string };
 
+    // 检查是否可以上传（大小和时间）
     if (!censorSizeAndTime()) {
       return;
     }
 
-    // 循环添加
+    // 循环添加文件到form
     const formData = new FormData();
     fileList.forEach((item) => {
       formData.append("file", item);
     });
 
-    try {
-      setUploadFileTypeShow(false);
-      const cancel = axios.CancelToken.source();
-      setCancelUp(cancel);
-      axios
-        .post(url, formData, {
-          headers,
-          onUploadProgress: (progressEvent) => {
-            if (progressEvent.lengthComputable) {
-              const complete =
-                ((progressEvent.loaded / progressEvent.total) * 100) | 0;
-              const percent = complete;
-              setPercent(percent);
-            }
-          },
-          cancelToken: cancel.token,
-        })
-        .then(async (res) => {
-          setPercent(100);
-          if (typeof res.data == "string") {
-            const resultArr = res.data.split("\n");
-            const folder = JSON.parse(resultArr[resultArr.length - 2]);
-            Hash = folder.Hash;
-            Name = folder.Name;
-          } else {
-            Hash = res.data.Hash;
-            Name = res.data.Name;
+    setUploadFileTypeShow(false);
+    const cancel = axios.CancelToken.source();
+    setCancelUp(cancel);
+    axios
+      .post(url, formData, {
+        headers,
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.lengthComputable) {
+            const complete =
+              ((progressEvent.loaded / progressEvent.total) * 100) | 0;
+            const percent = complete;
+            setPercent(percent);
           }
-          try {
-            setUpLoadStatus("success");
-            await UPDATA_FILE_API({
-              cid: Hash,
-              name: Name,
-            });
-            getFiles();
-            getFileSize();
-          } catch (e: any) {
-            if (e.data.code == 500) {
-              steErrorText("剩余存储空间不足");
-            }
+        },
+        cancelToken: cancel.token,
+      })
+      .then(async (res) => {
+        setPercent(100);
+        if (typeof res.data == "string") {
+          const resultArr = res.data.split("\n");
+          const folder = JSON.parse(resultArr[resultArr.length - 2]);
+          Hash = folder.Hash;
+          Name = folder.Name;
+        } else {
+          Hash = res.data.Hash;
+          Name = res.data.Name;
+        }
+        try {
+          await UPDATA_FILE_API({
+            cid: Hash,
+            name: Name,
+          });
+          setUpLoadStatus("success");
+          getFiles();
+          getFileSize();
+          updataPlan();
+        } catch (e: any) {
+          if (e.response.data.code == 500) {
+            steErrorText("剩余存储空间不足");
+          } else {
             steErrorText(e.response.data.message || "上传失败 请稍后重试");
           }
-        })
-        .catch((err) => {
-          console.log(err);
-          setUpLoadStatus("error");
-          if (err.response) {
-            steErrorText(err.response.data.message || "上传失败 请稍后重试");
-          } else {
-            // setUpLoadOpen(false);
-            steErrorText("上传失败 请稍后重试");
-            setPercent(0);
-            setUpLoadStatus("error");
-          }
-        });
-    } catch (e) {
-      console.log(e);
-    }
+        }
+      })
+      .catch((err) => {
+        setUpLoadStatus("error");
+        if (err.response) {
+          steErrorText(
+            err.response.data.code == 500
+              ? "剩余存储空间不足"
+              : "上传失败 请稍后重试"
+          );
+        } else {
+          steErrorText("上传失败 请稍后重试");
+          setPercent(0);
+        }
+      });
   };
 
   useEffect(() => {

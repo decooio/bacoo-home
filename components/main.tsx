@@ -216,14 +216,17 @@ export default function Main() {
           )}/ipfs/${cid}`
         );
       } catch (err) {
+        console.log('err=>',err);
+        
         removeFileList();
-        message.error("服务器异常,请稍后再试");
+        message.error("上传失败 请稍后重试");
         setUpLoadStatus("initial");
         setPercent(0);
       }
     } catch (error) {
+      console.log('error=>',error);
       removeFileList();
-      message.error("服务器异常,请稍后再试");
+      message.error("上传失败 请稍后重试");
       setUpLoadStatus("initial");
       setPercent(0);
     }
