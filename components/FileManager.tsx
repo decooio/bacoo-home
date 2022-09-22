@@ -314,10 +314,13 @@ export default function FileManager() {
           getFileSize();
           updataPlan();
         } catch (e: any) {
-          if (e.response.data.code == 500) {
-            steErrorText("剩余存储空间不足");
-          } else {
-            steErrorText(e.response.data.message || "上传失败 请稍后重试");
+          setUpLoadStatus("error");
+          if (e.response) {
+            steErrorText(
+              e.response.data.code == 500
+                ? "上传失败 请稍后重试"
+                : e.response.data.message || "上传失败 请稍后重试"
+            );
           }
         }
       })
@@ -326,8 +329,8 @@ export default function FileManager() {
         if (err.response) {
           steErrorText(
             err.response.data.code == 500
-              ? "剩余存储空间不足"
-              : "上传失败 请稍后重试"
+              ? "上传失败 请稍后重试"
+              : err.response.data.message || "上传失败 请稍后重试"
           );
         } else {
           steErrorText("上传失败 请稍后重试");
