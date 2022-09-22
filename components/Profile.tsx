@@ -496,9 +496,11 @@ export default function Profile() {
               type={"password"}
               value={oPwd}
               setValue={(e) => setOPwd(e)}
+              style={{ fontSize: "14px" }}
             />
             <div style={{ height: "10px" }}></div>
             <MyInput
+              style={{ fontSize: "14px" }}
               placeholder={"新密码"}
               type={"password"}
               value={nPwd}

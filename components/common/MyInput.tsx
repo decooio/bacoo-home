@@ -8,7 +8,7 @@ const normalStyle = (w?: string | number) => {
     border: " 1px solid #DDDDDD",
     borderRadius: "8px",
     boxShadow: "none",
-    padding: "10px 24px"
+    padding: "10px 24px",
   };
 };
 const placeholderStyle = (w?: string | number) => {
@@ -17,7 +17,7 @@ const placeholderStyle = (w?: string | number) => {
     height: "44px",
     borderRadius: "8px",
     boxShadow: "none",
-    padding: "10px 24px"
+    padding: "10px 24px",
   };
 };
 const inputStyle = (w?: string | number) => {
@@ -28,7 +28,7 @@ const inputStyle = (w?: string | number) => {
     borderRadius: "8px",
     boxShadow: "none",
     background: " #fff",
-    padding: "10px 24px"
+    padding: "10px 24px",
   };
 };
 const MyInput = ({
@@ -42,14 +42,14 @@ const MyInput = ({
     <Input
       value={value}
       size="large"
+      {...props}
       style={
         inputValue
-          ? inputStyle(width)
+          ? { ...inputStyle(width), ...props.style }
           : props.placeholder
-          ? normalStyle(width)
-          : placeholderStyle(width)
+          ? { ...normalStyle(width), ...props.style }
+          : { ...placeholderStyle(width), ...props.style }
       }
-      {...props}
       onInput={(e) => {
         setInputValue((e.target as any).value);
         setValue((e.target as any).value);
