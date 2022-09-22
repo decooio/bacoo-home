@@ -41,10 +41,15 @@ export const MCol = styled(COL)`
   }
 `;
 const FlexBox = styled.div`
- 
   width: 100%;
   display: flex;
   justify-content: space-between;
+`;
+const RightBtnBox = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 24px;
 `;
 const Tooltip = styled(COL)`
   padding: 24px 32px 20px 32px;
@@ -400,43 +405,40 @@ export default function HelpAndReport() {
         title="发起报告"
         visible={modalOpen}
         footer={null}
-       
         onCancel={() => setModalOpen(false)}
       >
-        
-          <ModalText>类型</ModalText>
-          <Select
-            defaultValue="技术支持"
-            style={{ width: "100%" }}
-            onChange={(e: string) => setType(e)}
-          >
-            {typeList.map((item) => {
-              return (
-                <Option value={item.type} key={item.type}>
-                  {item.text}
-                </Option>
-              );
-            })}
-          </Select>
-          <HeightBox h="10px"></HeightBox>
-          <ModalText>报告人</ModalText>
-          <Reporter>{userName}</Reporter>
-          <HeightBox h="10px"></HeightBox>
-          <ModalText>报告标题</ModalText>
-          <MyInput value={title} setValue={(value) => setTitle(value)} />
-          <HeightBox h="10px"></HeightBox>
-          <ModalText>报告内容</ModalText>
+        <ModalText>类型</ModalText>
+        <Select
+          defaultValue="技术支持"
+          style={{ width: "100%" }}
+          onChange={(e: string) => setType(e)}
+        >
+          {typeList.map((item) => {
+            return (
+              <Option value={item.type} key={item.type}>
+                {item.text}
+              </Option>
+            );
+          })}
+        </Select>
+        <HeightBox h="10px"></HeightBox>
+        <ModalText>报告人</ModalText>
+        <Reporter>{userName}</Reporter>
+        <HeightBox h="10px"></HeightBox>
+        <ModalText>报告标题</ModalText>
+        <MyInput value={title} setValue={(value) => setTitle(value)} />
+        <HeightBox h="10px"></HeightBox>
+        <ModalText>报告内容</ModalText>
 
-          <Editor
-            value={description}
-            setValue={(e) => {
-              setDescription(e);
-            }}
-          />
-          <div id="wangeditor" ref={editor}></div>
+        <Editor
+          value={description}
+          setValue={(e) => {
+            setDescription(e);
+          }}
+        />
+        <div id="wangeditor" ref={editor}></div>
 
-          <HeightBox h="10px"></HeightBox>
-       
+        <HeightBox h="10px"></HeightBox>
 
         {btnLoading ? (
           <Spin
@@ -521,7 +523,7 @@ export default function HelpAndReport() {
         </HtmlReporter>
         <HeightBox></HeightBox>
         {detail.status !== 2 ? (
-          <FlexBox>
+          <RightBtnBox>
             <Button
               style={{
                 width: "48%",
@@ -541,9 +543,9 @@ export default function HelpAndReport() {
             >
               已解决
             </Button>
-          </FlexBox>
+          </RightBtnBox>
         ) : (
-          <FlexBox>
+          <RightBtnBox>
             <Button
               style={{
                 width: "100%",
@@ -552,7 +554,7 @@ export default function HelpAndReport() {
             >
               已解决
             </Button>
-          </FlexBox>
+          </RightBtnBox>
         )}
       </Modal>
     </MCol>

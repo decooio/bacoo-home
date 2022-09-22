@@ -24,7 +24,7 @@ const Grid = styled(Row)`
   height: 100%;
   width: 100%;
   align-items: flex-start;
-  padding: 24px 24px 24px 12px;
+  padding: 24px 32px 24px 12px;
   background: #f8f8f8;
 
   ${Phone} {
@@ -611,7 +611,7 @@ export default function Profile() {
         footer={null}
         onCancel={() => setDetailsModalOpen(false)}
       >
-        <HtmlReporter h="400px">
+        <HtmlReporter h="450px">
           <ModalText>存储计划名称</ModalText>
           <DetailsText>百工链存 - 存储计划Pro</DetailsText>
           <HeightBox />

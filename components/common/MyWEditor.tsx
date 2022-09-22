@@ -5,7 +5,7 @@ const ReactWEditor = dynamic(import("wangeditor-for-react"), {
   ssr: false,
 });
 const config = {
-  height: 150,
+  height: 160,
   mode: "simple",
   menus: ["bold", "link", "image", "fontSize"],
   showLinkImgHref:false
