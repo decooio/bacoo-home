@@ -20,7 +20,7 @@ import copyToClipboard from "copy-to-clipboard";
 import { Context } from "./Context/Context";
 import { eloginStatus } from "./Context/types";
 import router from "next/router";
-import { AUTH } from "@src/helper/const";
+import { AUTH, SUB_DOMAIN } from "@src/helper/const";
 export const SIZE_LIMIT = 100 * 1024 * 1024;
 
 export const upDataPorps = {
@@ -209,7 +209,7 @@ export default function Main() {
         setUpLoadStatus("finish");
         const { cid } = (updatares as any).pin;
         setShareUrl(
-          `https://099equ.${activeGateway?.host.replace(
+          `https://${SUB_DOMAIN}.${activeGateway?.host.replace(
             "https://",
             ""
           )}/ipfs/${cid}`
