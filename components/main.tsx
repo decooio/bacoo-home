@@ -20,15 +20,14 @@ import copyToClipboard from "copy-to-clipboard";
 import { Context } from "./Context/Context";
 import { eloginStatus } from "./Context/types";
 import router from "next/router";
+import { AUTH, SUB_DOMAIN } from "@src/helper/const";
 export const SIZE_LIMIT = 100 * 1024 * 1024;
 
-const token =
-  "Bearer c3Vic3RyYXRlLWNUTEJlSGlvd2JDZE1rdjNLaENSQkxzbXNmRDNicVlnVlZURU5DQlp1ZjIxRW5OOEc6MHgwMjFiNTU1OTg3ZGU4OTJlY2JlMmE5MWIzMTI3Mzg4OGIwYTUwYzZmN2ExNzAwNTFhNzVkNjAwMDc2NzhiYjA1YTU0NWIwYjJkNjVkYmRlNTJmNWQyNDU0NzljODRiMzExZDQxMjM5MjU3MzM5MTlhMGFkMzhiZWE0YjRlZGM4OQ";
 export const upDataPorps = {
   showUploadList: false,
   name: "file",
   headers: {
-    authorization: token,
+    authorization: AUTH,
   },
 };
 
@@ -145,7 +144,7 @@ export default function Main() {
    * 获取节点列表
    * */
   const getGatewayList = async () => {
-    setLoc("token", token);
+    setLoc("token", AUTH);
     try {
       const res = await GET_GATEWAY_LIST_API();
       setGayewayList([...res.data]);
@@ -176,7 +175,7 @@ export default function Main() {
         formData,
         {
           headers: {
-            authorization: token,
+            authorization: AUTH,
           },
           onUploadProgress: (progressEvent) => {
             if (progressEvent.lengthComputable) {
@@ -201,7 +200,7 @@ export default function Main() {
         Name = res.data.Name;
       }
       try {
-        setLoc("token", token);
+        setLoc("token", AUTH);
         const updatares = await UPDATA_FILE_API({
           cid: Hash,
           name: Name,
@@ -210,7 +209,7 @@ export default function Main() {
         setUpLoadStatus("finish");
         const { cid } = (updatares as any).pin;
         setShareUrl(
-          `https://099equ.${activeGateway?.host.replace(
+          `https://${SUB_DOMAIN}.${activeGateway?.host.replace(
             "https://",
             ""
           )}/ipfs/${cid}`
