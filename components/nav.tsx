@@ -213,7 +213,7 @@ const Nav = () => {
             <div>
               <a
                 rel="noreferrer"
-                href={"https://beta-docs.baitech-ipfs.net/"}
+                href={"https://docs.baitech-ipfs.net/"}
                 className={"item"}
                 target="_blank"
               >
