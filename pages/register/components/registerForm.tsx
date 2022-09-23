@@ -177,8 +177,14 @@ const RegisterForm = function () {
             email: mail,
             emailCode: mailCode,
           });
-          const token = `Bearer ${res.data.signature}`;
+          const { signature, uuid } = res.data;
+          const token = `Bearer ${signature}`;
           setLoc("token", token);
+          setLoc("uuid", uuid);
+          dispatch({
+            type: "UPDATE_UUID",
+            payload: uuid,
+          });
           dispatch({
             type: "UPDATE_LOGIN_STATUS",
             payload: eloginStatus.login,
@@ -242,9 +248,9 @@ const RegisterForm = function () {
               message: "请输入4-32位用户名",
             },
             {
-              max:32,
+              max: 32,
               message: "请输入4-32位用户名",
-            }
+            },
           ]}
         >
           <MyInput
