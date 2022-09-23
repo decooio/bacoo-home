@@ -9,7 +9,7 @@ export const ErrorDist = {
 export const fileSizeLimitMb = 2048;
 
 // @ts-ignore
-export const isBeta = true;
+export const isBeta = false;
 
 export const baseUrl = isBeta
   ? "https://beta-api.baitech-ipfs.net/"
