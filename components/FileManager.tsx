@@ -623,18 +623,15 @@ export default function FileManager() {
           <Alert message="上传成功" type="success" />
         )}
         {upLoadStatus === "error" && <Alert message={errorText} type="error" />}
-        <Progress
-          strokeWidth={20}
-          strokeColor={"rgb(51 51 51)"}
-          percent={percent}
-          status={
-            upLoadStatus === "success"
-              ? "success"
-              : upLoadStatus === "error"
-              ? "exception"
-              : "active"
-          }
-        />
+        
+        {upLoadStatus !== "success" && upLoadStatus !== "error" && (
+          <Progress
+            strokeWidth={20}
+            strokeColor={"rgb(51 51 51)"}
+            percent={percent}
+            status={"active"}
+          />
+        )}
       </Modal>
     </MCol>
   );
