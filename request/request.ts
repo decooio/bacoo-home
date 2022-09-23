@@ -1,3 +1,4 @@
+import { baseUrl } from "@src/helper/const";
 import { getLoc } from "@src/index";
 import { message } from "antd";
 import axios from "axios";
@@ -7,7 +8,6 @@ import {
   SEMDSMS_ADDRESS,
   VERIFY_CODE_ADDRESS,
 } from "./apis";
-const BASE_URL = "https://beta-api.baitech-ipfs.net/";
 
 type RequestConfig = {
   method?: "get" | "post" | "put" | "delete";
@@ -59,7 +59,7 @@ const request: ResponseFun<any> = (
   },
   addHeaders
 ) => {
-  url = BASE_URL + url;
+  url = baseUrl + url;
   const headers = [
     REGISTERED_ADDRESS,
     LOGIN_ADDRESS,

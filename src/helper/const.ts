@@ -12,15 +12,16 @@ export const fileSizeLimitMb = 2048;
 export const isBeta = true;
 
 export const baseUrl = isBeta
-  ? "https://beta.api.decoo-cloud.cn"
-  : "https://api.decoo-cloud.cn";
+  ? "https://beta-api.baitech-ipfs.net/"
+  : "https://api.baitech-ipfs.net/";
 // @ts-ignore
-export const prodJwt =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJrZXkiOnsiYXBpX2tleSI6IjRHTUJINmNQbXFmbDN4alloeHZVVXo2WWZQMTNwekk0RTE2MjMyMzI0NDQzNzciLCJ1c2VyX2lkIjo0fX0.FChp_uFc01QrlxYu4L3Z5npTosZKN7AztUNntYZ1HzQ";
-export const betaJwt =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJrZXkiOnsiYXBpX2tleSI6IjJ2RVBtajlIYmkzcEpHTDhRanJSNjZRNkkzbUJrb0pJdDE2MjI3OTMzMzIzNDIiLCJ1c2VyX2lkIjoyfX0.Nq92bIOT1qKzEK5nwaGxUx1ViRr7sVeYnRMS9vXU27Y";
+export const prod_auth =
+  "Bearer 3Vic3RyYXRlLWNUSjJ3bUg5WmZuOHpLd0M2NnFQanZpRHU4M05yVmdjM0JHTG56emJNOFRSWkxhWmk6MHhiYWNlNzRhMDAwMjc5MDY3MzBlMTc5NmEyNWU2OWU2ZWRjYmIyNzg1MDEwZjVjYzYxOTg0YmQwM2I2NDk5YTE5MTY5MTEyMDdhNDNkNGFmM2MwMWEyNjRhMTRiN2UyOGQ2ZmRhYzExOTJhMmU5YmZiMTc5NjMzNGYxZTE5MGU4Mg==";
+export const beta_auth =
+  "Bearer c3Vic3RyYXRlLWNUTEJlSGlvd2JDZE1rdjNLaENSQkxzbXNmRDNicVlnVlZURU5DQlp1ZjIxRW5OOEc6MHgwMjFiNTU1OTg3ZGU4OTJlY2JlMmE5MWIzMTI3Mzg4OGIwYTUwYzZmN2ExNzAwNTFhNzVkNjAwMDc2NzhiYjA1YTU0NWIwYjJkNjVkYmRlNTJmNWQyNDU0NzljODRiMzExZDQxMjM5MjU3MzM5MTlhMGFkMzhiZWE0YjRlZGM4OQ";
 // for unLogin
-export const JWT = isBeta ? betaJwt : prodJwt;
+export const AUTH = isBeta ? beta_auth : prod_auth;
+export const SUB_DOMAIN = isBeta ? '099equ' : '099eqs';
 
 export const WIKI_URL = "https://wiki.decoo.io";
 

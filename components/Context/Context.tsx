@@ -1,5 +1,6 @@
 import { GET_USER_INFO_API } from "@request/apis";
 import { getUserInfoRes } from "@request/types";
+import { AUTH } from "@src/helper/const";
 import { getLoc } from "@src/index";
 import router from "next/router";
 import React, { createContext, useEffect, useReducer, useState } from "react";
@@ -84,8 +85,7 @@ const MyContextWrapper = ({ children: children }: any) => {
   useEffect(() => {
     const loginStatus =
       getLoc("token") &&
-      getLoc("token") !=
-        "Bearer c3Vic3RyYXRlLWNUTEJlSGlvd2JDZE1rdjNLaENSQkxzbXNmRDNicVlnVlZURU5DQlp1ZjIxRW5OOEc6MHgwMjFiNTU1OTg3ZGU4OTJlY2JlMmE5MWIzMTI3Mzg4OGIwYTUwYzZmN2ExNzAwNTFhNzVkNjAwMDc2NzhiYjA1YTU0NWIwYjJkNjVkYmRlNTJmNWQyNDU0NzljODRiMzExZDQxMjM5MjU3MzM5MTlhMGFkMzhiZWE0YjRlZGM4OQ"
+      getLoc("token") != AUTH
         ? eloginStatus.login
         : eloginStatus.notLogin;
     const userName = getLoc("userName") ? getLoc("userName") : "";
