@@ -242,14 +242,11 @@ export default function FileManager() {
     }
     // 文件大于属于储存空间时限制上传
     if (totalSize > remainingStorageSize) {
-      plan.orderType == 0
-        ? message.error(
-            "大于试用计划的使用容量上限。如需继续上传，请更新存储计划。"
-          )
-        : message.error(
-            "大于当前存储计划的使用容量上限。如需继续上传，请更新存储计划。"
-          );
-
+      message.error(
+        `大于${
+          plan.orderType == 0 ? "试用计划" : "当前存储计划"
+        }的使用容量上限。如需继续上传，请更新存储计划。`
+      );
       return errFun();
     }
 
@@ -623,7 +620,7 @@ export default function FileManager() {
           <Alert message="上传成功" type="success" />
         )}
         {upLoadStatus === "error" && <Alert message={errorText} type="error" />}
-        
+
         {upLoadStatus !== "success" && upLoadStatus !== "error" && (
           <Progress
             strokeWidth={20}
