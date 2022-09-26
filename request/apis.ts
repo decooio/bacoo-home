@@ -17,7 +17,7 @@ import {
 
 export const REGISTERED_ADDRESS = "common/user";
 export const REGISTERED_API: registerApi = (data) => {
-  return request(REGISTERED_ADDRESS, data);
+  return request(REGISTERED_ADDRESS, { ...data, oem: "dekun" });
 };
 
 /**-----------------------------------------------------------登录------------------------------------------------------------------------------*/
@@ -155,7 +155,7 @@ export const CHANGE_PASSWORD_API: changePasswordApi = (data: {
   oldPassword: string;
   newPassword: string;
 }) => {
-  return request(CHANGE_PASSWORD, data,{
+  return request(CHANGE_PASSWORD, data, {
     method: "post",
     hint: false,
     loading: true,
@@ -185,7 +185,7 @@ export const SUBMIT_TICKETS = "auth/tickets/report";
 export const SUBMIT_TICKETS_API = (data: {
   description: string;
   type: string | number;
-  title:string
+  title: string;
 }) => {
   return request(SUBMIT_TICKETS, data, {
     method: "post",

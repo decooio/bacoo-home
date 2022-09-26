@@ -480,78 +480,15 @@ export default function Main() {
 
         {
           <div className={s.homeSlog}>
-            <span className={s.title}>百工链存-创新性分布式存储</span>
+            <span className={s.title}>德坤云存储-创新性分布式存储</span>
             <p className={s.info}>
-              百工链存探索与拓宽分布式存储技术的发展潜力与应用边界，为企业级IPFS存储需求提供完整可用的解决方案。
+              德坤云存储探索与拓宽分布式存储技术的发展潜力与应用边界，为企业级IPFS存储需求提供完整可用的解决方案。
             </p>
           </div>
         }
         <div className={s.auto_padding} />
       </div>
-      {
-        <div
-          className={
-            "text-12 text-gray-300 bottom-1 absolute h-12 md:h-auto w-full flex flex-wrap md:flex-nowrap " +
-            " justify-center gap-2.5 items-center mb-2"
-          }
-          style={{
-            fontSize: "14px",
-            color: "#999999",
-          }}
-        >
-          <div className={"w-full text-center md:w-auto"}>
-            百工智联（上海）工业科技有限公司
-          </div>
-
-          <a
-            className={"md:hover:text-white"}
-            style={{
-              fontSize: "14px",
-              color: "rgb(153, 153, 153)",
-            }}
-            target={"_blank"}
-            rel="noreferrer"
-            href={"https://beian.miit.gov.cn/"}
-          >
-            沪ICP备2022024704号-1
-          </a>
-
-          <a
-            style={{
-              fontSize: "14px",
-              color: "rgb(153, 153, 153)",
-            }}
-            className={"md:hover:text-white"}
-            target={"_blank"}
-            rel="noreferrer"
-            href={"https://beian.miit.gov.cn/"}
-          ></a>
-          <a
-            style={{
-              fontSize: "14px",
-              color: "rgb(153, 153, 153)",
-            }}
-            target={"_blank"}
-            rel="noreferrer"
-            className={"md:hover:text-white"}
-            href={"/termofuse"}
-          >
-            用户协议
-          </a>
-          <a
-            style={{
-              fontSize: "14px",
-              color: "rgb(153, 153, 153)",
-            }}
-            className={"md:hover:text-white"}
-            target={"_blank"}
-            href={"/privacy"}
-            rel="noreferrer"
-          >
-            隐私政策
-          </a>
-        </div>
-      }
+     
     </div>
   );
 }

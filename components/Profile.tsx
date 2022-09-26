@@ -400,8 +400,8 @@ export default function Profile() {
             <Title
               children={
                 plan?.orderType == 0
-                  ? "百工链存试用计划"
-                  : "百工链存存储计划Pro"
+                  ? "德坤云存储试用计划"
+                  : "德坤云存储存储计划Pro"
               }
             />
             <SpaceH />
@@ -613,7 +613,7 @@ export default function Profile() {
       >
         <HtmlReporter h="450px">
           <ModalText>存储计划名称</ModalText>
-          <DetailsText>百工链存 - 存储计划Pro</DetailsText>
+          <DetailsText>德坤云存储 - 存储计划Pro</DetailsText>
           <HeightBox />
 
           <ModalText>计划配置</ModalText>

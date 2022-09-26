@@ -209,26 +209,6 @@ const Nav = () => {
         </>
       ) : (
         <div className={"nav_right"}>
-          {showDocumentation && (
-            <div>
-              <a
-                rel="noreferrer"
-                href={"https://docs.baitech-ipfs.net/"}
-                className={"item"}
-                target="_blank"
-              >
-                文档
-              </a>
-              <a
-                rel="noreferrer"
-                href={"mailto:may.to@baitech.com"}
-                className={"item"}
-                target="_blank"
-              >
-                联系我们
-              </a>
-            </div>
-          )}
           <Userinfo />
         </div>
       )}
