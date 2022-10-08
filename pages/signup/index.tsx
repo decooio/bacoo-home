@@ -17,9 +17,11 @@ export const LogoBox = styled.div`
   display: flex;
   align-items: center;
   transform: scale(2.0);
+  justify-content: center;
   @media (max-height: 650px) {
     margin-bottom: 20px;
   }
+
 `;
 export const Logo = styled.img`
   width: 35px;

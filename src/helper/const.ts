@@ -12,7 +12,7 @@ export const fileSizeLimitMb = 2048;
 export const isBeta = true;
 
 export const baseUrl = isBeta
-  ? "https://beta-api.baitech-ipfs.net/"
+  ? "https://dekun.baitech-ipfs.net/"
   : "https://api.baitech-ipfs.net/";
 // @ts-ignore
 export const prod_auth =

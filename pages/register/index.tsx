@@ -22,6 +22,7 @@ const LogoBox = styled.div`
   display: flex;
   align-items: center;
   transform: scale(2.0);
+  justify-content: center;
   @media (max-height: 800px) {
     margin-bottom: 20px;
   }
