@@ -52,7 +52,7 @@ export function stringToObject(str: string | null) {
 }
 
 export function getLogoDark() {
-  return "/logo_dark.png";
+  return "/logo.ico";
 }
 
 export function getMsg(e: any, def = "Error") {

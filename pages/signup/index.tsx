@@ -11,13 +11,19 @@ export const FormWrapper = styled.div`
     width: 457px;
   }
 `;
-export const Logo = styled.embed`
+export const LogoBox = styled.div`
   width: 165px;
-  //height: 55px;
   margin-bottom: 63px;
+  display: flex;
+  align-items: center;
+  transform: scale(2.0);
   @media (max-height: 650px) {
     margin-bottom: 20px;
   }
+`;
+export const Logo = styled.img`
+  width: 35px;
+  margin-right: 10px;
 `;
 
 export const FlexBox = styled.div`
@@ -39,7 +45,10 @@ export default function Loing() {
   return (
     <div className="w-full h-full flex relative items-center justify-center">
       <FormWrapper className="relative flex  flex-col	items-center w-full px-8 md:px-0">
-        <Logo src={getLogoDark()} />
+        <LogoBox>
+          <Logo src={getLogoDark()} />
+          <span>德坤云存储</span>
+        </LogoBox>
         <LoginForm />
 
         <FlexBox>

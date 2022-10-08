@@ -8,15 +8,8 @@ const RegisterBox = styled.div`
   }
 `;
 const Logo = styled.embed`
-  width: 165px;
-
-  margin-bottom: 63px;
-  @media (max-height: 800px) {
-    margin-bottom: 20px;
-  }
-  @media (max-height: 680px) {
-    display: none;
-  }
+  width: 35px;
+  margin-right: 10px;
 `;
 export const FormWrapper = styled.div`
   @media (min-width: 768px) {
@@ -24,14 +17,25 @@ export const FormWrapper = styled.div`
   }
 `;
 const LogoBox = styled.div`
-  width: 100%;
+  width: 165px;
+  margin-bottom: 63px;
+  display: flex;
+  align-items: center;
+  transform: scale(2.0);
+  @media (max-height: 800px) {
+    margin-bottom: 20px;
+  }
+  @media (max-height: 680px) {
+    display: none;
+  }
 `;
 export default function Register() {
   return (
     <RegisterBox className="w-full h-full flex relative items-center justify-center">
       <FormWrapper className="relative flex  flex-col	items-center w-full px-8 md:px-0">
-        <LogoBox className="flex items-center justify-center">
+        <LogoBox>
           <Logo src={getLogoDark()} />
+          <span>德坤云存储</span>
         </LogoBox>
         <RegisterForm />
       </FormWrapper>
