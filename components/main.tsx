@@ -215,15 +215,15 @@ export default function Main() {
           )}/ipfs/${cid}`
         );
       } catch (err) {
-        console.log('err=>',err);
-        
+        console.log("err=>", err);
+
         removeFileList();
         message.error("上传失败，请稍后重试");
         setUpLoadStatus("initial");
         setPercent(0);
       }
     } catch (error) {
-      console.log('error=>',error);
+      console.log("error=>", error);
       removeFileList();
       message.error("上传失败，请稍后重试");
       setUpLoadStatus("initial");
@@ -504,7 +504,21 @@ export default function Main() {
           </div>
 
           <a
-            className={"md:hover:text-white"}
+            className={s.hb}
+            style={{
+              fontSize: "14px",
+              color: "rgb(153, 153, 153)",
+            }}
+            target={"_blank"}
+            rel="noreferrer"
+            href={
+              "http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31011702008768"
+            }
+          >
+            沪公网安备 31011702008768号
+          </a>
+          <a
+            className={s.hb}
             style={{
               fontSize: "14px",
               color: "rgb(153, 153, 153)",
@@ -533,7 +547,7 @@ export default function Main() {
             }}
             target={"_blank"}
             rel="noreferrer"
-            className={"md:hover:text-white"}
+            className={s.hb}
             href={"/termofuse"}
           >
             用户协议
@@ -543,7 +557,7 @@ export default function Main() {
               fontSize: "14px",
               color: "rgb(153, 153, 153)",
             }}
-            className={"md:hover:text-white"}
+            className={s.hb}
             target={"_blank"}
             href={"/privacy"}
             rel="noreferrer"
