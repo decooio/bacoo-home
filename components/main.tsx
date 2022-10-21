@@ -547,7 +547,7 @@ export default function Main() {
             }}
             target={"_blank"}
             rel="noreferrer"
-            className={"md:hover:text-white"}
+            className={s.hb}
             href={"/termofuse"}
           >
             用户协议
@@ -557,7 +557,7 @@ export default function Main() {
               fontSize: "14px",
               color: "rgb(153, 153, 153)",
             }}
-            className={"md:hover:text-white"}
+            className={s.hb}
             target={"_blank"}
             href={"/privacy"}
             rel="noreferrer"
