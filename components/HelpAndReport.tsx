@@ -425,10 +425,10 @@ export default function HelpAndReport() {
         <ModalText>报告人</ModalText>
         <Reporter>{username}</Reporter>
         <HeightBox h="10px"></HeightBox>
-        <ModalText>报告标题</ModalText>
+        <ModalText>报告内容</ModalText>
         <MyInput value={title} setValue={(value) => setTitle(value)} />
         <HeightBox h="10px"></HeightBox>
-        <ModalText>报告内容</ModalText>
+        
 
         <Editor
           value={description}
