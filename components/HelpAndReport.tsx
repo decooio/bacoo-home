@@ -166,7 +166,7 @@ const typeList = [
 
 export default function HelpAndReport() {
   const { state, dispatch } = useContext(Context) as any;
-  const { userName } = state;
+  const { username } = state.user;
   const editor = useRef(null);
   const [pageNum, setPageNum] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
@@ -423,7 +423,7 @@ export default function HelpAndReport() {
         </Select>
         <HeightBox h="10px"></HeightBox>
         <ModalText>报告人</ModalText>
-        <Reporter>{userName}</Reporter>
+        <Reporter>{username}</Reporter>
         <HeightBox h="10px"></HeightBox>
         <ModalText>报告标题</ModalText>
         <MyInput value={title} setValue={(value) => setTitle(value)} />
@@ -506,7 +506,7 @@ export default function HelpAndReport() {
           <HeightBox></HeightBox>
 
           <ModalText>报告人</ModalText>
-          <Reporter>{userName}</Reporter>
+          <Reporter>{username}</Reporter>
           <HeightBox></HeightBox>
 
           <ModalText>报告内容</ModalText>

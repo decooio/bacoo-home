@@ -215,15 +215,15 @@ export default function Main() {
           )}/ipfs/${cid}`
         );
       } catch (err) {
-        console.log('err=>',err);
-        
+        console.log("err=>", err);
+
         removeFileList();
         message.error("上传失败，请稍后重试");
         setUpLoadStatus("initial");
         setPercent(0);
       }
     } catch (error) {
-      console.log('error=>',error);
+      console.log("error=>", error);
       removeFileList();
       message.error("上传失败，请稍后重试");
       setUpLoadStatus("initial");
@@ -503,6 +503,18 @@ export default function Main() {
             百工智联（上海）工业科技有限公司
           </div>
 
+          <a
+            className={"md:hover:text-white"}
+            style={{
+              fontSize: "14px",
+              color: "rgb(153, 153, 153)",
+            }}
+            target={"_blank"}
+            rel="noreferrer"
+            href={"http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31011702008768"}
+          >
+            沪公网安备 31011702008768号
+          </a>
           <a
             className={"md:hover:text-white"}
             style={{
