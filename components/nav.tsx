@@ -89,7 +89,7 @@ const NavDiv = styled.div<{ isHome: boolean }>`
     color: #fff !important;
 
     &:hover {
-      color: #2cc8c2;
+      color: #2cc8c2 !important;
     }
   }
   ${Phone} {

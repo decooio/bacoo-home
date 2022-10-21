@@ -422,7 +422,7 @@ export default function HelpAndReport() {
           })}
         </Select>
         <HeightBox h="10px"></HeightBox>
-        <ModalText>报告人</ModalText>
+        <div>报告人</div>
         <Reporter>{username}</Reporter>
         <HeightBox h="10px"></HeightBox>
         <ModalText>报告内容</ModalText>

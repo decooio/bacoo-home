@@ -504,19 +504,21 @@ export default function Main() {
           </div>
 
           <a
-            className={"md:hover:text-white"}
+            className={s.hb}
             style={{
               fontSize: "14px",
               color: "rgb(153, 153, 153)",
             }}
             target={"_blank"}
             rel="noreferrer"
-            href={"http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31011702008768"}
+            href={
+              "http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31011702008768"
+            }
           >
             沪公网安备 31011702008768号
           </a>
           <a
-            className={"md:hover:text-white"}
+            className={s.hb}
             style={{
               fontSize: "14px",
               color: "rgb(153, 153, 153)",
