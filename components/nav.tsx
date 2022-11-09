@@ -4,12 +4,10 @@ import React from "react";
 import Userinfo from "./Userinfo";
 import _ from "lodash";
 import styled, { css } from "styled-components";
-import { WIKI_URL } from "../src/helper/const";
 import { Phone, useDevice } from "../src/assets/style";
 import { Drawer } from "antd";
 import { FiMenu, FiX } from "react-icons/fi";
 import { COL, Row, SpaceW } from "./common/layouts";
-import { useTranslation } from "react-i18next";
 // import i18next from "i18next";
 
 export const NavOtherLayout = styled.div`
@@ -89,7 +87,7 @@ const NavDiv = styled.div<{ isHome: boolean }>`
     color: #fff !important;
 
     &:hover {
-      color: #2cc8c2;
+      color: #2cc8c2 !important;
     }
   }
   ${Phone} {
@@ -147,7 +145,6 @@ const MMenu = styled(FiMenu)`
 
 const Nav = () => {
   const router = useRouter();
-  const { t } = useTranslation();
   const { isMobile } = useDevice();
   const [visible, setVisible] = useState(false);
   const isHome = router.pathname === "/";
@@ -178,7 +175,7 @@ const Nav = () => {
         )}
       </div>
       {isMobile ? (
-        <>
+        <div>
           <Row>
             {showMenu && <MMenu onClick={() => setVisible(true)} />}
             <SpaceW />
@@ -191,22 +188,33 @@ const Nav = () => {
             height={120}
             closeIcon={<FiX color={"#fff"} size={24} />}
             contentWrapperStyle={{ background: "gray" }}
+            headerStyle={{ background: "rgb(45,45,45)" }}
             drawerStyle={{ background: "rgb(45,45,45)" }}
           >
             <Menus>
               {showDocumentation && (
-                <span
-                  className={"item"}
-                  children={t("Documentation")}
-                  onClick={() => {
-                    setVisible(false);
-                    window.open(WIKI_URL, "_blank");
-                  }}
-                />
+                <div className="flex flex-col">
+                  <a
+                    rel="noreferrer"
+                    href={"https://docs.baitech-ipfs.net/"}
+                    className={"item"}
+                    target="_blank"
+                  >
+                    文档
+                  </a>
+                  <a
+                    rel="noreferrer"
+                    href={"mailto:may.to@baitech.com"}
+                    className={"item"}
+                    target="_blank"
+                  >
+                    联系我们
+                  </a>
+              </div>
               )}
             </Menus>
           </Drawer>
-        </>
+        </div>
       ) : (
         <div className={"nav_right"}>
           <Userinfo />
