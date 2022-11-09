@@ -11,15 +11,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.4
 
-      - name: Install dependencies
-        uses: Borales/actions-yarn@v3
+      - name: Setup Node v16
+        uses: actions/setup-node@v1
         with:
-          cmd: install --frozen-lockfile
+          node-version: v16.16.0
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            .next
+            .yarn/cache
+            ./node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
       - name: Build for production
-        uses: Borales/actions-yarn@v3
-        with:
-          cmd: export
+        run: yarn export
 
       - name: Deploy Gh-Pages 🚀
         uses: peaceiris/actions-gh-pages@v3
