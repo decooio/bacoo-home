@@ -7,16 +7,8 @@ const RegisterBox = styled.div`
   padding-top: 88px;
 `;
 const Logo = styled.embed`
-  width: 165px;
-
-  margin-bottom: 63px;
-  @media (max-height: 800px) {
-    margin-bottom: 20px;
-  }
-  @media (max-height: 680px) {
-    /* display: none; */
-    margin-bottom: unset;
-  }
+  width: 35px;
+  margin-right: 10px;
 `;
 export const FormWrapper = styled.div`
   @media (min-width: 768px) {
