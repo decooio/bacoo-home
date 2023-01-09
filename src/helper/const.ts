@@ -9,9 +9,9 @@ export const ErrorDist = {
 export const fileSizeLimitMb = 2048;
 
 // @ts-ignore
-export const isBeta = true;
+export const isBeta = false;
 // @ts-ignore
-export const oem: string = "baitech";
+export const oem: string = "zhong";
 export interface OEMConfig {
   name: string;
   logo: string;
