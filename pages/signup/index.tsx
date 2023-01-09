@@ -1,10 +1,9 @@
-import React from "react";
 
 import styled from "styled-components";
-import { getLogoDark } from "../../src/helper/utils";
-
-import LoginForm from "./components/loginForm";
+import { oemConfig } from "@src/helper/const";
 import router from "next/router";
+import LoginForm from "./components/loginForm";
+import React from "react";
 
 export const FormWrapper = styled.div`
   @media (min-width: 768px) {
@@ -39,7 +38,7 @@ export default function Loing() {
   return (
     <div className="w-full h-full flex relative items-center justify-center">
       <FormWrapper className="relative flex  flex-col	items-center w-full px-8 md:px-0">
-        <Logo src={getLogoDark()} />
+        <Logo src={oemConfig.logoDark} />
         <LoginForm />
 
         <FlexBox>

@@ -20,14 +20,14 @@ import copyToClipboard from "copy-to-clipboard";
 import { Context } from "./Context/Context";
 import { eloginStatus } from "./Context/types";
 import router from "next/router";
-import { AUTH, SUB_DOMAIN } from "@src/helper/const";
+import { oemConfig } from "@src/helper/const";
 export const SIZE_LIMIT = 100 * 1024 * 1024;
 
 export const upDataPorps = {
   showUploadList: false,
   name: "file",
   headers: {
-    authorization: AUTH,
+    authorization: oemConfig.auth,
   },
 };
 
@@ -144,7 +144,7 @@ export default function Main() {
    * 获取节点列表
    * */
   const getGatewayList = async () => {
-    setLoc("token", AUTH);
+    setLoc("token", oemConfig.auth);
     try {
       const res = await GET_GATEWAY_LIST_API();
       setGayewayList([...res.data]);
@@ -175,7 +175,7 @@ export default function Main() {
         formData,
         {
           headers: {
-            authorization: AUTH,
+            authorization: oemConfig.auth,
           },
           onUploadProgress: (progressEvent) => {
             if (progressEvent.lengthComputable) {
@@ -200,7 +200,7 @@ export default function Main() {
         Name = res.data.Name;
       }
       try {
-        setLoc("token", AUTH);
+        setLoc("token", oemConfig.auth);
         const updatares = await UPDATA_FILE_API({
           cid: Hash,
           name: Name,
@@ -209,7 +209,7 @@ export default function Main() {
         setUpLoadStatus("finish");
         const { cid } = (updatares as any).pin;
         setShareUrl(
-          `https://${SUB_DOMAIN}.${activeGateway?.host.replace(
+          `https://${oemConfig.subDomain}.${activeGateway?.host.replace(
             "https://",
             ""
           )}/ipfs/${cid}`
@@ -480,9 +480,9 @@ export default function Main() {
 
         {
           <div className={s.homeSlog}>
-            <span className={s.title}>百工链存-创新性分布式存储</span>
+            <span className={s.title}>{oemConfig.name}-创新性分布式存储</span>
             <p className={s.info}>
-              百工链存探索与拓宽分布式存储技术的发展潜力与应用边界，为企业级IPFS存储需求提供完整可用的解决方案。
+             {oemConfig.name}探索与拓宽分布式存储技术的发展潜力与应用边界，为企业级IPFS存储需求提供完整可用的解决方案。
             </p>
           </div>
         }
@@ -495,6 +495,7 @@ export default function Main() {
             " justify-center gap-2.5 items-center mb-2"
           }
           style={{
+            display: oemConfig.showBeian? 'flex': 'none',
             fontSize: "14px",
             color: "#999999",
           }}

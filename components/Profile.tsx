@@ -19,6 +19,7 @@ import router from "next/router";
 import { Tips } from "./common/tips";
 import { HtmlReporter } from "./HelpAndReport";
 import MyInput from "./common/MyInput";
+import { oemConfig } from "@src/helper/const";
 
 const Grid = styled(Row)`
   height: 100%;
@@ -400,8 +401,8 @@ export default function Profile() {
             <Title
               children={
                 plan?.orderType == 0
-                  ? "百工链存试用计划"
-                  : "百工链存存储计划Pro"
+                  ? `${oemConfig.name}试用计划`
+                  : `${oemConfig.name}存储计划Pro`
               }
             />
             <SpaceH />
@@ -613,7 +614,7 @@ export default function Profile() {
       >
         <HtmlReporter h="450px">
           <ModalText>存储计划名称</ModalText>
-          <DetailsText>百工链存 - 存储计划Pro</DetailsText>
+          <DetailsText>{oemConfig.name} - 存储计划Pro</DetailsText>
           <HeightBox />
 
           <ModalText>计划配置</ModalText>

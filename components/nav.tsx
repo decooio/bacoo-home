@@ -8,6 +8,7 @@ import { Phone, useDevice } from "../src/assets/style";
 import { Drawer } from "antd";
 import { FiMenu, FiX } from "react-icons/fi";
 import { COL, Row, SpaceW } from "./common/layouts";
+import { oemConfig } from "@src/helper/const";
 // import i18next from "i18next";
 
 export const NavOtherLayout = styled.div`
@@ -115,7 +116,7 @@ const Menus = styled(COL)`
 `;
 export const getLogo = (isMobile: boolean) => {
   return {
-    src: "/logo.png",
+    src: oemConfig.logo,
     width: isMobile ? 60 : 110,
     height: isMobile ? 20 : 37,
   };
