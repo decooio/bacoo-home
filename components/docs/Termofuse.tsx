@@ -1,11 +1,12 @@
 import React from "react";
 import {PWraper} from "./Privacy";
 import Head from 'next/head'
+import { oemConfig } from "@src/helper/const";
 
 export default function TermOfUseCN(){
   return <PWraper>
      <Head>
-      <title>百工链存-用户协议</title>
+      <title>{oemConfig.name}-用户协议</title>
     </Head>
     <h1>百工用户协议</h1>
     <p>本协议系由百工开发团队及其关联公司（以下简称“百工”）与所有使用百工服务的主体（包括但不限于个人、团队等）（以下简称“用户”）对百工服务的使用及相关服务所订立的有效合约。使用百工服务的任何服务即表示接受本协议的全部条款。本协议适用于任何百工服务，包括本协议期限内的用户所使用的各项服务和软件的升级和更新。</p>

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Head from 'next/head'
+import { oemConfig } from "@src/helper/const";
 export const PWraper = styled.div`
   margin-top: 80px;
   overflow: auto;
@@ -19,7 +20,7 @@ export const PWraper = styled.div`
 export default function PrivacyCN() {
   return <PWraper>
     <Head>
-      <title>百工链存-隐私政策</title>
+      <title>{oemConfig.name}-隐私政策</title>
     </Head>
     <h1>百工隐私政策</h1>
     引言
