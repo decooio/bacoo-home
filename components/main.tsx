@@ -469,9 +469,9 @@ export default function Main() {
             color: "#999999",
           }}
         >
-          <div className={"w-full text-center md:w-auto"}>百工智联（上海）工业科技有限公司</div>
           {oemConfig.showBeian && (
             <>
+              <div className={"w-full text-center md:w-auto"}>百工智联（上海）工业科技有限公司</div>
               <a
                 className={s.hb}
                 style={{
