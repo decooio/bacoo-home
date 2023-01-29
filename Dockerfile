@@ -11,7 +11,7 @@ FROM node:16-alpine AS builder
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-RUN yarn build && yarn install --frozen-lockfile --production --ignore-scripts --prefer-offline
+RUN yarn build
 
 # Production image, copy all the files and run next
 FROM node:16-alpine AS runner
