@@ -108,9 +108,7 @@ export default function Main() {
     nodeType: number;
     name: string;
   } | null>();
-  const [upLoadStatus, setUpLoadStatus] = useState<string | undefined>(
-    "initial"
-  );
+  const [upLoadStatus, setUpLoadStatus] = useState<string | undefined>("initial");
   const [fileList, setFileList] = useState<RcFile[]>([]);
   const [folder, setFolder] = useState("");
   const [folderSize, setFolderSize] = useState(0);
@@ -170,23 +168,18 @@ export default function Main() {
 
     try {
       setUpLoadStatus("uploading");
-      const res = await axios.post(
-        `${activeGateway?.host}/api/v0/add?pin=true`,
-        formData,
-        {
-          headers: {
-            authorization: oemConfig.auth,
-          },
-          onUploadProgress: (progressEvent) => {
-            if (progressEvent.lengthComputable) {
-              const complete =
-                ((progressEvent.loaded / progressEvent.total) * 100) | 0;
-              const percent = complete;
-              setPercent(percent);
-            }
-          },
-        }
-      );
+      const res = await axios.post(`${activeGateway?.host}/api/v0/add?pin=true`, formData, {
+        headers: {
+          authorization: oemConfig.auth,
+        },
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.lengthComputable) {
+            const complete = ((progressEvent.loaded / progressEvent.total) * 100) | 0;
+            const percent = complete;
+            setPercent(percent);
+          }
+        },
+      });
       let Hash = "";
       let Name = "";
       setPercent(100);
@@ -208,12 +201,7 @@ export default function Main() {
         localStorage.removeItem("token");
         setUpLoadStatus("finish");
         const { cid } = (updatares as any).pin;
-        setShareUrl(
-          `https://${oemConfig.subDomain}.${activeGateway?.host.replace(
-            "https://",
-            ""
-          )}/ipfs/${cid}`
-        );
+        setShareUrl(`https://${oemConfig.subDomain}.${activeGateway?.host.replace("https://", "")}/ipfs/${cid}`);
       } catch (err) {
         console.log("err=>", err);
 
@@ -282,12 +270,7 @@ export default function Main() {
             directory
             {...upDataPorps}
             beforeUpload={async (file: any) => {
-              setFolder(
-                file.webkitRelativePath.substring(
-                  0,
-                  file.webkitRelativePath.indexOf("/")
-                )
-              );
+              setFolder(file.webkitRelativePath.substring(0, file.webkitRelativePath.indexOf("/")));
 
               const locFolder = fileList;
               locFolder.push(file);
@@ -317,13 +300,7 @@ export default function Main() {
     const margin = isMobile ? "0 15px" : "0 20px";
     return (
       <div className={s.inputFile}>
-        <Progress
-          strokeWidth={stroke}
-          style={{ margin }}
-          strokeColor={"#333333"}
-          showInfo={false}
-          percent={percent}
-        />
+        <Progress strokeWidth={stroke} style={{ margin }} strokeColor={"#333333"} showInfo={false} percent={percent} />
       </div>
     );
   };
@@ -367,9 +344,7 @@ export default function Main() {
   function DcPanelCom(list: getgatewayListRes["data"]) {
     return (
       <DCPanel invisible={false}>
-        <div className={"title"}>
-          {folder && folderSize ? "添加文件夹" : "添加文件"}
-        </div>
+        <div className={"title"}>{folder && folderSize ? "添加文件夹" : "添加文件"}</div>
 
         {folder && folderSize ? (
           <div className={"file_item"}>
@@ -405,10 +380,7 @@ export default function Main() {
               <Menu>
                 {list.map((item, index) => {
                   return (
-                    <Menu.Item
-                      key={index}
-                      onClick={() => setActiveGateway(item)}
-                    >
+                    <Menu.Item key={index} onClick={() => setActiveGateway(item)}>
                       {item.name}
                     </Menu.Item>
                   );
@@ -448,9 +420,7 @@ export default function Main() {
   }, []);
 
   useEffect(() => {
-    const totalSize = fileList
-      .map((item) => item.size)
-      .reduce((prev, curr) => prev + curr, 0);
+    const totalSize = fileList.map((item) => item.size).reduce((prev, curr) => prev + curr, 0);
     setFolderSize(totalSize);
   }, [fileList]);
 
@@ -482,91 +452,94 @@ export default function Main() {
           <div className={s.homeSlog}>
             <span className={s.title}>{oemConfig.name}-创新性分布式存储</span>
             <p className={s.info}>
-             {oemConfig.name}探索与拓宽分布式存储技术的发展潜力与应用边界，为企业级IPFS存储需求提供完整可用的解决方案。
+              {oemConfig.name}探索与拓宽分布式存储技术的发展潜力与应用边界，为企业级IPFS存储需求提供完整可用的解决方案。
             </p>
           </div>
         }
         <div className={s.auto_padding} />
       </div>
-      {
+      {(oemConfig.showBeian || oemConfig.showPrivacyAndTermofuse) && (
         <div
           className={
             "text-12 text-gray-300 bottom-1 absolute h-12 md:h-auto w-full flex flex-wrap md:flex-nowrap " +
             " justify-center gap-2.5 items-center mb-2"
           }
           style={{
-            display: oemConfig.showBeian? 'flex': 'none',
             fontSize: "14px",
             color: "#999999",
           }}
         >
-          <div className={"w-full text-center md:w-auto"}>
-            百工智联（上海）工业科技有限公司
-          </div>
+          <div className={"w-full text-center md:w-auto"}>百工智联（上海）工业科技有限公司</div>
+          {oemConfig.showBeian && (
+            <>
+              <a
+                className={s.hb}
+                style={{
+                  fontSize: "14px",
+                  color: "rgb(153, 153, 153)",
+                }}
+                target={"_blank"}
+                rel="noreferrer"
+                href={"http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31011702008768"}
+              >
+                沪公网安备 31011702008768号
+              </a>
+              <a
+                className={s.hb}
+                style={{
+                  fontSize: "14px",
+                  color: "rgb(153, 153, 153)",
+                }}
+                target={"_blank"}
+                rel="noreferrer"
+                href={"https://beian.miit.gov.cn/"}
+              >
+                沪ICP备2022024704号-1
+              </a>
 
-          <a
-            className={s.hb}
-            style={{
-              fontSize: "14px",
-              color: "rgb(153, 153, 153)",
-            }}
-            target={"_blank"}
-            rel="noreferrer"
-            href={
-              "http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31011702008768"
-            }
-          >
-            沪公网安备 31011702008768号
-          </a>
-          <a
-            className={s.hb}
-            style={{
-              fontSize: "14px",
-              color: "rgb(153, 153, 153)",
-            }}
-            target={"_blank"}
-            rel="noreferrer"
-            href={"https://beian.miit.gov.cn/"}
-          >
-            沪ICP备2022024704号-1
-          </a>
+              <a
+                style={{
+                  fontSize: "14px",
+                  color: "rgb(153, 153, 153)",
+                }}
+                className={"md:hover:text-white"}
+                target={"_blank"}
+                rel="noreferrer"
+                href={"https://beian.miit.gov.cn/"}
+              ></a>
+            </>
+          )}
 
-          <a
-            style={{
-              fontSize: "14px",
-              color: "rgb(153, 153, 153)",
-            }}
-            className={"md:hover:text-white"}
-            target={"_blank"}
-            rel="noreferrer"
-            href={"https://beian.miit.gov.cn/"}
-          ></a>
-          <a
-            style={{
-              fontSize: "14px",
-              color: "rgb(153, 153, 153)",
-            }}
-            target={"_blank"}
-            rel="noreferrer"
-            className={s.hb}
-            href={"/termofuse"}
-          >
-            用户协议
-          </a>
-          <a
-            style={{
-              fontSize: "14px",
-              color: "rgb(153, 153, 153)",
-            }}
-            className={s.hb}
-            target={"_blank"}
-            href={"/privacy"}
-            rel="noreferrer"
-          >
-            隐私政策
-          </a>
+          {oemConfig.showPrivacyAndTermofuse && (
+            <a
+              style={{
+                fontSize: "14px",
+                color: "rgb(153, 153, 153)",
+              }}
+              target={"_blank"}
+              rel="noreferrer"
+              className={s.hb}
+              href={"/termofuse"}
+            >
+              用户协议
+            </a>
+          )}
+          {oemConfig.showPrivacyAndTermofuse && (
+            <a
+              style={{
+                fontSize: "14px",
+                color: "rgb(153, 153, 153)",
+              }}
+              className={s.hb}
+              target={"_blank"}
+              href={"/privacy"}
+              rel="noreferrer"
+            >
+              隐私政策
+            </a>
+          )}
         </div>
-      }
+      )}
     </div>
   );
 }
