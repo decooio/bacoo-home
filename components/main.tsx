@@ -202,11 +202,10 @@ export default function Main() {
         setUpLoadStatus("finish");
         const { cid } = (updatares as any).pin;
         setShareUrl(`https://${oemConfig.subDomain}.${activeGateway?.host.replace("https://", "")}/ipfs/${cid}`);
-      } catch (err) {
+      } catch (err: any) {
         console.log("err=>", err);
-
         removeFileList();
-        message.error("上传失败，请稍后重试");
+        message.error(err.data.message || "上传失败，请稍后重试");
         setUpLoadStatus("initial");
         setPercent(0);
       }
