@@ -51,10 +51,6 @@ export function stringToObject(str: string | null) {
   return JSON.parse(str);
 }
 
-export function getLogoDark() {
-  return "/logo_dark.png";
-}
-
 export function getMsg(e: any, def = "Error") {
   console.info("res-->:", e.response);
   return _.get(e, "response.data.Msg", _.get(e, "message", def));

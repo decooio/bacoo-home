@@ -1,7 +1,8 @@
-import React from "react";
+import { oemConfig } from "@src/helper/const";
 import styled from "styled-components";
-import { getLogoDark } from "../../src/helper/utils";
 import RegisterForm from "./components/registerForm";
+import React from "react";
+
 const RegisterBox = styled.div`
   overflow-y: auto;
   padding-top: 88px;
@@ -32,7 +33,7 @@ export default function Register() {
       <div className="flex-1"/>
       <FormWrapper className="relative flex  flex-col	items-center w-full px-8 md:px-0">
         <LogoBox className="flex items-center justify-center">
-          <Logo src={getLogoDark()} />
+          <Logo src={oemConfig.logoDark} />
         </LogoBox>
         <RegisterForm />
       </FormWrapper>

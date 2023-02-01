@@ -20,14 +20,14 @@ import copyToClipboard from "copy-to-clipboard";
 import { Context } from "./Context/Context";
 import { eloginStatus } from "./Context/types";
 import router from "next/router";
-import { AUTH, SUB_DOMAIN } from "@src/helper/const";
+import { oemConfig } from "@src/helper/const";
 export const SIZE_LIMIT = 100 * 1024 * 1024;
 
 export const upDataPorps = {
   showUploadList: false,
   name: "file",
   headers: {
-    authorization: AUTH,
+    authorization: oemConfig.auth,
   },
 };
 
@@ -108,9 +108,7 @@ export default function Main() {
     nodeType: number;
     name: string;
   } | null>();
-  const [upLoadStatus, setUpLoadStatus] = useState<string | undefined>(
-    "initial"
-  );
+  const [upLoadStatus, setUpLoadStatus] = useState<string | undefined>("initial");
   const [fileList, setFileList] = useState<RcFile[]>([]);
   const [folder, setFolder] = useState("");
   const [folderSize, setFolderSize] = useState(0);
@@ -144,7 +142,7 @@ export default function Main() {
    * 获取节点列表
    * */
   const getGatewayList = async () => {
-    setLoc("token", AUTH);
+    setLoc("token", oemConfig.auth);
     try {
       const res = await GET_GATEWAY_LIST_API();
       setGayewayList([...res.data]);
@@ -170,23 +168,18 @@ export default function Main() {
 
     try {
       setUpLoadStatus("uploading");
-      const res = await axios.post(
-        `${activeGateway?.host}/api/v0/add?pin=true`,
-        formData,
-        {
-          headers: {
-            authorization: AUTH,
-          },
-          onUploadProgress: (progressEvent) => {
-            if (progressEvent.lengthComputable) {
-              const complete =
-                ((progressEvent.loaded / progressEvent.total) * 100) | 0;
-              const percent = complete;
-              setPercent(percent);
-            }
-          },
-        }
-      );
+      const res = await axios.post(`${activeGateway?.host}/api/v0/add?pin=true`, formData, {
+        headers: {
+          authorization: oemConfig.auth,
+        },
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.lengthComputable) {
+            const complete = ((progressEvent.loaded / progressEvent.total) * 100) | 0;
+            const percent = complete;
+            setPercent(percent);
+          }
+        },
+      });
       let Hash = "";
       let Name = "";
       setPercent(100);
@@ -200,7 +193,7 @@ export default function Main() {
         Name = res.data.Name;
       }
       try {
-        setLoc("token", AUTH);
+        setLoc("token", oemConfig.auth);
         const updatares = await UPDATA_FILE_API({
           cid: Hash,
           name: Name,
@@ -208,17 +201,11 @@ export default function Main() {
         localStorage.removeItem("token");
         setUpLoadStatus("finish");
         const { cid } = (updatares as any).pin;
-        setShareUrl(
-          `https://${SUB_DOMAIN}.${activeGateway?.host.replace(
-            "https://",
-            ""
-          )}/ipfs/${cid}`
-        );
-      } catch (err) {
+        setShareUrl(`https://${oemConfig.subDomain}.${activeGateway?.host.replace("https://", "")}/ipfs/${cid}`);
+      } catch (err: any) {
         console.log("err=>", err);
-
         removeFileList();
-        message.error("上传失败，请稍后重试");
+        message.error(err.data.message || "上传失败，请稍后重试");
         setUpLoadStatus("initial");
         setPercent(0);
       }
@@ -282,12 +269,7 @@ export default function Main() {
             directory
             {...upDataPorps}
             beforeUpload={async (file: any) => {
-              setFolder(
-                file.webkitRelativePath.substring(
-                  0,
-                  file.webkitRelativePath.indexOf("/")
-                )
-              );
+              setFolder(file.webkitRelativePath.substring(0, file.webkitRelativePath.indexOf("/")));
 
               const locFolder = fileList;
               locFolder.push(file);
@@ -317,13 +299,7 @@ export default function Main() {
     const margin = isMobile ? "0 15px" : "0 20px";
     return (
       <div className={s.inputFile}>
-        <Progress
-          strokeWidth={stroke}
-          style={{ margin }}
-          strokeColor={"#333333"}
-          showInfo={false}
-          percent={percent}
-        />
+        <Progress strokeWidth={stroke} style={{ margin }} strokeColor={"#333333"} showInfo={false} percent={percent} />
       </div>
     );
   };
@@ -367,9 +343,7 @@ export default function Main() {
   function DcPanelCom(list: getgatewayListRes["data"]) {
     return (
       <DCPanel invisible={false}>
-        <div className={"title"}>
-          {folder && folderSize ? "添加文件夹" : "添加文件"}
-        </div>
+        <div className={"title"}>{folder && folderSize ? "添加文件夹" : "添加文件"}</div>
 
         {folder && folderSize ? (
           <div className={"file_item"}>
@@ -405,10 +379,7 @@ export default function Main() {
               <Menu>
                 {list.map((item, index) => {
                   return (
-                    <Menu.Item
-                      key={index}
-                      onClick={() => setActiveGateway(item)}
-                    >
+                    <Menu.Item key={index} onClick={() => setActiveGateway(item)}>
                       {item.name}
                     </Menu.Item>
                   );
@@ -448,9 +419,7 @@ export default function Main() {
   }, []);
 
   useEffect(() => {
-    const totalSize = fileList
-      .map((item) => item.size)
-      .reduce((prev, curr) => prev + curr, 0);
+    const totalSize = fileList.map((item) => item.size).reduce((prev, curr) => prev + curr, 0);
     setFolderSize(totalSize);
   }, [fileList]);
 
@@ -480,15 +449,15 @@ export default function Main() {
 
         {
           <div className={s.homeSlog}>
-            <span className={s.title}>百工链存-创新性分布式存储</span>
+            <span className={s.title}>{oemConfig.name}-创新性分布式存储</span>
             <p className={s.info}>
-              百工链存探索与拓宽分布式存储技术的发展潜力与应用边界，为企业级IPFS存储需求提供完整可用的解决方案。
+              {oemConfig.name}探索与拓宽分布式存储技术的发展潜力与应用边界，为企业级IPFS存储需求提供完整可用的解决方案。
             </p>
           </div>
         }
         <div className={s.auto_padding} />
       </div>
-      {
+      {(oemConfig.showBeian || oemConfig.showPrivacyAndTermofuse) && (
         <div
           className={
             "text-12 text-gray-300 bottom-1 absolute h-12 md:h-auto w-full flex flex-wrap md:flex-nowrap " +
@@ -499,73 +468,77 @@ export default function Main() {
             color: "#999999",
           }}
         >
-          <div className={"w-full text-center md:w-auto"}>
-            百工智联（上海）工业科技有限公司
-          </div>
+          {oemConfig.showBeian && (
+            <>
+              <div className={"w-full text-center md:w-auto"}>百工智联（上海）工业科技有限公司</div>
+              <a
+                className={s.hb}
+                style={{
+                  fontSize: "14px",
+                  color: "rgb(153, 153, 153)",
+                }}
+                target={"_blank"}
+                rel="noreferrer"
+                href={"http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31011702008768"}
+              >
+                沪公网安备 31011702008768号
+              </a>
+              <a
+                className={s.hb}
+                style={{
+                  fontSize: "14px",
+                  color: "rgb(153, 153, 153)",
+                }}
+                target={"_blank"}
+                rel="noreferrer"
+                href={"https://beian.miit.gov.cn/"}
+              >
+                沪ICP备2022024704号-1
+              </a>
 
-          <a
-            className={s.hb}
-            style={{
-              fontSize: "14px",
-              color: "rgb(153, 153, 153)",
-            }}
-            target={"_blank"}
-            rel="noreferrer"
-            href={
-              "http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31011702008768"
-            }
-          >
-            沪公网安备 31011702008768号
-          </a>
-          <a
-            className={s.hb}
-            style={{
-              fontSize: "14px",
-              color: "rgb(153, 153, 153)",
-            }}
-            target={"_blank"}
-            rel="noreferrer"
-            href={"https://beian.miit.gov.cn/"}
-          >
-            沪ICP备2022024704号-1
-          </a>
+              <a
+                style={{
+                  fontSize: "14px",
+                  color: "rgb(153, 153, 153)",
+                }}
+                className={"md:hover:text-white"}
+                target={"_blank"}
+                rel="noreferrer"
+                href={"https://beian.miit.gov.cn/"}
+              ></a>
+            </>
+          )}
 
-          <a
-            style={{
-              fontSize: "14px",
-              color: "rgb(153, 153, 153)",
-            }}
-            className={"md:hover:text-white"}
-            target={"_blank"}
-            rel="noreferrer"
-            href={"https://beian.miit.gov.cn/"}
-          ></a>
-          <a
-            style={{
-              fontSize: "14px",
-              color: "rgb(153, 153, 153)",
-            }}
-            target={"_blank"}
-            rel="noreferrer"
-            className={s.hb}
-            href={"/termofuse"}
-          >
-            用户协议
-          </a>
-          <a
-            style={{
-              fontSize: "14px",
-              color: "rgb(153, 153, 153)",
-            }}
-            className={s.hb}
-            target={"_blank"}
-            href={"/privacy"}
-            rel="noreferrer"
-          >
-            隐私政策
-          </a>
+          {oemConfig.showPrivacyAndTermofuse && (
+            <a
+              style={{
+                fontSize: "14px",
+                color: "rgb(153, 153, 153)",
+              }}
+              target={"_blank"}
+              rel="noreferrer"
+              className={s.hb}
+              href={"/termofuse"}
+            >
+              用户协议
+            </a>
+          )}
+          {oemConfig.showPrivacyAndTermofuse && (
+            <a
+              style={{
+                fontSize: "14px",
+                color: "rgb(153, 153, 153)",
+              }}
+              className={s.hb}
+              target={"_blank"}
+              href={"/privacy"}
+              rel="noreferrer"
+            >
+              隐私政策
+            </a>
+          )}
         </div>
-      }
+      )}
     </div>
   );
 }

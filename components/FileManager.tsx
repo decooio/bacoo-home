@@ -315,13 +315,7 @@ export default function FileManager() {
           updataPlan();
         } catch (e: any) {
           setUpLoadStatus("error");
-          if (e.response) {
-            steErrorText(
-              e.response.data.code == 500
-                ? "上传失败，请稍后重试"
-                : e.response.data.message || "上传失败，请稍后重试"
-            );
-          }
+          steErrorText(e.data.message || "上传失败，请稍后重试");
         }
       })
       .catch((err) => {

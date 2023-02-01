@@ -1,6 +1,6 @@
 import { GET_USER_INFO_API } from "@request/apis";
 import { getUserInfoRes } from "@request/types";
-import { AUTH } from "@src/helper/const";
+import { oemConfig } from "@src/helper/const";
 import { getLoc } from "@src/index";
 import router from "next/router";
 import React, { createContext, useEffect, useReducer, useState } from "react";
@@ -85,7 +85,7 @@ const MyContextWrapper = ({ children: children }: any) => {
   useEffect(() => {
     const loginStatus =
       getLoc("token") &&
-      getLoc("token") != AUTH
+      getLoc("token") != oemConfig.auth
         ? eloginStatus.login
         : eloginStatus.notLogin;
     const userName = getLoc("userName") ? getLoc("userName") : "";

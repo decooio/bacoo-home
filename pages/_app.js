@@ -18,11 +18,8 @@ import React from "react";
 import {prefSelector, updatePref} from "../redux/main";
 import {Alert} from "antd";
 import MyContextWrapper from '@components/Context/Context'
+import {oemConfig} from '../src/helper/const'
 
-
-function getFavicon(){
-  return '/logo.ico'
-}
 function MApp({Component, pageProps}) {
   const r = useRouter()
   const isActivity = r.pathname.startsWith('/activity')
@@ -45,8 +42,8 @@ function MApp({Component, pageProps}) {
     }}
   >
     <Head>
-      <link rel="shortcut icon" href={getFavicon()}/>
-      <title>百工链存-创新性分布式存储</title>
+      <link rel="shortcut icon" href={oemConfig.fav}/>
+      <title>{oemConfig.name}-创新性分布式存储</title>
     </Head>
     <div style={{
       position: 'absolute', left: 0, top: 0,

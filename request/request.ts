@@ -1,4 +1,4 @@
-import { baseUrl } from "@src/helper/const";
+import { oemConfig } from "@src/helper/const";
 import { getLoc } from "@src/index";
 import { message } from "antd";
 import axios from "axios";
@@ -59,7 +59,7 @@ const request: ResponseFun<any> = (
   },
   addHeaders
 ) => {
-  url = baseUrl + url;
+  url = oemConfig.baseUrl + url;
   const headers = [
     REGISTERED_ADDRESS,
     LOGIN_ADDRESS,
