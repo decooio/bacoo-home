@@ -503,7 +503,7 @@ export default function Main() {
             <>
               <a
                 target="_blank"
-                href="https://wap.scjgj.sh.gov.cn/businessCheck/verifKey.do?showType=extShow&serial=9031000020211126125251000008628137-SAIC_SHOW_310000-2c984b428a0650a9018a1a95bb1023ca671&signData=MEUCIH+AqyJ4pG1RccutVvH8H/FlOUBB6OEi8CH1W2o1Z4DPAiEA5by0qSjS3mYSdm5WccEwgV0DPPLPnCVSxeY3ROxpUJI="
+                href="https://wap.scjgj.sh.gov.cn/businessCheck/verifKey.do?showType=extShow&serial=9031000020211126125251000008628137-SAIC_SHOW_310000-2c984b428a0650a9018a1a95bb1023ca671&signData=MEUCIH+AqyJ4pG1RccutVvH8H/FlOUBB6OEi8CH1W2o1Z4DPAiEA5by0qSjS3mYSdm5WccEwgV0DPPLPnCVSxeY3ROxpUJI=" rel="noreferrer"
               >
                 <img src={"./license.jpg"} height={"35px"} width={"35px"} />
               </a>
