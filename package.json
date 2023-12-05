@@ -2,7 +2,7 @@
   "name": "with-redux",
   "version": "1.0.0",
   "scripts": {
-    "dev": "next --port 3000",
+    "dev": "next --port 3002",
     "build": "next build",
     "start": "next start",
     "export": "next build && next export",
@@ -13,11 +13,12 @@
   "private": true,
   "resolutions": {
     "react": "17.0.2",
-    "@types/react": "^17.0.6"
+    "@types/react": "17.0.6"
   },
   "dependencies": {
     "@decooio/sdk": "1.0.5",
     "@types/crypto-js": "^4.0.2",
+    "@types/react": "17.0.6",
     "antd": "4.21.5",
     "autoprefixer": "^9",
     "axios": "0.21.1",
@@ -55,7 +56,6 @@
   "devDependencies": {
     "@types/lodash": "4.14.170",
     "@types/node": "15.12.2",
-    "@types/react": "17.0.6",
     "@types/react-dom": "^18.0.6",
     "@types/react-i18next": "8.1.0",
     "@types/react-icons": "3.0.0",
