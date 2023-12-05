@@ -108,7 +108,9 @@ export default function Main() {
     nodeType: number;
     name: string;
   } | null>();
-  const [upLoadStatus, setUpLoadStatus] = useState<string | undefined>("initial");
+  const [upLoadStatus, setUpLoadStatus] = useState<string | undefined>(
+    "initial"
+  );
   const [fileList, setFileList] = useState<RcFile[]>([]);
   const [folder, setFolder] = useState("");
   const [folderSize, setFolderSize] = useState(0);
@@ -168,18 +170,23 @@ export default function Main() {
 
     try {
       setUpLoadStatus("uploading");
-      const res = await axios.post(`${activeGateway?.host}/api/v0/add?pin=true`, formData, {
-        headers: {
-          authorization: oemConfig.auth,
-        },
-        onUploadProgress: (progressEvent) => {
-          if (progressEvent.lengthComputable) {
-            const complete = ((progressEvent.loaded / progressEvent.total) * 100) | 0;
-            const percent = complete;
-            setPercent(percent);
-          }
-        },
-      });
+      const res = await axios.post(
+        `${activeGateway?.host}/api/v0/add?pin=true`,
+        formData,
+        {
+          headers: {
+            authorization: oemConfig.auth,
+          },
+          onUploadProgress: (progressEvent) => {
+            if (progressEvent.lengthComputable) {
+              const complete =
+                ((progressEvent.loaded / progressEvent.total) * 100) | 0;
+              const percent = complete;
+              setPercent(percent);
+            }
+          },
+        }
+      );
       let Hash = "";
       let Name = "";
       setPercent(100);
@@ -201,7 +208,12 @@ export default function Main() {
         localStorage.removeItem("token");
         setUpLoadStatus("finish");
         const { cid } = (updatares as any).pin;
-        setShareUrl(`https://${oemConfig.subDomain}.${activeGateway?.host.replace("https://", "")}/ipfs/${cid}`);
+        setShareUrl(
+          `https://${oemConfig.subDomain}.${activeGateway?.host.replace(
+            "https://",
+            ""
+          )}/ipfs/${cid}`
+        );
       } catch (err: any) {
         console.log("err=>", err);
         removeFileList();
@@ -269,7 +281,12 @@ export default function Main() {
             directory
             {...upDataPorps}
             beforeUpload={async (file: any) => {
-              setFolder(file.webkitRelativePath.substring(0, file.webkitRelativePath.indexOf("/")));
+              setFolder(
+                file.webkitRelativePath.substring(
+                  0,
+                  file.webkitRelativePath.indexOf("/")
+                )
+              );
 
               const locFolder = fileList;
               locFolder.push(file);
@@ -299,7 +316,13 @@ export default function Main() {
     const margin = isMobile ? "0 15px" : "0 20px";
     return (
       <div className={s.inputFile}>
-        <Progress strokeWidth={stroke} style={{ margin }} strokeColor={"#333333"} showInfo={false} percent={percent} />
+        <Progress
+          strokeWidth={stroke}
+          style={{ margin }}
+          strokeColor={"#333333"}
+          showInfo={false}
+          percent={percent}
+        />
       </div>
     );
   };
@@ -343,7 +366,9 @@ export default function Main() {
   function DcPanelCom(list: getgatewayListRes["data"]) {
     return (
       <DCPanel invisible={false}>
-        <div className={"title"}>{folder && folderSize ? "添加文件夹" : "添加文件"}</div>
+        <div className={"title"}>
+          {folder && folderSize ? "添加文件夹" : "添加文件"}
+        </div>
 
         {folder && folderSize ? (
           <div className={"file_item"}>
@@ -379,7 +404,10 @@ export default function Main() {
               <Menu>
                 {list.map((item, index) => {
                   return (
-                    <Menu.Item key={index} onClick={() => setActiveGateway(item)}>
+                    <Menu.Item
+                      key={index}
+                      onClick={() => setActiveGateway(item)}
+                    >
                       {item.name}
                     </Menu.Item>
                   );
@@ -419,7 +447,9 @@ export default function Main() {
   }, []);
 
   useEffect(() => {
-    const totalSize = fileList.map((item) => item.size).reduce((prev, curr) => prev + curr, 0);
+    const totalSize = fileList
+      .map((item) => item.size)
+      .reduce((prev, curr) => prev + curr, 0);
     setFolderSize(totalSize);
   }, [fileList]);
 
@@ -451,7 +481,8 @@ export default function Main() {
           <div className={s.homeSlog}>
             <span className={s.title}>{oemConfig.name}-创新性分布式存储</span>
             <p className={s.info}>
-              {oemConfig.name}探索与拓宽分布式存储技术的发展潜力与应用边界，为企业级IPFS存储需求提供完整可用的解决方案。
+              {oemConfig.name}
+              探索与拓宽分布式存储技术的发展潜力与应用边界，为企业级IPFS存储需求提供完整可用的解决方案。
             </p>
           </div>
         }
@@ -470,7 +501,15 @@ export default function Main() {
         >
           {oemConfig.showBeian && (
             <>
-              <div className={"w-full text-center md:w-auto"}>百工智联（上海）工业科技有限公司</div>
+              <a
+                target="_blank"
+                href="https://wap.scjgj.sh.gov.cn/businessCheck/verifKey.do?showType=extShow&serial=9031000020211126125251000008628137-SAIC_SHOW_310000-2c984b428a0650a9018a1a95bb1023ca671&signData=MEUCIH+AqyJ4pG1RccutVvH8H/FlOUBB6OEi8CH1W2o1Z4DPAiEA5by0qSjS3mYSdm5WccEwgV0DPPLPnCVSxeY3ROxpUJI="
+              >
+                <img src={"./license.jpg"} height={"35px"} width={"35px"} />
+              </a>
+              <div className={"w-full text-center md:w-auto"}>
+                百工智联（上海）工业科技有限公司
+              </div>
               <a
                 className={s.hb}
                 style={{
@@ -479,7 +518,9 @@ export default function Main() {
                 }}
                 target={"_blank"}
                 rel="noreferrer"
-                href={"http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31011702008768"}
+                href={
+                  "http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31011702008768"
+                }
               >
                 沪公网安备 31011702008768号
               </a>
